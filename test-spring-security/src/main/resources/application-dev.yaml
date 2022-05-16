@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: test-spring-security
+  redis:
+    host: ${REDIS_HOST:10.12.2.64}
+    password: ${REDIS_PASSWORD:sy_202106}
+    port: 6379
 
 logging:
   level:
