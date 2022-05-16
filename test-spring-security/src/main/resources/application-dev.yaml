@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: test-spring-security
+
+logging:
+  level:
+    root: debug

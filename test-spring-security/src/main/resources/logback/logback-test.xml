@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="log.home" value="logs"/>
+    <!--<include resource="org/springframework/boot/logging/logback/base.xml" />-->
+
+    <!-- 输出日志到控制台 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder" charset="UTF-8">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>
+                    <![CDATA[%mdc{traceid} %d{yyyy-MM-dd HH:mm:ss} %yellow(%-5level) [%thread] %cyan(%logger{39}) - [%method,%line] - %msg%n]]>
+                </pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <!-- 以下是全局INFO级别日志 -->
+    <appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender" additivity="false">
+        <file>${log.home}/info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.home}/backup/info.%i%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder" charset="UTF-8">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>
+                    <![CDATA[%mdc{traceid}|%date{yyyy-MM-dd HH:mm:ss.SSS}|%level|%logger %msg%n]]></pattern>
+            </layout>
+        </encoder>
+    </appender>
+    <appender name="async_info" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>1024</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="file_info"/>
+    </appender>
+
+    <!-- 以下是全局ERROR级别日志 -->
+    <appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${log.home}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/${log.home}/backup/error.%i%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder" charset="UTF-8">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>
+                    <![CDATA[%date{yyyy-MM-dd HH:mm:ss.SSS}|%level|%logger %msg%n]]></pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <appender name="async_error" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>1024</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="file_error"/>
+    </appender>
+
+    <logger name="org.springframework" level="info" />
+    <!--<logger name="org.hibernate" level="info" />-->
+    <root>
+        <level>info</level>
+        <appender-ref ref="console"/>
+        <appender-ref ref="async_info"/>
+        <appender-ref ref="async_error"/>
+    </root>
+</configuration>
