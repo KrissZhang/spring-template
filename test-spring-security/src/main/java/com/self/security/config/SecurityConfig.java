@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -78,7 +80,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 //对指定路径请求允许任意访问
                 .antMatchers("/api/token/**").permitAll()
-                .antMatchers("/api/test/test1").permitAll()
 
                 //对前端静态资源查询请求允许任意访问
                 .antMatchers(
@@ -121,7 +122,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth
                 //用户名密码认证
                 .userDetailsService(sysUserDetailsService)
-                .passwordEncoder(bCryptPasswordEncoder())
+                .passwordEncoder(noOpPasswordEncoder())
                 .and()
 
                 //验证码认证
@@ -134,6 +135,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * 密码处理器
+     */
+    @Bean
+    public PasswordEncoder noOpPasswordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
     }
 
 }

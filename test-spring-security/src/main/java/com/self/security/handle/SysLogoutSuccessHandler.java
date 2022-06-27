@@ -1,5 +1,10 @@
 package com.self.security.handle;
 
+import com.alibaba.fastjson.JSON;
+import com.self.security.bean.AuthUser;
+import com.self.security.domain.ResultEntity;
+import com.self.security.service.JwtTokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -8,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * 退出处理
@@ -15,9 +21,21 @@ import java.io.IOException;
 @Configuration
 public class SysLogoutSuccessHandler implements LogoutSuccessHandler {
 
+    @Autowired
+    private JwtTokenService jwtTokenService;
+
     @Override
-    public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        //TODO
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        AuthUser authUser = jwtTokenService.getAuthUserByRequest(request);
+        if(Objects.nonNull(authUser)){
+            //删除缓存认证令牌
+            jwtTokenService.removeToken(authUser.getTokenId());
+        }
+
+        response.setStatus(200);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().print(JSON.toJSONString(ResultEntity.addError("200", "退出成功")));
     }
 
 }
