@@ -30,6 +30,23 @@ public class UserService {
     }
 
     /**
+     * 根据手机号码查询用户
+     * @param telPhoneNum 手机号码
+     * @return 用户
+     */
+    public User selectUserByTelPhoneNum(String telPhoneNum){
+        //查询手机号码指定用户--TODO
+        User user = new User();
+        user.setId(2);
+        user.setUserName("user2");
+        user.setPassword(DigestUtils.md5Hex("123456"));
+        user.setRealName("用户2");
+        user.setDeleteFlag(1);
+
+        return user;
+    }
+
+    /**
      * 根据用户id查询用户权限
      * @param userId 用户id
      * @return 用户权限

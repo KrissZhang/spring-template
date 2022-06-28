@@ -36,4 +36,18 @@ public class SysUserDetailsService implements UserDetailsService {
         return new AuthUser(jwtInfo, permissionList);
     }
 
+    public UserDetails loadUserByTelPhoneNum(String telPhoneNum) {
+        //获取认证用户
+        User user = userService.selectUserByTelPhoneNum(telPhoneNum);
+        if(Objects.isNull(user)){
+            throw new RuntimeException("认证用户不存在");
+        }
+        JWTInfo jwtInfo = userService.buildJWTInfoByUser(user);
+
+        //获取权限列表
+        List<String> permissionList = userService.selectPermissionListByUserId(user.getId());
+
+        return new AuthUser(jwtInfo, permissionList);
+    }
+
 }
