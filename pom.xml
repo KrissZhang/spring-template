@@ -4,9 +4,9 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.self</groupId>
-    <artifactId>test-security</artifactId>
+    <artifactId>spring-template</artifactId>
     <version>1.0.0</version>
-    <name>test-security</name>
+    <name>spring-template</name>
     <url>http://maven.apache.org</url>
     <packaging>pom</packaging>
 
@@ -27,7 +27,7 @@
     </properties>
 
     <modules>
-        <module>test-spring-security</module>
+        <module>spring-security</module>
     </modules>
 
     <dependencies>
