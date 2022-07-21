@@ -1,0 +1,9 @@
+package com.self.biz.exception;
+
+public class BizException extends RuntimeException {
+
+    public BizException(String message) {
+        super(message);
+    }
+
+}
