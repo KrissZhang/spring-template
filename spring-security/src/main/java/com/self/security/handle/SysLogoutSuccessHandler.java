@@ -1,6 +1,7 @@
 package com.self.security.handle;
 
 import com.alibaba.fastjson.JSON;
+import com.self.common.enums.RespCodeEnum;
 import com.self.security.bean.AuthUser;
 import com.self.common.domain.ResultEntity;
 import com.self.security.service.JwtTokenService;
@@ -35,7 +36,7 @@ public class SysLogoutSuccessHandler implements LogoutSuccessHandler {
         response.setStatus(200);
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        response.getWriter().print(JSON.toJSONString(ResultEntity.addError("200", "退出成功")));
+        response.getWriter().print(JSON.toJSONString(ResultEntity.addError(RespCodeEnum.SUCCESS.getCode(), "退出成功")));
     }
 
 }

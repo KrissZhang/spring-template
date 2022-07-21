@@ -2,6 +2,7 @@ package com.self.security.handle;
 
 import com.alibaba.fastjson.JSON;
 import com.self.common.domain.ResultEntity;
+import com.self.common.enums.RespCodeEnum;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class AuthenticationFailedEntryPoint implements AuthenticationEntryPoint,
         response.setStatus(200);
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        response.getWriter().print(JSON.toJSONString(ResultEntity.addError("401", msg)));
+        response.getWriter().print(JSON.toJSONString(ResultEntity.addError(RespCodeEnum.FAIL_UNAUTHORIZED.getCode(), msg)));
     }
 
 }
