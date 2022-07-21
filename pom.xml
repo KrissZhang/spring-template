@@ -35,6 +35,7 @@
         <module>spring-system</module>
         <module>spring-security</module>
         <module>spring-biz</module>
+        <module>spring-bridge</module>
         <module>spring-web</module>
     </modules>
 
