@@ -8,6 +8,8 @@ server:
       enabled: true
 
 spring:
+  banner:
+    location: banner.txt
   profiles:
     active: ${ENV_TYPE:dev}
   mvc:
