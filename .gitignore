@@ -1,1 +1,7 @@
 /.idea/
+/spring-biz/spring-biz.iml
+/spring-common/spring-common.iml
+/spring-dao/spring-dao.iml
+/spring-security/spring-security.iml
+/spring-system/spring-system.iml
+/spring-web/spring-web.iml
