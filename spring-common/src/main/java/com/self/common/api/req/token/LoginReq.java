@@ -10,11 +10,11 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class LoginReq {
 
-    @Schema(name = "用户名", description = "用户名")
+    @Schema(name = "用户名", description = "用户名", required = true)
     @NotBlank(message = "用户名不能为空")
     private String userName;
 
-    @Schema(name = "密码", description = "密码")
+    @Schema(name = "密码", description = "密码", required = true)
     @NotBlank(message = "密码不能为空")
     private String password;
 

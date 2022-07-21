@@ -10,11 +10,11 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class SmsLoginReq {
 
-    @Schema(name = "手机号码", description = "手机号码")
+    @Schema(name = "手机号码", description = "手机号码", required = true)
     @NotBlank(message = "手机号码不能为空")
     private String telPhoneNum;
 
-    @Schema(name = "验证码", description = "验证码")
+    @Schema(name = "验证码", description = "验证码", required = true)
     @NotBlank(message = "验证码不能为空")
     private String verifyCode;
 
