@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  swagger:
+    enable: true
   redis:
     host: ${REDIS_HOST:10.12.2.64}
     password: ${REDIS_PASSWORD:sy_202106}

@@ -92,10 +92,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 ).permitAll()
 
                 //对swagger配置请求允许匿名访问
-                .antMatchers("/swagger-ui.html").anonymous()
+                .antMatchers("/swagger-ui/**").anonymous()
                 .antMatchers("/swagger-resources/**").anonymous()
-                .antMatchers("/webjars/**").anonymous()
-                .antMatchers("/*/api-docs").anonymous()
+                .antMatchers("/v3/api-docs/**").anonymous()
 
                 //对druid数据连接池请求允许匿名访问
                 .antMatchers("/druid/**").anonymous()

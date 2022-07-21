@@ -26,6 +26,15 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+  swagger:
+    groupName: spring-web
+    basePackage: com.self
+    version: 1.0.0
+    title: spring-web
+    description: spring-web 开发文档
+    contactName: zp
+    contactEmail: default@default.com
+    contactUrl: www.default.com
 
 logging:
   config: ${LOGING_CONFIG:classpath:logback/logback-test.xml}
