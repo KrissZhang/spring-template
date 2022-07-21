@@ -11,5 +11,18 @@
 
     <artifactId>spring-system</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.self</groupId>
+            <artifactId>spring-common</artifactId>
+            <version>${spring-template.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.self</groupId>
+            <artifactId>spring-dao</artifactId>
+            <version>${spring-template.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

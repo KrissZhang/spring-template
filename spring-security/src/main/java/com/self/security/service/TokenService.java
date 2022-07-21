@@ -1,11 +1,11 @@
 package com.self.security.service;
 
-import com.self.security.api.req.LoginReq;
-import com.self.security.api.req.SmsLoginReq;
+import com.self.common.api.req.token.LoginReq;
+import com.self.common.api.req.token.SmsLoginReq;
 import com.self.security.bean.AuthUser;
 import com.self.security.constants.SecurityConstants;
-import com.self.security.domain.ResultEntity;
-import com.self.security.enums.TerminalTypeEnum;
+import com.self.common.domain.ResultEntity;
+import com.self.common.enums.TerminalTypeEnum;
 import com.self.security.token.SmsAuthenticationToken;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

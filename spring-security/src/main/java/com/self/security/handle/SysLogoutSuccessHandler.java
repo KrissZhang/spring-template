@@ -2,7 +2,7 @@ package com.self.security.handle;
 
 import com.alibaba.fastjson.JSON;
 import com.self.security.bean.AuthUser;
-import com.self.security.domain.ResultEntity;
+import com.self.common.domain.ResultEntity;
 import com.self.security.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

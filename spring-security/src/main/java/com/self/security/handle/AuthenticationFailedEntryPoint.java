@@ -1,7 +1,7 @@
 package com.self.security.handle;
 
 import com.alibaba.fastjson.JSON;
-import com.self.security.domain.ResultEntity;
+import com.self.common.domain.ResultEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,10 @@
 package com.self.security.service;
 
+import com.self.common.utils.BeanUtils;
+import com.self.dao.entity.User;
 import com.self.security.bean.AuthUser;
 import com.self.security.bean.JWTInfo;
-import com.self.security.entity.User;
+import com.self.biz.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,7 +30,7 @@ public class SysUserDetailsService implements UserDetailsService {
         if(Objects.isNull(user)){
             throw new RuntimeException("认证用户不存在");
         }
-        JWTInfo jwtInfo = userService.buildJWTInfoByUser(user);
+        JWTInfo jwtInfo = buildJWTInfoByUser(user);
 
         //获取权限列表
         List<String> permissionList = userService.selectPermissionListByUserId(user.getId());
@@ -42,12 +44,25 @@ public class SysUserDetailsService implements UserDetailsService {
         if(Objects.isNull(user)){
             throw new RuntimeException("认证用户不存在");
         }
-        JWTInfo jwtInfo = userService.buildJWTInfoByUser(user);
+        JWTInfo jwtInfo = buildJWTInfoByUser(user);
 
         //获取权限列表
         List<String> permissionList = userService.selectPermissionListByUserId(user.getId());
 
         return new AuthUser(jwtInfo, permissionList);
+    }
+
+    /**
+     * 根据用户获取 JWTInfo
+     * @param user 用户
+     * @return JWTInfo
+     */
+    @SuppressWarnings({"all"})
+    public JWTInfo buildJWTInfoByUser(User user){
+        JWTInfo jwtInfo = BeanUtils.copyProperties(user, JWTInfo.class);
+        jwtInfo.setUserId(user.getId());
+
+        return jwtInfo;
     }
 
 }
