@@ -22,7 +22,7 @@ public class UserService {
         user.setUserName(userName);
         user.setPassword(DigestUtils.md5Hex("123456"));
         user.setRealName("用户1");
-        user.setDeleteFlag(1);
+        user.setEnable(1);
 
         return user;
     }
@@ -39,7 +39,7 @@ public class UserService {
         user.setUserName("user2");
         user.setPassword(DigestUtils.md5Hex("123456"));
         user.setRealName("用户2");
-        user.setDeleteFlag(1);
+        user.setEnable(1);
 
         return user;
     }

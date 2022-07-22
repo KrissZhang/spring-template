@@ -13,6 +13,6 @@ public class User {
 
     private String realName;
 
-    private Integer deleteFlag;
+    private Integer enable;
 
 }
