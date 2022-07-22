@@ -4,6 +4,11 @@ server:
 spring:
   swagger:
     enable: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/spring-template?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:Zp18716331455}
   redis:
     host: ${REDIS_HOST:10.12.2.64}
     password: ${REDIS_PASSWORD:sy_202106}
