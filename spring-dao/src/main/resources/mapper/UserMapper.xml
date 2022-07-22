@@ -9,11 +9,12 @@
             <result property="userName" column="user_name" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="realName" column="real_name" jdbcType="VARCHAR"/>
+            <result property="phoneNum" column="phone_num" jdbcType="VARCHAR"/>
             <result property="enable" column="enable" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,user_name,password,
-        real_name,enable
+        real_name,phone_num,enable
     </sql>
 </mapper>

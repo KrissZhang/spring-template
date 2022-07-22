@@ -36,6 +36,11 @@ public class User implements Serializable {
     private String realName;
 
     /**
+     * 手机号码
+     */
+    private String phoneNum;
+
+    /**
      * 是否启用
      */
     private Byte enable;
