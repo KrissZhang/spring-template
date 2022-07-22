@@ -1,9 +1,10 @@
 package com.self.biz.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
+import com.self.common.enums.EnableEnum;
 import com.self.dao.entity.User;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,21 +12,19 @@ import java.util.List;
 @Service
 public class UserService {
 
+    @Autowired
+    private com.self.dao.service.UserService userService;
+
     /**
      * 根据用户名查询用户
      * @param userName 用户名
      * @return 用户
      */
     public User selectUserByUserName(String userName){
-        //查询用户名指定用户--TODO
-        User user = new User();
-        user.setId(1);
-        user.setUserName(userName);
-        user.setPassword(DigestUtils.md5Hex("123456"));
-        user.setRealName("用户1");
-        user.setEnable(NumberUtils.BYTE_ONE);
-
-        return user;
+        //查询用户名指定用户
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getEnable, EnableEnum.ENABLE.getValue()).eq(User::getUserName, userName);
+        return userService.getOne(wrapper);
     }
 
     /**
@@ -34,15 +33,10 @@ public class UserService {
      * @return 用户
      */
     public User selectUserByTelPhoneNum(String telPhoneNum){
-        //查询手机号码指定用户--TODO
-        User user = new User();
-        user.setId(2);
-        user.setUserName("user2");
-        user.setPassword(DigestUtils.md5Hex("123456"));
-        user.setRealName("用户2");
-        user.setEnable(NumberUtils.BYTE_ONE);
-
-        return user;
+        //查询手机号码指定用户
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getEnable, EnableEnum.ENABLE.getValue()).eq(User::getPhoneNum, telPhoneNum);
+        return userService.getOne(wrapper);
     }
 
     /**
