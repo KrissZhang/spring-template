@@ -4,6 +4,7 @@ package com.self.common.enums;
  * 终端类型
  */
 public enum TerminalTypeEnum {
+
     /**
      * web
      */
@@ -13,6 +14,7 @@ public enum TerminalTypeEnum {
      * app
      */
     APP("app", "app");
+
 
     private String desc;
 
