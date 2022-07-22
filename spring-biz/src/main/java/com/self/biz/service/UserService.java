@@ -3,6 +3,7 @@ package com.self.biz.service;
 import com.google.common.collect.Lists;
 import com.self.dao.entity.User;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class UserService {
         user.setUserName(userName);
         user.setPassword(DigestUtils.md5Hex("123456"));
         user.setRealName("用户1");
-        user.setEnable(1);
+        user.setEnable(NumberUtils.BYTE_ONE);
 
         return user;
     }
@@ -39,7 +40,7 @@ public class UserService {
         user.setUserName("user2");
         user.setPassword(DigestUtils.md5Hex("123456"));
         user.setRealName("用户2");
-        user.setEnable(1);
+        user.setEnable(NumberUtils.BYTE_ONE);
 
         return user;
     }
