@@ -17,11 +17,6 @@
             <artifactId>spring-biz</artifactId>
             <version>${spring-template.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

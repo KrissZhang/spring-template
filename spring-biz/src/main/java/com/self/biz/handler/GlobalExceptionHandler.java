@@ -7,6 +7,9 @@ import com.self.common.domain.ResultEntity;
 import com.self.common.enums.RespCodeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,6 +42,21 @@ public class GlobalExceptionHandler {
     public final ResultEntity<Object> handleAllExceptions(Exception ex) {
         logger.error(ex.getMessage(), ex);
         return ResultEntity.addError(RespCodeEnum.FAIL_SYS.getCode(), "系统错误，请联系管理员");
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public final ResultEntity<Object> handleInternalAuthExceptions(Exception ex) {
+        return ResultEntity.addError(RespCodeEnum.FAIL_UNAUTHORIZED.getCode(), ex.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public final ResultEntity<Object> handleBadCredentialsExceptions(Exception ex) {
+        return ResultEntity.addError(RespCodeEnum.FAIL_UNAUTHORIZED.getCode(), "用户名密码错误");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public final ResultEntity<Object> handleAccessDeniedExceptions(Exception ex) {
+        return ResultEntity.addError(RespCodeEnum.FAIL_UNAUTHORIZED.getCode(), "权限不足");
     }
 
     /**
