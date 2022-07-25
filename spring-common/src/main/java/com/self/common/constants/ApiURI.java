@@ -24,8 +24,13 @@ public class ApiURI {
     public static final String TOKEN_SMS_LOGIN = MODULE_URI_PREFIX + "/token/smsLogin";
 
     /**
-     * 测试接口1
+     * 测试请求
      */
-    public static final String TEST_ONE = MODULE_URI_PREFIX + "/test/test1";
+    public static final String TEST_REQ = MODULE_URI_PREFIX + "/test/testReq";
+
+    /**
+     * 测试分页
+     */
+    public static final String TEST_PAGE = MODULE_URI_PREFIX + "/test/testPage";
 
 }

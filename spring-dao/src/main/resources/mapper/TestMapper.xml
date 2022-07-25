@@ -15,4 +15,19 @@
         id,name,value,
         enable
     </sql>
+
+    <select id="selectAllByNameTestList" resultType="com.self.dao.entity.Test">
+        select
+            <include refid="Base_Column_List" />
+        from test t
+
+        <where>
+            <if test="condition.name != null and condition.name != ''">
+                and t.name = #{condition.name}
+            </if>
+        </where>
+
+        order by t.id asc
+    </select>
+
 </mapper>
