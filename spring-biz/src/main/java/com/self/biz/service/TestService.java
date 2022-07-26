@@ -8,6 +8,7 @@ import com.self.common.api.resp.test.TestListResp;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.EnableEnum;
 import com.self.common.utils.BeanUtils;
+import com.self.dao.api.page.PagingResp;
 import com.self.dao.entity.Test;
 import com.self.dao.mapper.TestMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class TestService {
         return ResultEntity.ok("testKey:" + req);
     }
 
-    public ResultEntity<Page<TestListResp>> testPage(TestListReq testListReq){
+    public ResultEntity<PagingResp<TestListResp>> testPage(TestListReq testListReq){
         Page<TestListResp> page = new Page<>(testListReq.getCurrentPage(), testListReq.getPageSize());
 
         TestListCondition condition = BeanUtils.copyProperties(testListReq, TestListCondition.class);
@@ -37,9 +38,7 @@ public class TestService {
         ImmutableMap<Byte, EnableEnum> enableMap = EnableEnum.enableMap();
         respList.forEach(r -> Optional.ofNullable(enableMap.get(r.getEnable())).ifPresent(enableEnum -> r.setEnableName(enableEnum.getDesc())));
 
-        page.setRecords(respList);
-
-        return ResultEntity.ok(page);
+        return ResultEntity.ok(new PagingResp<>(page, respList));
     }
 
 }

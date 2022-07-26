@@ -1,11 +1,11 @@
 package com.self.web.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.self.biz.service.TestService;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
 import com.self.common.constants.ApiURI;
 import com.self.common.domain.ResultEntity;
+import com.self.dao.api.page.PagingResp;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,7 +28,7 @@ public class TestController {
 
     @Operation(summary = "测试分页")
     @PostMapping(value = ApiURI.TEST_PAGE)
-    public ResultEntity<Page<TestListResp>> testPage(@RequestBody @Validated TestListReq testListReq){
+    public ResultEntity<PagingResp<TestListResp>> testPage(@RequestBody @Validated TestListReq testListReq){
         return testService.testPage(testListReq);
     }
 
