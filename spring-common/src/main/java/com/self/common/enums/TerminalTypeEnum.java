@@ -16,9 +16,9 @@ public enum TerminalTypeEnum {
     APP("app", "app");
 
 
-    private String desc;
+    private final String desc;
 
-    private String value;
+    private final String value;
 
     TerminalTypeEnum(String desc, String value) {
         this.desc = desc;

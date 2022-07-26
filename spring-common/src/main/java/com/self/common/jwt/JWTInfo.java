@@ -1,4 +1,4 @@
-package com.self.security.bean;
+package com.self.common.jwt;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;

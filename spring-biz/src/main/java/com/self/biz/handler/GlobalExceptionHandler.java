@@ -1,8 +1,8 @@
 package com.self.biz.handler;
 
-import com.self.biz.exception.BizException;
-import com.self.biz.exception.ParamException;
-import com.self.biz.exception.UnAuthorizedException;
+import com.self.common.exception.BizException;
+import com.self.common.exception.ParamException;
+import com.self.common.exception.UnAuthorizedException;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.RespCodeEnum;
 import org.slf4j.Logger;

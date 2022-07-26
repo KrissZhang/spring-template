@@ -1,4 +1,4 @@
-package com.self.biz.exception;
+package com.self.common.exception;
 
 public class BizException extends RuntimeException {
 

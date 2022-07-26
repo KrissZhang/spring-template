@@ -31,12 +31,12 @@ public enum EnableEnum {
         this.desc = desc;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
     public Byte getValue() {
         return value;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 
     public static ImmutableMap<Byte, EnableEnum> enableMap(){

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.self.dao.mapper.OperLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.self.dao.entity.OperLog">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="businessType" column="business_type" jdbcType="TINYINT"/>
+            <result property="method" column="method" jdbcType="VARCHAR"/>
+            <result property="reqMethod" column="req_method" jdbcType="VARCHAR"/>
+            <result property="operatorId" column="operator_id" jdbcType="INTEGER"/>
+            <result property="operatorName" column="operator_name" jdbcType="VARCHAR"/>
+            <result property="reqIp" column="req_ip" jdbcType="VARCHAR"/>
+            <result property="reqUrl" column="req_url" jdbcType="VARCHAR"/>
+            <result property="reqParam" column="req_param" jdbcType="VARCHAR"/>
+            <result property="respResult" column="resp_result" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="errorMsg" column="error_msg" jdbcType="VARCHAR"/>
+            <result property="operateTime" column="operate_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,business_type,
+        method,req_method,operator_id,
+        operator_name,req_ip,
+        req_url,req_param,resp_result,
+        status,error_msg,operate_time
+    </sql>
+</mapper>

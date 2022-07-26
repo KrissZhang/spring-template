@@ -4,7 +4,7 @@ import com.self.biz.service.UserService;
 import com.self.common.utils.BeanUtils;
 import com.self.dao.entity.User;
 import com.self.security.bean.AuthUser;
-import com.self.security.bean.JWTInfo;
+import com.self.common.jwt.JWTInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

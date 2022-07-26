@@ -1,7 +1,6 @@
 package com.self.common.annotation;
 
 import com.self.common.enums.BusinessTypeEnum;
-import com.self.common.enums.OperatorTypeEnum;
 
 import java.lang.annotation.*;
 
@@ -11,7 +10,7 @@ import java.lang.annotation.*;
 public @interface OperLog {
 
     /**
-     * 模块
+     * 标题
      */
     String title() default "";
 
@@ -19,11 +18,6 @@ public @interface OperLog {
      * 功能类型
      */
     BusinessTypeEnum businessType() default BusinessTypeEnum.OTHER;
-
-    /**
-     * 操作人类别
-     */
-    OperatorTypeEnum operatorType() default OperatorTypeEnum.OTHER;
 
     /**
      * 是否保存请求的参数

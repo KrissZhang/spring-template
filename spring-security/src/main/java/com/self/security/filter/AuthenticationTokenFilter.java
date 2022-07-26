@@ -1,5 +1,6 @@
 package com.self.security.filter;
 
+import com.self.common.context.JWTInfoContext;
 import com.self.security.bean.AuthUser;
 import com.self.security.service.JwtTokenService;
 import com.self.security.utils.SecurityUtils;
@@ -39,7 +40,15 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
 
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+        try {
+            if(Objects.nonNull(authUser)){
+                JWTInfoContext.set(authUser.getJwtInfo());
+            }
+
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
+        } finally {
+            JWTInfoContext.clean();
+        }
     }
 
 }

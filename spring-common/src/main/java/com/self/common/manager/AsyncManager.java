@@ -25,7 +25,7 @@ public class AsyncManager {
         return asyncManager;
     }
 
-    public  void executor(Runnable runnable){
+    public void execute(Runnable runnable){
         threadPoolTaskExecutor.execute(runnable);
     }
 
