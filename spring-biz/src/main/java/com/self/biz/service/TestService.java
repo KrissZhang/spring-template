@@ -27,7 +27,7 @@ public class TestService {
     }
 
     public ResultEntity<PagingResp<TestListResp>> testPage(TestListReq testListReq){
-        Page<TestListResp> page = new Page<>(testListReq.getCurrentPage(), testListReq.getPageSize());
+        Page<TestListResp> page = Page.of(testListReq.getCurrentPage(), testListReq.getPageSize());
 
         TestListCondition condition = BeanUtils.copyProperties(testListReq, TestListCondition.class);
         List<Test> testList = testMapper.selectAllByNameTestList(page, condition);
