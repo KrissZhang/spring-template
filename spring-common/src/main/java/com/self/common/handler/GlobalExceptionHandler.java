@@ -1,4 +1,4 @@
-package com.self.biz.handler;
+package com.self.common.handler;
 
 import com.self.common.exception.BizException;
 import com.self.common.exception.ParamException;
