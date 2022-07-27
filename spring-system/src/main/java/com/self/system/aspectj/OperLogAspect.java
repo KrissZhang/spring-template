@@ -87,6 +87,7 @@ public class OperLogAspect {
 
             com.self.dao.entity.OperLog operLog = new com.self.dao.entity.OperLog();
 
+            operLog.setTerminalType(ServletUtils.getTerminalType());
             operLog.setStatus(BusinessStatusEnum.SUCCESS.getValue());
 
             //请求ip

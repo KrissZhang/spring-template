@@ -1,7 +1,10 @@
 package com.self.common.utils;
 
+import com.self.common.enums.TerminalTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mobile.device.Device;
+import org.springframework.mobile.device.DeviceUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -98,25 +101,15 @@ public class ServletUtils {
         return null;
     }
 
-    /**
-     * 判断 User-Agent 是不是来自于手机
-     */
-    public static boolean checkAgentIsMobile(String ua) {
-        boolean flag = false;
-
-        if (!ua.contains("Windows NT") || ua.contains("compatible; MSIE 9.0;")) {
-            //排除 苹果桌面系统
-            if (!ua.contains("Windows NT") && !ua.contains("Macintosh")) {
-                for (String item : AGENT) {
-                    if (ua.contains(item)) {
-                        flag = true;
-                        break;
-                    }
-                }
-            }
+    public static String getTerminalType(){
+        Device curDevice = DeviceUtils.getCurrentDevice(getRequest());
+        if(curDevice.isTablet()){
+            return TerminalTypeEnum.TABLET.getValue();
+        }else if(curDevice.isMobile()){
+            return TerminalTypeEnum.MOBILE.getValue();
+        }else{
+            return TerminalTypeEnum.WEB.getValue();
         }
-
-        return flag;
     }
 
 }

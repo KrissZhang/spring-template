@@ -1,7 +1,6 @@
 package com.self.biz.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.common.collect.ImmutableMap;
 import com.self.common.api.condition.test.TestListCondition;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
@@ -35,8 +34,7 @@ public class TestService {
 
         List<TestListResp> respList = BeanUtils.copyList(testList, TestListResp.class);
 
-        ImmutableMap<Byte, EnableEnum> enableMap = EnableEnum.enableMap();
-        respList.forEach(r -> Optional.ofNullable(enableMap.get(r.getEnable())).ifPresent(enableEnum -> r.setEnableName(enableEnum.getDesc())));
+        respList.forEach(r -> Optional.ofNullable(EnableEnum.resolve(r.getEnable())).ifPresent(enableEnum -> r.setEnableName(enableEnum.getDesc())));
 
         return ResultEntity.ok(new PagingResp<>(page, respList));
     }

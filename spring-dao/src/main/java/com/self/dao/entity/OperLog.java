@@ -22,6 +22,11 @@ public class OperLog implements Serializable {
     private Integer id;
 
     /**
+     * 终端类别
+     */
+    private String terminalType;
+
+    /**
      * 标题
      */
     private String title;
