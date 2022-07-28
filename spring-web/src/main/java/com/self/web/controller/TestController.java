@@ -2,6 +2,7 @@ package com.self.web.controller;
 
 import com.self.biz.service.TestService;
 import com.self.common.annotation.OperLog;
+import com.self.common.api.req.test.TestAddReq;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
 import com.self.common.constants.ApiURI;
@@ -34,6 +35,13 @@ public class TestController {
     @PostMapping(value = ApiURI.TEST_PAGE)
     public ResultEntity<PagingResp<TestListResp>> testPage(@RequestBody @Validated TestListReq testListReq){
         return testService.testPage(testListReq);
+    }
+
+    @Operation(summary = "测试事务")
+    @OperLog(title = "测试事务", businessType = BusinessTypeEnum.ADD)
+    @PostMapping(value = ApiURI.TEST_TRANSACTION)
+    public ResultEntity<Object> testTransaction(@RequestBody @Validated TestAddReq testAddReq){
+        return testService.testTransaction(testAddReq);
     }
 
 }

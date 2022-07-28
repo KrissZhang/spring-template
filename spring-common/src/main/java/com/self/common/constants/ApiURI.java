@@ -33,4 +33,9 @@ public class ApiURI {
      */
     public static final String TEST_PAGE = MODULE_URI_PREFIX + "/test/testPage";
 
+    /**
+     * 测试事务
+     */
+    public static final String TEST_TRANSACTION = MODULE_URI_PREFIX + "/test/testTransaction";
+
 }
