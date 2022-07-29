@@ -2,12 +2,14 @@ package com.self.web.controller;
 
 import com.self.biz.service.TestService;
 import com.self.common.annotation.OperLog;
+import com.self.common.annotation.RateLimiter;
 import com.self.common.api.req.test.TestAddReq;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
 import com.self.common.constants.ApiURI;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.BusinessTypeEnum;
+import com.self.common.enums.LimitTypeEnum;
 import com.self.dao.api.page.PagingResp;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +26,7 @@ public class TestController {
     private TestService testService;
 
     @Operation(summary = "测试请求")
+    @RateLimiter(limitType = LimitTypeEnum.IP, count = 10)
     @OperLog(title = "测试请求", businessType = BusinessTypeEnum.OTHER)
     @GetMapping(value = ApiURI.TEST_REQ)
     public ResultEntity<String> testReq(@Parameter(description = "请求参数") @RequestParam String req){
