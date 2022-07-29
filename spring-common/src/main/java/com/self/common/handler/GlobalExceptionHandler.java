@@ -2,6 +2,7 @@ package com.self.common.handler;
 
 import com.self.common.exception.BizException;
 import com.self.common.exception.ParamException;
+import com.self.common.exception.RateLimiterException;
 import com.self.common.exception.UnAuthorizedException;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.RespCodeEnum;
@@ -34,8 +35,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BizException.class)
-    public final ResultEntity<Object> handleBizExceptions(BizException ex) {
+    public final ResultEntity<Object> handleBizExceptions(Exception ex) {
         return ResultEntity.addError(RespCodeEnum.FAIL_BIZ.getCode(), ex.getMessage());
+    }
+
+    @ExceptionHandler(RateLimiterException.class)
+    public final ResultEntity<Object> handleRateLimiterExceptions(Exception ex) {
+        return ResultEntity.addError(RespCodeEnum.FAIL_TOO_MANY_REQUESTS.getCode(), ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

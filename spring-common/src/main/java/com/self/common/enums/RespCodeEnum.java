@@ -20,6 +20,11 @@ public enum RespCodeEnum {
     FAIL_UNAUTHORIZED(String.valueOf(HttpStatus.UNAUTHORIZED.value()), "未授权"),
 
     /**
+     * 请求过多
+     */
+    FAIL_TOO_MANY_REQUESTS(String.valueOf(HttpStatus.TOO_MANY_REQUESTS.value()), "请求过多"),
+
+    /**
      * 业务逻辑错误
      */
     FAIL_BIZ(String.valueOf(HttpStatus.CONFLICT.value()), "业务逻辑错误"),
