@@ -36,6 +36,7 @@ public class SysDictService {
 
         LambdaQueryWrapper<SysDictData> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysDictData::getStatus, NumberUtils.BYTE_ONE).eq(SysDictData::getDictTypeCode, dictTypeCode);
+        wrapper.orderByAsc(SysDictData::getDictSort, SysDictData::getId);
         dictList = sysDictDataService.list(wrapper);
 
         redisUtils.set(CacheConstants.SYS_DICT_KEY + dictTypeCode, dictList);
