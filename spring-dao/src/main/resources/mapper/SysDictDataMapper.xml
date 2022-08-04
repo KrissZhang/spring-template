@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.self.dao.mapper.SysDictDataMapper">
+
+    <resultMap id="BaseResultMap" type="com.self.dao.entity.SysDictData">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="dictTypeCode" column="dict_type_code" jdbcType="VARCHAR"/>
+            <result property="dictLabel" column="dict_label" jdbcType="VARCHAR"/>
+            <result property="dictValue" column="dict_value" jdbcType="VARCHAR"/>
+            <result property="dictSort" column="dict_sort" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,dict_type_code,dict_label,
+        dict_value,dict_sort,status,
+        remark,create_user,create_time,
+        update_user,update_time
+    </sql>
+</mapper>
