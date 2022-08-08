@@ -5,7 +5,6 @@ import cn.hutool.core.util.EscapeUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Objects;
 
 /**
  * 获取ip方法
