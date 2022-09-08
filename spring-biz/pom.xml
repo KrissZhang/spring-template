@@ -29,6 +29,12 @@
             <artifactId>spring-system</artifactId>
             <version>${spring-template.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.self</groupId>
+            <artifactId>spring-quartz</artifactId>
+            <version>${spring-template.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

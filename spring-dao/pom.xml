@@ -12,7 +12,9 @@
     <artifactId>spring-dao</artifactId>
 
     <properties>
+        <druid.version>1.2.8</druid.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <mybatisplus-plus.version>1.5.1-RELEASE</mybatisplus-plus.version>
     </properties>
 
     <dependencies>
@@ -29,9 +31,21 @@
         </dependency>
 
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jeffreyning</groupId>
+            <artifactId>mybatisplus-plus</artifactId>
+            <version>${mybatisplus-plus.version}</version>
         </dependency>
     </dependencies>
 
