@@ -35,6 +35,32 @@ spring:
     contactName: zp
     contactEmail: default@default.com
     contactUrl: www.default.com
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    wait-for-jobs-to-complete-on-shutdown: true
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+            instanceName: quartzScheduler
+          jobStore:
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            useProperties: false
+            misfireThreshold: 12000
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 10000
+            maxMisfiresToHandleAtATime: 1
+            txIsolationLevelSerializable: true
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 20
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
 
 mybatis-plus:
   configuration:

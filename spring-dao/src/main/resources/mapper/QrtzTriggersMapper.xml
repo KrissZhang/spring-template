@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.self.dao.mapper.QrtzTriggersMapper">
+
+    <resultMap id="BaseResultMap" type="com.self.dao.entity.QrtzTriggers">
+            <id property="schedName" column="SCHED_NAME" jdbcType="VARCHAR"/>
+            <id property="triggerName" column="TRIGGER_NAME" jdbcType="VARCHAR"/>
+            <id property="triggerGroup" column="TRIGGER_GROUP" jdbcType="VARCHAR"/>
+            <result property="jobName" column="JOB_NAME" jdbcType="VARCHAR"/>
+            <result property="jobGroup" column="JOB_GROUP" jdbcType="VARCHAR"/>
+            <result property="description" column="DESCRIPTION" jdbcType="VARCHAR"/>
+            <result property="nextFireTime" column="NEXT_FIRE_TIME" jdbcType="BIGINT"/>
+            <result property="prevFireTime" column="PREV_FIRE_TIME" jdbcType="BIGINT"/>
+            <result property="priority" column="PRIORITY" jdbcType="INTEGER"/>
+            <result property="triggerState" column="TRIGGER_STATE" jdbcType="VARCHAR"/>
+            <result property="triggerType" column="TRIGGER_TYPE" jdbcType="VARCHAR"/>
+            <result property="startTime" column="START_TIME" jdbcType="BIGINT"/>
+            <result property="endTime" column="END_TIME" jdbcType="BIGINT"/>
+            <result property="calendarName" column="CALENDAR_NAME" jdbcType="VARCHAR"/>
+            <result property="misfireInstr" column="MISFIRE_INSTR" jdbcType="SMALLINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP,
+        JOB_NAME,JOB_GROUP,DESCRIPTION,
+        NEXT_FIRE_TIME,PREV_FIRE_TIME,PRIORITY,
+        TRIGGER_STATE,TRIGGER_TYPE,START_TIME,
+        END_TIME,CALENDAR_NAME,MISFIRE_INSTR,
+        JOB_DATA
+    </sql>
+</mapper>

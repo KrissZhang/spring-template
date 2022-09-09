@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.self.dao.mapper.QrtzBlobTriggersMapper">
+
+    <resultMap id="BaseResultMap" type="com.self.dao.entity.QrtzBlobTriggers">
+            <id property="schedName" column="SCHED_NAME" jdbcType="VARCHAR"/>
+            <id property="triggerName" column="TRIGGER_NAME" jdbcType="VARCHAR"/>
+            <id property="triggerGroup" column="TRIGGER_GROUP" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP,
+        BLOB_DATA
+    </sql>
+</mapper>

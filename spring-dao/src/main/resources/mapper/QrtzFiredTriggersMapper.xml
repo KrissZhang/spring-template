@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.self.dao.mapper.QrtzFiredTriggersMapper">
+
+    <resultMap id="BaseResultMap" type="com.self.dao.entity.QrtzFiredTriggers">
+            <id property="schedName" column="SCHED_NAME" jdbcType="VARCHAR"/>
+            <id property="entryId" column="ENTRY_ID" jdbcType="VARCHAR"/>
+            <result property="triggerName" column="TRIGGER_NAME" jdbcType="VARCHAR"/>
+            <result property="triggerGroup" column="TRIGGER_GROUP" jdbcType="VARCHAR"/>
+            <result property="instanceName" column="INSTANCE_NAME" jdbcType="VARCHAR"/>
+            <result property="firedTime" column="FIRED_TIME" jdbcType="BIGINT"/>
+            <result property="schedTime" column="SCHED_TIME" jdbcType="BIGINT"/>
+            <result property="priority" column="PRIORITY" jdbcType="INTEGER"/>
+            <result property="state" column="STATE" jdbcType="VARCHAR"/>
+            <result property="jobName" column="JOB_NAME" jdbcType="VARCHAR"/>
+            <result property="jobGroup" column="JOB_GROUP" jdbcType="VARCHAR"/>
+            <result property="isNonconcurrent" column="IS_NONCONCURRENT" jdbcType="VARCHAR"/>
+            <result property="requestsRecovery" column="REQUESTS_RECOVERY" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        SCHED_NAME,ENTRY_ID,TRIGGER_NAME,
+        TRIGGER_GROUP,INSTANCE_NAME,FIRED_TIME,
+        SCHED_TIME,PRIORITY,STATE,
+        JOB_NAME,JOB_GROUP,IS_NONCONCURRENT,
+        REQUESTS_RECOVERY
+    </sql>
+</mapper>

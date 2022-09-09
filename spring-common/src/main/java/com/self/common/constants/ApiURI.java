@@ -38,4 +38,24 @@ public class ApiURI {
      */
     public static final String TEST_TRANSACTION = MODULE_URI_PREFIX + "/test/testTransaction";
 
+    /**
+     * 测试添加Cron定时任务
+     */
+    public static final String TEST_CRON_JOB_ADD = MODULE_URI_PREFIX + "/test/testCronJobAdd";
+
+    /**
+     * 测试暂停定时任务
+     */
+    public static final String TEST_JOB_PAUSE = MODULE_URI_PREFIX + "/test/testJobPause";
+
+    /**
+     * 测试恢复定时任务
+     */
+    public static final String TEST_JOB_RESUME = MODULE_URI_PREFIX + "/test/testJobResume";
+
+    /**
+     * 测试删除定时任务
+     */
+    public static final String TEST_JOB_DEL = MODULE_URI_PREFIX + "/test/testJobDel";
+
 }

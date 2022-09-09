@@ -72,7 +72,7 @@ public class DruidConfig {
             /*
                 这里配置的是插件，常用的插件有：
                 监控统计：stat
-                日志监控：log4j2
+                日志监控：slf4j
                 防御 SQL 注入：wall
              */
             dataSource.setFilters("stat,slf4j");
@@ -96,7 +96,7 @@ public class DruidConfig {
             WallFilter wallFilter = new WallFilter();
             WallConfig config = new WallConfig();
             // 是否允许执行 DELETE 语句（建议值为 false）
-            config.setDeleteAllow(false);
+            config.setDeleteAllow(true);
             // 是否允许删除表（建议值为 false）
             config.setDropTableAllow(false);
             wallFilter.setConfig(config);

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.self.dao.mapper.QrtzSimpleTriggersMapper">
+
+    <resultMap id="BaseResultMap" type="com.self.dao.entity.QrtzSimpleTriggers">
+            <id property="schedName" column="SCHED_NAME" jdbcType="VARCHAR"/>
+            <id property="triggerName" column="TRIGGER_NAME" jdbcType="VARCHAR"/>
+            <id property="triggerGroup" column="TRIGGER_GROUP" jdbcType="VARCHAR"/>
+            <result property="repeatCount" column="REPEAT_COUNT" jdbcType="BIGINT"/>
+            <result property="repeatInterval" column="REPEAT_INTERVAL" jdbcType="BIGINT"/>
+            <result property="timesTriggered" column="TIMES_TRIGGERED" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP,
+        REPEAT_COUNT,REPEAT_INTERVAL,TIMES_TRIGGERED
+    </sql>
+</mapper>
