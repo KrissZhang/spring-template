@@ -4,10 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Maps;
 import com.self.common.api.condition.test.TestListCondition;
-import com.self.common.api.req.job.TestCronJobAddReq;
-import com.self.common.api.req.job.TestJobDelReq;
-import com.self.common.api.req.job.TestJobPauseReq;
-import com.self.common.api.req.job.TestJobResumeReq;
+import com.self.common.api.req.job.*;
 import com.self.common.api.req.test.TestAddReq;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
@@ -94,6 +91,18 @@ public class TestService {
         return ResultEntity.ok();
     }
 
+    public ResultEntity<Object> testSimpleJobAdd(TestSimpleJobAddReq testSimpleJobAddReq){
+        //任务参数
+        Map<String, String> paramMap = Maps.newHashMap();
+        if(!CollectionUtils.isEmpty(testSimpleJobAddReq.getParams())){
+            paramMap = JSON.parseObject(JSON.toJSONString(testSimpleJobAddReq.getParams()), Map.class);
+        }
+
+        quartzService.addSimpleJob(testSimpleJobAddReq.getJName(), testSimpleJobAddReq.getJGroup(), testSimpleJobAddReq.getTName(), testSimpleJobAddReq.getTGroup(), testSimpleJobAddReq.getIntervalTime(), TestJob.class, paramMap);
+
+        return ResultEntity.ok();
+    }
+
     public ResultEntity<Object> testJobPause(TestJobPauseReq testJobPauseReq) throws SchedulerException {
         quartzService.pauseJob(testJobPauseReq.getJName(), testJobPauseReq.getJGroup());
 
@@ -102,6 +111,12 @@ public class TestService {
 
     public ResultEntity<Object> testJobResume(TestJobResumeReq testJobResumeReq) throws SchedulerException {
         quartzService.resumeJob(testJobResumeReq.getJName(), testJobResumeReq.getJGroup());
+
+        return ResultEntity.ok();
+    }
+
+    public ResultEntity<Object> testJobReschedule(TestJobRescheduleReq testJobRescheduleReq) throws SchedulerException {
+        quartzService.rescheduleSimpleJob(testJobRescheduleReq.getTName(), testJobRescheduleReq.getTGroup(), testJobRescheduleReq.getIntervalTime());
 
         return ResultEntity.ok();
     }

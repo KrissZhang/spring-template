@@ -3,10 +3,7 @@ package com.self.web.controller;
 import com.self.biz.service.TestService;
 import com.self.common.annotation.OperLog;
 import com.self.common.annotation.RateLimiter;
-import com.self.common.api.req.job.TestCronJobAddReq;
-import com.self.common.api.req.job.TestJobDelReq;
-import com.self.common.api.req.job.TestJobPauseReq;
-import com.self.common.api.req.job.TestJobResumeReq;
+import com.self.common.api.req.job.*;
 import com.self.common.api.req.test.TestAddReq;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
@@ -59,6 +56,13 @@ public class TestController {
         return testService.testCronJobAdd(testCronJobAddReq);
     }
 
+    @Operation(summary = "测试添加时间间隔定时任务")
+    @OperLog(title = "测试添加时间间隔定时任务", businessType = BusinessTypeEnum.ADD)
+    @PostMapping(value = ApiURI.TEST_SIMPLE_JOB_ADD)
+    public ResultEntity<Object> testSimpleJobAdd(@RequestBody @Validated TestSimpleJobAddReq testSimpleJobAddReq) {
+        return testService.testSimpleJobAdd(testSimpleJobAddReq);
+    }
+
     @Operation(summary = "测试暂停定时任务")
     @OperLog(title = "测试暂停定时任务", businessType = BusinessTypeEnum.EDIT)
     @PostMapping(value = ApiURI.TEST_JOB_PAUSE)
@@ -71,6 +75,13 @@ public class TestController {
     @PostMapping(value = ApiURI.TEST_JOB_RESUME)
     public ResultEntity<Object> testJobResume(@RequestBody @Validated TestJobResumeReq testJobResumeReq) throws SchedulerException {
         return testService.testJobResume(testJobResumeReq);
+    }
+
+    @Operation(summary = "测试重启定时任务")
+    @OperLog(title = "测试重启定时任务", businessType = BusinessTypeEnum.EDIT)
+    @PostMapping(value = ApiURI.TEST_JOB_RESCHEDULE)
+    public ResultEntity<Object> testJobReschedule(@RequestBody @Validated TestJobRescheduleReq testJobRescheduleReq) throws SchedulerException {
+        return testService.testJobReschedule(testJobRescheduleReq);
     }
 
     @Operation(summary = "测试删除定时任务")

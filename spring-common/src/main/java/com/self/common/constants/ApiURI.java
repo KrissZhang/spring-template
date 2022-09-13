@@ -44,6 +44,11 @@ public class ApiURI {
     public static final String TEST_CRON_JOB_ADD = MODULE_URI_PREFIX + "/test/testCronJobAdd";
 
     /**
+     * 测试添加时间间隔定时任务
+     */
+    public static final String TEST_SIMPLE_JOB_ADD = MODULE_URI_PREFIX + "/test/testSimpleJobAdd";
+
+    /**
      * 测试暂停定时任务
      */
     public static final String TEST_JOB_PAUSE = MODULE_URI_PREFIX + "/test/testJobPause";
@@ -52,6 +57,11 @@ public class ApiURI {
      * 测试恢复定时任务
      */
     public static final String TEST_JOB_RESUME = MODULE_URI_PREFIX + "/test/testJobResume";
+
+    /**
+     * 测试重启定时任务
+     */
+    public static final String TEST_JOB_RESCHEDULE = MODULE_URI_PREFIX + "/test/testJobReschedule";
 
     /**
      * 测试删除定时任务
