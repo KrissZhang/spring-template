@@ -1,5 +1,6 @@
 package com.self.quartz.service;
 
+import com.self.common.exception.BizException;
 import com.self.quartz.utils.CronUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -61,6 +62,7 @@ public class QuartzService {
             scheduler.scheduleJob(jobDetail, cronTrigger);
         }catch (Exception e){
             logger.error("创建定时任务失败：", e);
+            throw new BizException("创建定时任务失败：" + e.getMessage());
         }
     }
 
@@ -104,6 +106,7 @@ public class QuartzService {
             scheduler.scheduleJob(jobDetail, simpleTrigger);
         }catch (Exception e){
             logger.error("创建定时任务失败：", e);
+            throw new BizException("创建定时任务失败：" + e.getMessage());
         }
     }
 
@@ -147,6 +150,7 @@ public class QuartzService {
             scheduler.scheduleJob(jobDetail, cronTrigger);
         }catch (Exception e){
             logger.error("创建延迟执行任务失败：", e);
+            throw new BizException("创建延迟执行任务失败：" + e.getMessage());
         }
     }
 
@@ -154,20 +158,28 @@ public class QuartzService {
      * 暂停定时任务
      * @param jName 任务名称
      * @param jGroup 任务组
-     * @throws SchedulerException SchedulerException
      */
-    public void pauseJob(String jName, String jGroup) throws SchedulerException {
-        scheduler.pauseJob(JobKey.jobKey(jName, jGroup));
+    public void pauseJob(String jName, String jGroup) {
+        try{
+            scheduler.pauseJob(JobKey.jobKey(jName, jGroup));
+        }catch (Exception e){
+            logger.error("暂停定时任务失败：", e);
+            throw new BizException("暂停定时任务失败：" + e.getMessage());
+        }
     }
 
     /**
      * 恢复定时任务
      * @param jName 任务名称
      * @param jGroup 任务组
-     * @throws SchedulerException SchedulerException
      */
-    public void resumeJob(String jName, String jGroup) throws SchedulerException {
-        scheduler.resumeJob(JobKey.jobKey(jName, jGroup));
+    public void resumeJob(String jName, String jGroup) {
+        try{
+            scheduler.resumeJob(JobKey.jobKey(jName, jGroup));
+        }catch (Exception e){
+            logger.error("恢复定时任务失败：", e);
+            throw new BizException("恢复定时任务失败：" + e.getMessage());
+        }
     }
 
     /**
@@ -175,20 +187,24 @@ public class QuartzService {
      * @param tName 触发器名称
      * @param tGroup 触发器组
      * @param cron 表达式
-     * @throws SchedulerException SchedulerException
      */
-    public void rescheduleCronJob(String tName, String tGroup, String cron) throws SchedulerException {
-        TriggerKey triggerKey = TriggerKey.triggerKey(tName, tGroup);
+    public void rescheduleCronJob(String tName, String tGroup, String cron) {
+        try{
+            TriggerKey triggerKey = TriggerKey.triggerKey(tName, tGroup);
 
-        // 表达式调度构建器
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
-        CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
+            // 表达式调度构建器
+            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
+            CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
 
-        // 按新的 cronExpression 表达式重新构建 trigger
-        cronTrigger = cronTrigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
+            // 按新的 cronExpression 表达式重新构建 trigger
+            cronTrigger = cronTrigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
 
-        // 按新的 trigger 重新设置 job 执行，重启触发器
-        scheduler.rescheduleJob(triggerKey, cronTrigger);
+            // 按新的 trigger 重新设置 job 执行，重启触发器
+            scheduler.rescheduleJob(triggerKey, cronTrigger);
+        }catch (Exception e){
+            logger.error("重启定时任务失败：", e);
+            throw new BizException("重启定时任务失败：" + e.getMessage());
+        }
     }
 
     /**
@@ -196,32 +212,40 @@ public class QuartzService {
      * @param tName 触发器名称
      * @param tGroup 触发器组
      * @param intervalTime 间隔时间(秒)
-     * @throws SchedulerException SchedulerException
      */
-    public void rescheduleSimpleJob(String tName, String tGroup, Integer intervalTime) throws SchedulerException {
-        TriggerKey triggerKey = TriggerKey.triggerKey(tName, tGroup);
+    public void rescheduleSimpleJob(String tName, String tGroup, Integer intervalTime) {
+        try{
+            TriggerKey triggerKey = TriggerKey.triggerKey(tName, tGroup);
 
-        // 时间间隔调度构建器
-        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.repeatSecondlyForever(intervalTime);
-        SimpleTrigger simpleTrigger = (SimpleTrigger) scheduler.getTrigger(triggerKey);
+            // 时间间隔调度构建器
+            SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.repeatSecondlyForever(intervalTime);
+            SimpleTrigger simpleTrigger = (SimpleTrigger) scheduler.getTrigger(triggerKey);
 
-        // 按新的 间隔时间 重新构建 trigger
-        simpleTrigger = simpleTrigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
+            // 按新的 间隔时间 重新构建 trigger
+            simpleTrigger = simpleTrigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
 
-        // 按新的 trigger 重新设置 job 执行，重启触发器
-        scheduler.rescheduleJob(triggerKey, simpleTrigger);
+            // 按新的 trigger 重新设置 job 执行，重启触发器
+            scheduler.rescheduleJob(triggerKey, simpleTrigger);
+        }catch (Exception e){
+            logger.error("重启定时任务失败：", e);
+            throw new BizException("重启定时任务失败：" + e.getMessage());
+        }
     }
 
     /**
      * 删除任务
      * @param jName 任务名称
      * @param jGroup 任务组
-     * @throws SchedulerException SchedulerException
      */
-    public void deleteJob(String jName, String jGroup) throws SchedulerException {
-        scheduler.pauseTrigger(TriggerKey.triggerKey(jName, jGroup));
-        scheduler.unscheduleJob(TriggerKey.triggerKey(jName, jGroup));
-        scheduler.deleteJob(JobKey.jobKey(jName, jGroup));
+    public void deleteJob(String jName, String jGroup) {
+        try{
+            scheduler.pauseTrigger(TriggerKey.triggerKey(jName, jGroup));
+            scheduler.unscheduleJob(TriggerKey.triggerKey(jName, jGroup));
+            scheduler.deleteJob(JobKey.jobKey(jName, jGroup));
+        }catch (Exception e){
+            logger.error("删除任务失败：", e);
+            throw new BizException("删除任务失败：" + e.getMessage());
+        }
     }
 
 }

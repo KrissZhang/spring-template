@@ -116,25 +116,25 @@ public class TestService {
         return ResultEntity.ok();
     }
 
-    public ResultEntity<Object> testJobPause(TestJobPauseReq testJobPauseReq) throws SchedulerException {
+    public ResultEntity<Object> testJobPause(TestJobPauseReq testJobPauseReq) {
         quartzService.pauseJob(testJobPauseReq.getJName(), testJobPauseReq.getJGroup());
 
         return ResultEntity.ok();
     }
 
-    public ResultEntity<Object> testJobResume(TestJobResumeReq testJobResumeReq) throws SchedulerException {
+    public ResultEntity<Object> testJobResume(TestJobResumeReq testJobResumeReq) {
         quartzService.resumeJob(testJobResumeReq.getJName(), testJobResumeReq.getJGroup());
 
         return ResultEntity.ok();
     }
 
-    public ResultEntity<Object> testJobReschedule(TestJobRescheduleReq testJobRescheduleReq) throws SchedulerException {
+    public ResultEntity<Object> testJobReschedule(TestJobRescheduleReq testJobRescheduleReq) {
         quartzService.rescheduleSimpleJob(testJobRescheduleReq.getTName(), testJobRescheduleReq.getTGroup(), testJobRescheduleReq.getIntervalTime());
 
         return ResultEntity.ok();
     }
 
-    public ResultEntity<Object> testJobDel(TestJobDelReq testJobDelReq) throws SchedulerException {
+    public ResultEntity<Object> testJobDel(TestJobDelReq testJobDelReq) {
         quartzService.deleteJob(testJobDelReq.getJName(), testJobDelReq.getJGroup());
 
         return ResultEntity.ok();

@@ -73,28 +73,28 @@ public class TestController {
     @Operation(summary = "测试暂停定时任务")
     @OperLog(title = "测试暂停定时任务", businessType = BusinessTypeEnum.EDIT)
     @PostMapping(value = ApiURI.TEST_JOB_PAUSE)
-    public ResultEntity<Object> testJobPause(@RequestBody @Validated TestJobPauseReq testJobPauseReq) throws SchedulerException {
+    public ResultEntity<Object> testJobPause(@RequestBody @Validated TestJobPauseReq testJobPauseReq) {
         return testService.testJobPause(testJobPauseReq);
     }
 
     @Operation(summary = "测试恢复定时任务")
     @OperLog(title = "测试恢复定时任务", businessType = BusinessTypeEnum.EDIT)
     @PostMapping(value = ApiURI.TEST_JOB_RESUME)
-    public ResultEntity<Object> testJobResume(@RequestBody @Validated TestJobResumeReq testJobResumeReq) throws SchedulerException {
+    public ResultEntity<Object> testJobResume(@RequestBody @Validated TestJobResumeReq testJobResumeReq) {
         return testService.testJobResume(testJobResumeReq);
     }
 
     @Operation(summary = "测试重启定时任务")
     @OperLog(title = "测试重启定时任务", businessType = BusinessTypeEnum.EDIT)
     @PostMapping(value = ApiURI.TEST_JOB_RESCHEDULE)
-    public ResultEntity<Object> testJobReschedule(@RequestBody @Validated TestJobRescheduleReq testJobRescheduleReq) throws SchedulerException {
+    public ResultEntity<Object> testJobReschedule(@RequestBody @Validated TestJobRescheduleReq testJobRescheduleReq) {
         return testService.testJobReschedule(testJobRescheduleReq);
     }
 
     @Operation(summary = "测试删除定时任务")
     @OperLog(title = "测试删除定时任务", businessType = BusinessTypeEnum.DELETE)
     @PostMapping(value = ApiURI.TEST_JOB_DEL)
-    public ResultEntity<Object> testJobDel(@RequestBody @Validated TestJobDelReq testJobDelReq) throws SchedulerException {
+    public ResultEntity<Object> testJobDel(@RequestBody @Validated TestJobDelReq testJobDelReq) {
         return testService.testJobDel(testJobDelReq);
     }
 
