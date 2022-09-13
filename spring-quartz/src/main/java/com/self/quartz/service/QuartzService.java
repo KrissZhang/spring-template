@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -23,9 +24,10 @@ public class QuartzService {
      * @param tName 触发器名称
      * @param tGroup 触发器组
      * @param cron cron表达式
+     * @param startTime 任务开始时间
      * @param clazz 任务
      */
-    public void addCronJob(String jName, String jGroup, String tName, String tGroup, String cron, Class<? extends Job> clazz, Map<String, String> paramMap){
+    public void addCronJob(String jName, String jGroup, String tName, String tGroup, String cron, Date startTime, Class<? extends Job> clazz, Map<String, String> paramMap){
         try{
             //JobDataMap
             JobDataMap jobDataMap = new JobDataMap();
@@ -40,7 +42,7 @@ public class QuartzService {
             // Trigger
             CronTrigger cronTrigger = TriggerBuilder.newTrigger()
                     .withIdentity(tName, tGroup)
-                    .startNow()
+                    .startAt(startTime)
                     .withSchedule(CronScheduleBuilder.cronSchedule(cron))
                     .build();
 
@@ -59,9 +61,10 @@ public class QuartzService {
      * @param tName 触发器名称
      * @param tGroup 触发器组
      * @param intervalTime 间隔时间(秒)
+     * @param startTime 任务开始时间
      * @param clazz 任务
      */
-    public void addSimpleJob(String jName, String jGroup, String tName, String tGroup, Integer intervalTime, Class<? extends Job> clazz, Map<String, String> paramMap){
+    public void addSimpleJob(String jName, String jGroup, String tName, String tGroup, Integer intervalTime, Date startTime, Class<? extends Job> clazz, Map<String, String> paramMap){
         try{
             //JobDataMap
             JobDataMap jobDataMap = new JobDataMap();
@@ -76,7 +79,7 @@ public class QuartzService {
             // Trigger
             SimpleTrigger simpleTrigger = TriggerBuilder.newTrigger()
                     .withIdentity(tName, tGroup)
-                    .startNow()
+                    .startAt(startTime)
                     .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(intervalTime))
                     .build();
 

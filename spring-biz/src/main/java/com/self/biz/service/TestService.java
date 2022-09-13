@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -86,7 +87,7 @@ public class TestService {
             paramMap = JSON.parseObject(JSON.toJSONString(testCronJobAddReq.getParams()), Map.class);
         }
 
-        quartzService.addCronJob(testCronJobAddReq.getJName(), testCronJobAddReq.getJGroup(), testCronJobAddReq.getTName(), testCronJobAddReq.getTGroup(), testCronJobAddReq.getCron(), TestJob.class, paramMap);
+        quartzService.addCronJob(testCronJobAddReq.getJName(), testCronJobAddReq.getJGroup(), testCronJobAddReq.getTName(), testCronJobAddReq.getTGroup(), testCronJobAddReq.getCron(), new Date(), TestJob.class, paramMap);
 
         return ResultEntity.ok();
     }
@@ -98,7 +99,7 @@ public class TestService {
             paramMap = JSON.parseObject(JSON.toJSONString(testSimpleJobAddReq.getParams()), Map.class);
         }
 
-        quartzService.addSimpleJob(testSimpleJobAddReq.getJName(), testSimpleJobAddReq.getJGroup(), testSimpleJobAddReq.getTName(), testSimpleJobAddReq.getTGroup(), testSimpleJobAddReq.getIntervalTime(), TestJob.class, paramMap);
+        quartzService.addSimpleJob(testSimpleJobAddReq.getJName(), testSimpleJobAddReq.getJGroup(), testSimpleJobAddReq.getTName(), testSimpleJobAddReq.getTGroup(), testSimpleJobAddReq.getIntervalTime(), new Date(), TestJob.class, paramMap);
 
         return ResultEntity.ok();
     }
