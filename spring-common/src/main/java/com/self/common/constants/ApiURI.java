@@ -49,6 +49,11 @@ public class ApiURI {
     public static final String TEST_SIMPLE_JOB_ADD = MODULE_URI_PREFIX + "/test/testSimpleJobAdd";
 
     /**
+     * 测试添加延迟执行任务
+     */
+    public static final String TEST_DELAY_JOB_ADD = MODULE_URI_PREFIX + "/test/testDelayJobAdd";
+
+    /**
      * 测试暂停定时任务
      */
     public static final String TEST_JOB_PAUSE = MODULE_URI_PREFIX + "/test/testJobPause";

@@ -63,6 +63,13 @@ public class TestController {
         return testService.testSimpleJobAdd(testSimpleJobAddReq);
     }
 
+    @Operation(summary = "测试添加延迟执行任务")
+    @OperLog(title = "测试添加延迟执行任务", businessType = BusinessTypeEnum.ADD)
+    @PostMapping(value = ApiURI.TEST_DELAY_JOB_ADD)
+    public ResultEntity<Object> testDelayJobAdd(@RequestBody @Validated TestDelayJobAddReq testDelayJobAddReq) {
+        return testService.testDelayJobAdd(testDelayJobAddReq);
+    }
+
     @Operation(summary = "测试暂停定时任务")
     @OperLog(title = "测试暂停定时任务", businessType = BusinessTypeEnum.EDIT)
     @PostMapping(value = ApiURI.TEST_JOB_PAUSE)

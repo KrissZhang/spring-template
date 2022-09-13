@@ -104,6 +104,18 @@ public class TestService {
         return ResultEntity.ok();
     }
 
+    public ResultEntity<Object> testDelayJobAdd(TestDelayJobAddReq testDelayJobAddReq){
+        //任务参数
+        Map<String, String> paramMap = Maps.newHashMap();
+        if(!CollectionUtils.isEmpty(testDelayJobAddReq.getParams())){
+            paramMap = JSON.parseObject(JSON.toJSONString(testDelayJobAddReq.getParams()), Map.class);
+        }
+
+        quartzService.addDelayJob(testDelayJobAddReq.getJName(), testDelayJobAddReq.getJGroup(), testDelayJobAddReq.getTName(), testDelayJobAddReq.getTGroup(), testDelayJobAddReq.getStartTime(), TestJob.class, paramMap);
+
+        return ResultEntity.ok();
+    }
+
     public ResultEntity<Object> testJobPause(TestJobPauseReq testJobPauseReq) throws SchedulerException {
         quartzService.pauseJob(testJobPauseReq.getJName(), testJobPauseReq.getJGroup());
 
