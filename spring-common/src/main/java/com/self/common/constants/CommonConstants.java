@@ -30,4 +30,14 @@ public final class CommonConstants {
      */
     public static final String STR_COLON = ":";
 
+    /**
+     * UNKNOWN
+     */
+    public static final String STR_UNKNOWN = "unknown";
+
+    /**
+     * 127.0.0.1
+     */
+    public static final String STR_LOCAL_IP = "127.0.0.1";
+
 }
