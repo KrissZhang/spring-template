@@ -18,7 +18,6 @@ import com.self.dao.entity.Test;
 import com.self.dao.mapper.TestMapper;
 import com.self.quartz.job.TestJob;
 import com.self.quartz.service.QuartzService;
-import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
