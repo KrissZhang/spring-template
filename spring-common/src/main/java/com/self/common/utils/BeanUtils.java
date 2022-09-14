@@ -5,13 +5,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BeanUtils {
+
+    private BeanUtils() {
+    }
 
     public static <T> T copyProperties(Object source, Class<T> tClass) {
         try {
@@ -38,11 +38,7 @@ public class BeanUtils {
                 String name = f.getName();
                 String key = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
                 Object o1 = f.get(o);
-                if(o1 == null){
-                    continue;
-                }else if(o1 instanceof String && StringUtils.isEmpty((String)o1)){
-                    continue;
-                }else{
+                if(Objects.nonNull(o1) && !(o1 instanceof String && StringUtils.isBlank(o1.toString()))){
                     result.put(key, o1);
                 }
             } catch (IllegalAccessException e) {
