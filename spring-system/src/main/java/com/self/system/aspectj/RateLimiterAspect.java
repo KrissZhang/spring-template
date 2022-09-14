@@ -40,12 +40,12 @@ public class RateLimiterAspect {
     }
 
     @Before("@annotation(rateLimiter)")
-    public void doBefore(JoinPoint point, RateLimiter rateLimiter) throws Throwable {
+    public void doBefore(JoinPoint point, RateLimiter rateLimiter) {
         String key = rateLimiter.key();
         int time = rateLimiter.time();
         int count = rateLimiter.count();
 
-        String combineKey = getCombineKey(rateLimiter, point);
+        String combineKey = getCombineKey(rateLimiter);
         List<String> keys = Collections.singletonList(combineKey);
         try {
             Long number = redisTemplate.execute(limitScript, keys, count, time);
@@ -60,14 +60,14 @@ public class RateLimiterAspect {
         }
     }
 
-    public String getCombineKey(RateLimiter rateLimiter, JoinPoint point) {
-        StringBuffer buffer = new StringBuffer(rateLimiter.key());
+    public String getCombineKey(RateLimiter rateLimiter) {
+        StringBuilder builder = new StringBuilder(rateLimiter.key());
         if (rateLimiter.limitType() == LimitTypeEnum.IP) {
-            buffer.append(IpUtils.getIpAddr(ServletUtils.getRequest())).append("-");
+            builder.append(IpUtils.getIpAddr(ServletUtils.getRequest())).append("-");
         }
         HttpServletRequest request = ServletUtils.getRequest();
-        buffer.append(request.getRequestURI());
-        return buffer.toString();
+        builder.append(request.getRequestURI());
+        return builder.toString();
     }
 
 }

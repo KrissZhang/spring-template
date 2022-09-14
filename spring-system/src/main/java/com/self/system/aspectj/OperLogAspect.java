@@ -51,6 +51,7 @@ public class OperLogAspect {
      */
     @Pointcut("@annotation(com.self.common.annotation.OperLog)")
     public void logPointCut() {
+        //ignore
     }
 
     /**
@@ -96,7 +97,7 @@ public class OperLogAspect {
 
             //返回参数
             if(controllerLog.isSaveResponseData()){
-                operLog.setRespResult(JSONObject.toJSONString(jsonResult));
+                operLog.setRespResult(JSON.toJSONString(jsonResult));
             }
 
             operLog.setReqUrl(request.getRequestURI());
@@ -133,7 +134,7 @@ public class OperLogAspect {
      * @param controllerLog 日志注解
      * @param operLog 操作日志
      */
-    public void getControllerMethodDescription(OperLog controllerLog, JoinPoint joinPoint, com.self.dao.entity.OperLog operLog) throws Exception {
+    public void getControllerMethodDescription(OperLog controllerLog, JoinPoint joinPoint, com.self.dao.entity.OperLog operLog) {
         //标题
         operLog.setTitle(controllerLog.title());
 
@@ -182,6 +183,7 @@ public class OperLogAspect {
                     try {
                         params.append(JSON.toJSONString(o, propertyPreFilter)).append(" ");
                     } catch (Exception ignored) {
+                        //ignore
                     }
                 }
             }
@@ -221,7 +223,7 @@ public class OperLogAspect {
     /**
      * 获取注解
      */
-    private OperLog getAnnotationOperLog(JoinPoint joinPoint) throws Exception {
+    private OperLog getAnnotationOperLog(JoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();

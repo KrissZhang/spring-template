@@ -4,6 +4,9 @@ import com.self.common.jwt.JWTInfo;
 
 public class JWTInfoContext {
 
+	private JWTInfoContext() {
+	}
+
 	private static final ThreadLocal<JWTInfo> JWT_INFO_THREAD_LOCAL = new ThreadLocal<>();
 
 	public static JWTInfo get() {
