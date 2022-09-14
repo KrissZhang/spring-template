@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class BeanUtils {
 
     private BeanUtils() {
+        super();
     }
 
     public static <T> T copyProperties(Object source, Class<T> tClass) {

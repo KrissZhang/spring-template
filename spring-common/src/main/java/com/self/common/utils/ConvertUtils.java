@@ -16,11 +16,15 @@ import java.util.Set;
  */
 public class ConvertUtils {
 
-    private static String[] FRACTION = {"角", "分"};
+    private ConvertUtils() {
+        super();
+    }
 
-    private static String[] DIGIT = {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"};
+    private static final String[] FRACTION = {"角", "分"};
 
-    private static String[][] UNIT = {{"元", "万", "亿"}, {"", "拾", "佰", "仟"}};
+    private static final String[] DIGIT = {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"};
+
+    private static final String[][] UNIT = {{"元", "万", "亿"}, {"", "拾", "佰", "仟"}};
 
     /**
      * 转换为字符串
@@ -675,7 +679,7 @@ public class ConvertUtils {
         }
 
         if (value instanceof Double) {
-            return new BigDecimal((Double) value);
+            return BigDecimal.valueOf((Double) value);
         }
 
         if (value instanceof Integer) {
@@ -901,13 +905,13 @@ public class ConvertUtils {
         String head = n < 0 ? "负" : "";
         n = Math.abs(n);
 
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < FRACTION.length; i++) {
-            s += (DIGIT[(int) (Math.floor(n * 10 * Math.pow(10, i)) % 10)] + FRACTION[i]).replaceAll("(零.)+", "");
+            s.append((DIGIT[(int) (Math.floor(n * 10 * Math.pow(10, i)) % 10)] + FRACTION[i]).replaceAll("(零.)+", ""));
         }
 
         if (s.length() < 1) {
-            s = "整";
+            s = new StringBuilder("整");
         }
 
         int integerPart = (int) Math.floor(n);
@@ -915,16 +919,16 @@ public class ConvertUtils {
         int len1 = UNIT[1].length;
 
         for (int i = 0; i < len0 && integerPart > 0; i++) {
-            String p = "";
+            StringBuilder p = new StringBuilder();
             for (int j = 0; j < len1 && n > 0; j++) {
-                p = DIGIT[integerPart % 10] + UNIT[1][j] + p;
+                p.insert(0, DIGIT[integerPart % 10] + UNIT[1][j]);
                 integerPart = integerPart / 10;
             }
 
-            s = p.replaceAll("(零.)*零$", "").replaceAll("^$", "零") + UNIT[0][i] + s;
+            s.insert(0, p.toString().replaceAll("(零.)*零$", "").replaceAll("^$", "零") + UNIT[0][i]);
         }
 
-        return head + s.replaceAll("(零.)*零元", "元").replaceFirst("(零.)+", "").replaceAll("(零.)+", "零").replaceAll("^整$", "零元整");
+        return head + s.toString().replaceAll("(零.)*零元", "元").replaceFirst("(零.)+", "").replaceAll("(零.)+", "零").replaceAll("^整$", "零元整");
     }
 
 }

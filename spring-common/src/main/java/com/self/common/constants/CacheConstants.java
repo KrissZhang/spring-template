@@ -6,6 +6,10 @@ package com.self.common.constants;
  */
 public final class CacheConstants {
 
+    private CacheConstants() {
+        super();
+    }
+
     /**
      * 字典 key
      */
