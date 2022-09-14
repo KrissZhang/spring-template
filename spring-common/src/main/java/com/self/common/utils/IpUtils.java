@@ -133,24 +133,24 @@ public class IpUtils {
     }
 
     public static String getHostIp() {
-        String hostIp = "";
+        String hostIp = CommonConstants.STR_LOCAL_IP;
 
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            hostIp = CommonConstants.STR_LOCAL_IP;
+            //ignore
         }
 
         return hostIp;
     }
 
     public static String getHostName() {
-        String hostName = "";
+        String hostName = "未知";
 
         try {
             return InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
-            hostName = "未知";
+            //ignore
         }
 
         return hostName;
