@@ -10,6 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 public class SecurityUtils {
 
+    private SecurityUtils() {
+    }
+
     public static AuthUser getAuthUser(){
         try{
             return (AuthUser) getAuthentication().getPrincipal();

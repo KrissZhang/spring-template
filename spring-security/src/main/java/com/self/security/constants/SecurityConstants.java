@@ -5,6 +5,9 @@ package com.self.security.constants;
  */
 public final class SecurityConstants {
 
+    private SecurityConstants() {
+    }
+
     public static final String ACCESS_TOKEN = "access_token";
 
     public static final String TERMINAL_TYPE = "terminalType";

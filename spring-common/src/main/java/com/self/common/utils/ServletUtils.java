@@ -19,12 +19,15 @@ import java.io.IOException;
  */
 public class ServletUtils {
 
+    private ServletUtils() {
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(ServletUtils.class);
 
     /**
      * 定义移动端所有可能的请求类型
      */
-    private final static String[] AGENT = {"Android", "iPhone", "iPod", "iPad", "Windows Phone", "MQQBrowser"};
+    private static final String[] AGENT = {"Android", "iPhone", "iPod", "iPad", "Windows Phone", "MQQBrowser"};
 
     /**
      * 获取参数

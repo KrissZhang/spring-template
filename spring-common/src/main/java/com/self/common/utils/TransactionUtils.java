@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Propagation;
 
 public class TransactionUtils {
 
+    private TransactionUtils() {
+    }
+
     private static volatile CustomTransactionManager customTransactionManager;
 
     private static CustomTransactionManager getCustomTransactionManager(){
