@@ -20,7 +20,7 @@ import java.io.IOException;
 @ConditionalOnWebApplication
 @AutoConfigureAfter(DruidDataSourceAutoConfigure.class)
 @ConditionalOnProperty(name = "spring.druid.datasource.druid.stat-view-servlet.enabled", havingValue = "true", matchIfMissing = true)
-public class RemoveDruidAdConfig {
+public class DruidRemoveAdConfig {
 
     @Bean
     public FilterRegistrationBean removeDruidAdFilterRegistrationBean(DruidStatProperties properties) {
