@@ -19,7 +19,7 @@
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
         <junit.version>4.13.2</junit.version>
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
-        <druid.version>1.2.8</druid.version>
+        <druid.version>1.2.12</druid.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <mybatisplus-plus.version>1.5.1-RELEASE</mybatisplus-plus.version>
         <springfox.version>3.0.0</springfox.version>
