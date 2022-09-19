@@ -19,6 +19,9 @@
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
         <junit.version>4.13.2</junit.version>
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
+        <druid.version>1.2.8</druid.version>
+        <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <mybatisplus-plus.version>1.5.1-RELEASE</mybatisplus-plus.version>
         <springfox.version>3.0.0</springfox.version>
         <knife4j.version>3.0.3</knife4j.version>
         <jjwt.version>0.9.1</jjwt.version>
@@ -102,6 +105,30 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jeffreyning</groupId>
+            <artifactId>mybatisplus-plus</artifactId>
+            <version>${mybatisplus-plus.version}</version>
         </dependency>
 
         <dependency>

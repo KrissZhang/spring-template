@@ -35,7 +35,7 @@ public class QuartzService {
      */
     public void addCronJob(String jName, String jGroup, String tName, String tGroup, String cron, Date startTime, Class<? extends Job> clazz, Map<String, String> paramMap){
         try{
-            //JobDataMap
+            // JobDataMap
             JobDataMap jobDataMap = new JobDataMap();
             jobDataMap.putAll(paramMap);
 
@@ -79,7 +79,7 @@ public class QuartzService {
      */
     public void addSimpleJob(String jName, String jGroup, String tName, String tGroup, Integer intervalTime, Date startTime, Class<? extends Job> clazz, Map<String, String> paramMap){
         try{
-            //JobDataMap
+            // JobDataMap
             JobDataMap jobDataMap = new JobDataMap();
             jobDataMap.putAll(paramMap);
 
@@ -122,7 +122,7 @@ public class QuartzService {
      */
     public void addDelayJob(String jName, String jGroup, String tName, String tGroup, Date startTime, Class<? extends Job> clazz, Map<String, String> paramMap){
         try{
-            //JobDataMap
+            // JobDataMap
             JobDataMap jobDataMap = new JobDataMap();
             jobDataMap.putAll(paramMap);
 
@@ -132,13 +132,14 @@ public class QuartzService {
                     .withIdentity(jName, jGroup)
                     .build();
 
-            Date curDate = new Date();
-            if(Objects.isNull(startTime) || startTime.before(curDate)){
-                startTime = curDate;
+            // 最早可用开始时间(当前时间后3秒钟)
+            Date earliestDate = DateUtils.addSeconds(new Date(), NumberUtils.createInteger("3"));
+            if(Objects.isNull(startTime) || startTime.before(earliestDate)){
+                startTime = earliestDate;
             }
 
             // Trigger
-            String cron = CronUtils.getCron(DateUtils.addSeconds(startTime, NumberUtils.INTEGER_TWO));
+            String cron = CronUtils.getCron(startTime);
             CronTrigger cronTrigger = TriggerBuilder.newTrigger()
                     .withIdentity(tName, tGroup)
                     .startNow()
