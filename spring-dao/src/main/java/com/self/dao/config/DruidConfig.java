@@ -6,8 +6,10 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import com.alibaba.druid.wall.WallConfig;
 import com.alibaba.druid.wall.WallFilter;
+import com.self.common.constants.CfgConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,6 +28,15 @@ import java.util.*;
 public class DruidConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(DruidConfig.class);
+
+    @Value(CfgConstants.DRUID_LOGIN_USERNAME)
+    private String loginUserName;
+
+    @Value(CfgConstants.DRUID_LOGIN_PASSWORD)
+    private String loginPassword;
+
+    @Value(CfgConstants.DRUID_LOGIN_ALLOW)
+    private String allow;
 
     @Bean
     @ConfigurationProperties(prefix = "spring.druid.datasource")
@@ -127,11 +138,11 @@ public class DruidConfig {
         // 是否允许清空统计数据
         initParams.put("resetEnable", "false");
         // 登录监控信息显示页面的用户名
-        initParams.put("loginUsername", "admin");
+        initParams.put("loginUsername", loginUserName);
         // 登录监控信息显示页面的密码
-        initParams.put("loginPassword", "123");
+        initParams.put("loginPassword", loginPassword);
         // 允许访问控制（格式：ip地址、ip地址/子网掩码位数）逗号分隔多个地址
-        initParams.put("allow", "127.0.0.1");
+        initParams.put("allow", allow);
         // 拒绝访问控制（格式：ip地址、ip地址/子网掩码位数）逗号分隔多个地址
         //initParams.put("deny", "");
 
