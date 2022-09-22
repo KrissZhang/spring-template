@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface TestMapper extends BaseMapper<Test> {
 
-    List<Test> selectAllByNameTestList(Page page, @Param("condition") TestListCondition condition);
+    List<Test> selectAllByNameTestList(Page<?> page, @Param("condition") TestListCondition condition);
 
 }
 
