@@ -99,6 +99,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //对druid数据连接池请求允许匿名访问
                 .antMatchers("/druid/**").anonymous()
 
+                //对健康检查请求允许匿名访问
+                //.antMatchers("/actuator/**").anonymous()
+
                 //除以上请求外所有请求都必须身份认证后才能访问
                 .anyRequest().authenticated()
                 .and()

@@ -19,6 +19,13 @@ spring:
     password: ${REDIS_PASSWORD:sy_202106}
     port: 6379
 
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: env,health,info
+
 logging:
   level:
     root: debug
