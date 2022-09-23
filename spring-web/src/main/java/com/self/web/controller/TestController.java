@@ -18,6 +18,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Api(tags = "测试管理")
 @RestController
@@ -95,6 +99,20 @@ public class TestController {
     @PostMapping(value = ApiURI.TEST_JOB_DEL)
     public ResultEntity<Object> testJobDel(@RequestBody @Validated TestJobDelReq testJobDelReq) {
         return testService.testJobDel(testJobDelReq);
+    }
+
+    @Operation(summary = "测试上传文件")
+    @OperLog(title = "测试上传文件", businessType = BusinessTypeEnum.OTHER)
+    @PostMapping(value = ApiURI.TEST_UPLOAD_FILE)
+    public ResultEntity<String> testUploadFile(MultipartFile multipartFile) throws IOException {
+        return testService.testUploadFile(multipartFile);
+    }
+
+    @Operation(summary = "测试下载文件")
+    @OperLog(title = "测试下载文件", businessType = BusinessTypeEnum.OTHER)
+    @PostMapping(value = ApiURI.TEST_DOWNLOAD_FILE)
+    public void testDownloadFile(HttpServletResponse response, @RequestParam String fileId, @RequestParam String fileName) {
+        testService.testDownloadFile(response, fileId, fileName);
     }
 
 }

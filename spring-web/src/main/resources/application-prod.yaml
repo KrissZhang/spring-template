@@ -19,7 +19,7 @@ spring:
     password: ${REDIS_PASSWORD:sy_202106}
     port: 6379
 
-seaweedfs
+seaweedfs:
   host: 10.15.2.214
   port: 9333
   use-public: true

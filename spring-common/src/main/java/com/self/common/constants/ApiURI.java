@@ -73,4 +73,14 @@ public class ApiURI {
      */
     public static final String TEST_JOB_DEL = MODULE_URI_PREFIX + "/test/testJobDel";
 
+    /**
+     * 测试上传文件
+     */
+    public static final String TEST_UPLOAD_FILE = MODULE_URI_PREFIX + "/test/testUploadFile";
+
+    /**
+     * 测试下载文件
+     */
+    public static final String TEST_DOWNLOAD_FILE = MODULE_URI_PREFIX + "/test/testDownloadFile";
+
 }

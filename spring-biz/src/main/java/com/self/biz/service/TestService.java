@@ -23,7 +23,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +42,9 @@ public class TestService {
 
     @Autowired
     private QuartzService quartzService;
+
+    @Autowired
+    private FileService fileService;
 
     public ResultEntity<String> testReq(String req){
         return ResultEntity.ok("testKey:" + req);
@@ -137,6 +143,14 @@ public class TestService {
         quartzService.deleteJob(testJobDelReq.getJName(), testJobDelReq.getJGroup());
 
         return ResultEntity.ok();
+    }
+
+    public ResultEntity<String> testUploadFile(MultipartFile multipartFile) throws IOException {
+        return ResultEntity.ok(fileService.uploadFile(multipartFile));
+    }
+
+    public void testDownloadFile(HttpServletResponse response, String fileId, String fileName){
+        fileService.downloadFile(response, fileId, fileName);
     }
 
 }
