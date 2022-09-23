@@ -22,6 +22,7 @@
         <druid.version>1.2.12</druid.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <mybatisplus-plus.version>1.5.1-RELEASE</mybatisplus-plus.version>
+        <seaweedfs.version>0.0.9.RELEASE</seaweedfs.version>
         <springfox.version>3.0.0</springfox.version>
         <knife4j.version>3.0.3</knife4j.version>
         <jjwt.version>0.9.1</jjwt.version>
@@ -134,6 +135,12 @@
             <groupId>com.github.jeffreyning</groupId>
             <artifactId>mybatisplus-plus</artifactId>
             <version>${mybatisplus-plus.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.anumbrella.seaweedfs</groupId>
+            <artifactId>seaweedfs-java-client</artifactId>
+            <version>${seaweedfs.version}</version>
         </dependency>
 
         <dependency>
