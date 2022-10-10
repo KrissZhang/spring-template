@@ -1,5 +1,6 @@
 package com.self.web;
 
+import com.github.yitter.idgen.YitIdHelper;
 import com.google.common.collect.Lists;
 import com.self.common.utils.RedissonUtils;
 import org.junit.Test;
@@ -46,6 +47,11 @@ public class WebTest {
                 redissonUtils.unlockAviable(rLock);
             }
         });
+    }
+
+    @Test
+    public void testYitId(){
+        System.out.println("生成分布式id：" + YitIdHelper.nextId());
     }
 
 }

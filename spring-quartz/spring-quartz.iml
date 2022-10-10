@@ -219,5 +219,6 @@
     <orderEntry type="library" name="Maven: com.alibaba.fastjson2:fastjson2-extension:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.fastjson2:fastjson2:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20220320" level="project" />
+    <orderEntry type="library" name="Maven: com.github.yitter:yitter-idgenerator:1.0.6" level="project" />
   </component>
 </module>
