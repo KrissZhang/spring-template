@@ -19,6 +19,7 @@
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
         <junit.version>4.13.2</junit.version>
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
+        <redisson.version>3.17.7</redisson.version>
         <druid.version>1.2.12</druid.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <mybatisplus-plus.version>1.5.1-RELEASE</mybatisplus-plus.version>
@@ -112,6 +113,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>${redisson.version}</version>
         </dependency>
 
         <dependency>

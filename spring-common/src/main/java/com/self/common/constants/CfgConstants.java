@@ -9,6 +9,21 @@ public final class CfgConstants {
     }
 
     /**
+     * redis host
+     */
+    public static final String REDIS_HOST = "${spring.redis.host:10.12.2.64}";
+
+    /**
+     * redis port
+     */
+    public static final String REDIS_PORT = "${spring.redis.port:6379}";
+
+    /**
+     * redis password
+     */
+    public static final String REDIS_PASSWORD = "${spring.redis.password:sy_202106}";
+
+    /**
      * druid 登陆用户名
      */
     public static final String DRUID_LOGIN_USERNAME = "${spring.druid.login-username: admin}";
