@@ -23,6 +23,7 @@
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <mybatisplus-plus.version>1.5.1-RELEASE</mybatisplus-plus.version>
         <seaweedfs.version>0.0.9.RELEASE</seaweedfs.version>
+        <okhttp.version>4.9.3</okhttp.version>
         <springfox.version>3.0.0</springfox.version>
         <knife4j.version>3.0.3</knife4j.version>
         <jjwt.version>0.9.1</jjwt.version>
@@ -141,6 +142,12 @@
             <groupId>net.anumbrella.seaweedfs</groupId>
             <artifactId>seaweedfs-java-client</artifactId>
             <version>${seaweedfs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
         </dependency>
 
         <dependency>

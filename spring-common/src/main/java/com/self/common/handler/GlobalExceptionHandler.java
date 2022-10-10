@@ -1,9 +1,6 @@
 package com.self.common.handler;
 
-import com.self.common.exception.BizException;
-import com.self.common.exception.ParamException;
-import com.self.common.exception.RateLimiterException;
-import com.self.common.exception.UnAuthorizedException;
+import com.self.common.exception.*;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.RespCodeEnum;
 import org.slf4j.Logger;
@@ -42,6 +39,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RateLimiterException.class)
     public final ResultEntity<Object> handleRateLimiterExceptions(Exception ex) {
         return ResultEntity.addError(RespCodeEnum.FAIL_TOO_MANY_REQUESTS.getCode(), ex.getMessage());
+    }
+
+    @ExceptionHandler(HttpException.class)
+    public final ResultEntity<Object> handleHttpExceptions(Exception ex) {
+        return ResultEntity.addError(RespCodeEnum.FAIL_SYS.getCode(), ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

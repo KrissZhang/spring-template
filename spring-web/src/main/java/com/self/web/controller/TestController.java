@@ -1,5 +1,6 @@
 package com.self.web.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.self.biz.service.TestService;
 import com.self.common.annotation.OperLog;
 import com.self.common.annotation.RateLimiter;
@@ -113,6 +114,14 @@ public class TestController {
     @PostMapping(value = ApiURI.TEST_DOWNLOAD_FILE)
     public void testDownloadFile(HttpServletResponse response, @RequestParam String fileId, @RequestParam String fileName) {
         testService.testDownloadFile(response, fileId, fileName);
+    }
+
+    @Operation(summary = "测试OkHttp")
+    @RateLimiter(limitType = LimitTypeEnum.IP, count = 10)
+    @OperLog(title = "测试OkHttp", businessType = BusinessTypeEnum.OTHER)
+    @GetMapping(value = ApiURI.TEST_OKHTTP)
+    public ResultEntity<JSONObject> testOkHttp(){
+        return testService.testOkHttp();
     }
 
 }

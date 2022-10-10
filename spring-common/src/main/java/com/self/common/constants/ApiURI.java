@@ -83,4 +83,9 @@ public class ApiURI {
      */
     public static final String TEST_DOWNLOAD_FILE = MODULE_URI_PREFIX + "/test/testDownloadFile";
 
+    /**
+     * 测试OkHttp
+     */
+    public static final String TEST_OKHTTP = MODULE_URI_PREFIX + "/test/testOkHttp";
+
 }

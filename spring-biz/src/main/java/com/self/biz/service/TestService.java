@@ -1,6 +1,7 @@
 package com.self.biz.service;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Maps;
 import com.self.common.api.condition.test.TestListCondition;
@@ -13,6 +14,8 @@ import com.self.common.enums.EnableEnum;
 import com.self.common.exception.BizException;
 import com.self.common.utils.BeanUtils;
 import com.self.common.utils.TransactionUtils;
+import com.self.common.utils.http.BaseHttpRequest;
+import com.self.common.utils.http.OkHttpUtils;
 import com.self.dao.api.page.PagingResp;
 import com.self.dao.entity.Test;
 import com.self.dao.mapper.TestMapper;
@@ -151,6 +154,22 @@ public class TestService {
 
     public void testDownloadFile(HttpServletResponse response, String fileId, String fileName){
         fileService.downloadFile(response, fileId, fileName);
+    }
+
+    public ResultEntity<JSONObject> testOkHttp(){
+        String url = "https://wis.qq.com/weather/common";
+        Map<String, Object> reqMap = Maps.newHashMap();
+        reqMap.put("source", "pc");
+        reqMap.put("weather_type", "forecast_24h");
+        reqMap.put("province", "重庆市");
+        reqMap.put("city", "重庆市");
+        reqMap.put("county", "北碚区");
+
+        BaseHttpRequest request = new BaseHttpRequest(url, BaseHttpRequest.Method.GET);
+        request.getQueryParams().putAll(reqMap);
+        String response = OkHttpUtils.getInstance().sendRequest(request);
+
+        return ResultEntity.ok(JSON.parseObject(response));
     }
 
 }
