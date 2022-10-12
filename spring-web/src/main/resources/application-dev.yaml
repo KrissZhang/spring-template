@@ -18,6 +18,12 @@ spring:
     host: ${REDIS_HOST:10.12.2.64}
     password: ${REDIS_PASSWORD:sy_202106}
     port: 6379
+  kafka:
+    # 指定kafka server的地址，集群配多个，中间，逗号隔开
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:10.15.2.214:9092,10.15.2.215:9092,10.15.2.216:9092}
+    # 指定默认消费者group id --> 由于在kafka中，同一组中的consumer不会读取到同一个消息，依靠groud.id设置组名
+    consumer:
+      group-id: spring-web-dev
 
 seaweedfs:
   host: 10.15.2.214
@@ -34,3 +40,6 @@ management:
 logging:
   level:
     root: info
+
+# Kafka Topic
+app.topic.test_record: TEST-RECORD-DEV

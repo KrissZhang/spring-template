@@ -88,4 +88,9 @@ public class ApiURI {
      */
     public static final String TEST_OKHTTP = MODULE_URI_PREFIX + "/test/testOkHttp";
 
+    /**
+     * 测试Kafka消息
+     */
+    public static final String TEST_KAFKA_SEND = MODULE_URI_PREFIX + "/test/testKafkaSend";
+
 }

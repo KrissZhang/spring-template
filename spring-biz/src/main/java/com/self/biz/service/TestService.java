@@ -4,8 +4,10 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Maps;
+import com.self.biz.kafka.producer.RecordKafkaProducer;
 import com.self.common.api.condition.test.TestListCondition;
 import com.self.common.api.req.job.*;
+import com.self.common.api.req.kafka.TestKafkaReq;
 import com.self.common.api.req.test.TestAddReq;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
@@ -48,6 +50,9 @@ public class TestService {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private RecordKafkaProducer recordKafkaProducer;
 
     public ResultEntity<String> testReq(String req){
         return ResultEntity.ok("testKey:" + req);
@@ -170,6 +175,12 @@ public class TestService {
         String response = OkHttpUtils.getInstance().sendRequest(request);
 
         return ResultEntity.ok(JSON.parseObject(response));
+    }
+
+    public ResultEntity<Object> testKafkaSend(TestKafkaReq testKafkaReq){
+        recordKafkaProducer.send(testKafkaReq);
+
+        return ResultEntity.ok();
     }
 
 }

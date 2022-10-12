@@ -5,6 +5,7 @@ import com.self.biz.service.TestService;
 import com.self.common.annotation.OperLog;
 import com.self.common.annotation.RateLimiter;
 import com.self.common.api.req.job.*;
+import com.self.common.api.req.kafka.TestKafkaReq;
 import com.self.common.api.req.test.TestAddReq;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
@@ -122,6 +123,13 @@ public class TestController {
     @GetMapping(value = ApiURI.TEST_OKHTTP)
     public ResultEntity<JSONObject> testOkHttp(){
         return testService.testOkHttp();
+    }
+
+    @Operation(summary = "测试Kafka消息")
+    @OperLog(title = "测试Kafka消息", businessType = BusinessTypeEnum.OTHER)
+    @PostMapping(value = ApiURI.TEST_KAFKA_SEND)
+    public ResultEntity<Object> testKafkaSend(@RequestBody @Validated TestKafkaReq testKafkaReq){
+        return testService.testKafkaSend(testKafkaReq);
     }
 
 }
