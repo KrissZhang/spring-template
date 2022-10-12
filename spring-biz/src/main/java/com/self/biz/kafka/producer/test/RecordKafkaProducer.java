@@ -1,4 +1,4 @@
-package com.self.biz.kafka.producer;
+package com.self.biz.kafka.producer.test;
 
 import com.self.common.api.req.kafka.TestKafkaReq;
 import com.self.common.constants.TopicConstants;

@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Maps;
-import com.self.biz.kafka.producer.RecordKafkaProducer;
+import com.self.biz.kafka.producer.test.RecordKafkaProducer;
 import com.self.common.api.condition.test.TestListCondition;
 import com.self.common.api.req.job.*;
 import com.self.common.api.req.kafka.TestKafkaReq;
