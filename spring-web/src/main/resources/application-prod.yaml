@@ -26,7 +26,7 @@ spring:
       group-id: spring-web-prod
 
 seaweedfs:
-  host: 10.15.2.214
+  host: 10.15.2.53
   port: 9333
   use-public: true
 
