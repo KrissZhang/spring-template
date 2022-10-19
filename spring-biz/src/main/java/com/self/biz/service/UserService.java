@@ -2,7 +2,6 @@ package com.self.biz.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
-import com.self.common.enums.EnableEnum;
 import com.self.dao.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class UserService {
     public User selectUserByUserName(String userName){
         //查询用户名指定用户
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getEnable, EnableEnum.ENABLE.getValue()).eq(User::getUserName, userName);
+        wrapper.eq(User::getUserName, userName);
         return userService.getOne(wrapper);
     }
 
@@ -35,7 +34,7 @@ public class UserService {
     public User selectUserByTelPhoneNum(String telPhoneNum){
         //查询手机号码指定用户
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getEnable, EnableEnum.ENABLE.getValue()).eq(User::getPhoneNum, telPhoneNum);
+        wrapper.eq(User::getPhoneNum, telPhoneNum);
         return userService.getOne(wrapper);
     }
 

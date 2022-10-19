@@ -58,6 +58,12 @@ public class TestService {
         return ResultEntity.ok("testKey:" + req);
     }
 
+    public ResultEntity<Object> testDel(Integer id){
+        testMapper.deleteById(id);
+
+        return ResultEntity.ok();
+    }
+
     public ResultEntity<PagingResp<TestListResp>> testPage(TestListReq testListReq){
         Page<TestListResp> page = Page.of(testListReq.getCurrentPage(), testListReq.getPageSize());
 

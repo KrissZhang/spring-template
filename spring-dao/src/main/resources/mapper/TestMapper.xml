@@ -22,6 +22,8 @@
         from test t
 
         <where>
+            and t.enable = 1
+
             <if test="condition.name != null and condition.name != ''">
                 and t.name = #{condition.name}
             </if>

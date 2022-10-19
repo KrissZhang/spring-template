@@ -40,6 +40,14 @@ public class TestController {
         return testService.testReq(req);
     }
 
+    @Operation(summary = "测试逻辑删除")
+    @RateLimiter(limitType = LimitTypeEnum.IP, count = 10)
+    @OperLog(title = "测试逻辑删除", businessType = BusinessTypeEnum.DELETE)
+    @GetMapping(value = ApiURI.TEST_DEL)
+    public ResultEntity<Object> testDel(@Parameter(description = "删除主键id") @RequestParam Integer id){
+        return testService.testDel(id);
+    }
+
     @Operation(summary = "测试分页")
     @OperLog(title = "测试分页", businessType = BusinessTypeEnum.OTHER)
     @PostMapping(value = ApiURI.TEST_PAGE)
