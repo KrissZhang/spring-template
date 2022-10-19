@@ -43,7 +43,7 @@ public class TestController {
     @Operation(summary = "测试逻辑删除")
     @RateLimiter(limitType = LimitTypeEnum.IP, count = 10)
     @OperLog(title = "测试逻辑删除", businessType = BusinessTypeEnum.DELETE)
-    @GetMapping(value = ApiURI.TEST_DEL)
+    @DeleteMapping(value = ApiURI.TEST_DEL)
     public ResultEntity<Object> testDel(@Parameter(description = "删除主键id") @RequestParam Integer id){
         return testService.testDel(id);
     }
