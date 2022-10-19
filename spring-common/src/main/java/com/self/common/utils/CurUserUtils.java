@@ -18,4 +18,8 @@ public class CurUserUtils {
         return jwtInfo;
     }
 
+    public static Long getUserId(){
+        return curJWTInfo().getUserId();
+    }
+
 }

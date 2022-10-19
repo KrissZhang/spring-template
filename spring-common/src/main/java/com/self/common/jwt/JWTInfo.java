@@ -15,7 +15,7 @@ public class JWTInfo implements Serializable {
     private static final long serialVersionUID = -2192965577950942743L;
 
     @Schema(name = "用户id", description = "用户id")
-    private Integer userId;
+    private Long userId;
 
     @Schema(name = "用户名", description = "用户名")
     private String userName;

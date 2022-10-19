@@ -7,38 +7,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 是否启用
+ * 逻辑删除标识
  */
-public enum EnableEnum {
+public enum DeletedEnum {
 
     /**
-     * 禁用
+     * 未删除
      */
-    DISABLE(NumberUtils.toByte("0"), "禁用"),
+    ENABLE(NumberUtils.toByte("0"), "未删除"),
 
     /**
-     * 启用
+     * 已删除
      */
-    ENABLE(NumberUtils.toByte("1"), "启用");
+    DELETED(NumberUtils.toByte("1"), "已删除");
 
     private final Byte value;
 
     private final String desc;
 
-    private static final Map<Byte, EnableEnum> MAPPINGS = new HashMap<>(2);
+    private static final Map<Byte, DeletedEnum> MAPPINGS = new HashMap<>(2);
 
     static {
-        for (EnableEnum enableEnum : values()) {
-            MAPPINGS.put(enableEnum.getValue(), enableEnum);
+        for (DeletedEnum deletedEnum : values()) {
+            MAPPINGS.put(deletedEnum.getValue(), deletedEnum);
         }
     }
 
     @Nullable
-    public static EnableEnum resolve(@Nullable Byte value) {
+    public static DeletedEnum resolve(@Nullable Byte value) {
         return (value != null ? MAPPINGS.get(value) : null);
     }
 
-    EnableEnum(Byte value, String desc) {
+    DeletedEnum(Byte value, String desc) {
         this.value = value;
         this.desc = desc;
     }

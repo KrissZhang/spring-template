@@ -49,7 +49,7 @@ public class OperLog implements Serializable {
     /**
      * 操作人id
      */
-    private Integer operatorId;
+    private Long operatorId;
 
     /**
      * 操作人名称

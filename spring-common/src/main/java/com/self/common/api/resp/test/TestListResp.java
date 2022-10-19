@@ -17,10 +17,10 @@ public class TestListResp {
     @Schema(name = "值", description = "值")
     private String value;
 
-    @Schema(name = "是否启用", description = "是否启用")
-    private Byte enable;
+    @Schema(name = "是否逻辑删除", description = "是否逻辑删除")
+    private Byte isDeleted;
 
-    @Schema(name = "启用状态名称", description = "启用状态名称")
-    private String enableName;
+    @Schema(name = "是否逻辑删除名称", description = "是否逻辑删除名称")
+    private String isDeletedName;
 
 }

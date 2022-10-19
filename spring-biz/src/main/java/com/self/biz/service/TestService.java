@@ -12,9 +12,10 @@ import com.self.common.api.req.test.TestAddReq;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
 import com.self.common.domain.ResultEntity;
-import com.self.common.enums.EnableEnum;
+import com.self.common.enums.DeletedEnum;
 import com.self.common.exception.BizException;
 import com.self.common.utils.BeanUtils;
+import com.self.common.utils.CurUserUtils;
 import com.self.common.utils.TransactionUtils;
 import com.self.common.utils.http.BaseHttpRequest;
 import com.self.common.utils.http.OkHttpUtils;
@@ -74,14 +75,16 @@ public class TestService {
 
         List<TestListResp> respList = BeanUtils.copyList(testList, TestListResp.class);
 
-        respList.forEach(r -> Optional.ofNullable(EnableEnum.resolve(r.getEnable())).ifPresent(enableEnum -> r.setEnableName(enableEnum.getDesc())));
+        respList.forEach(r -> Optional.ofNullable(DeletedEnum.resolve(r.getIsDeleted())).ifPresent(deletedEnum -> r.setIsDeletedName(deletedEnum.getDesc())));
 
         return ResultEntity.ok(new PagingResp<>(page, respList));
     }
 
     public ResultEntity<Object> testTransaction(TestAddReq testAddReq){
         Test test = BeanUtils.copyProperties(testAddReq, Test.class);
-        test.setEnable(EnableEnum.ENABLE.getValue());
+
+        test.setCreateUser(CurUserUtils.getUserId());
+        test.setUpdateUser(CurUserUtils.getUserId());
 
         TransactionUtils.beginTransaction(() -> {
             testMapper.insert(test);

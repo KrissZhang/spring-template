@@ -10,12 +10,12 @@ public enum BusinessStatusEnum {
     /**
      * 成功
      */
-    SUCCESS(NumberUtils.toByte("1"), "成功"),
+    SUCCESS(NumberUtils.toByte("0"), "成功"),
 
     /**
      * 失败
      */
-    FAIL(NumberUtils.toByte("0"), "失败");
+    FAIL(NumberUtils.toByte("1"), "失败");
 
     private final Byte value;
 

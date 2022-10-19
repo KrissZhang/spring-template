@@ -21,7 +21,7 @@ public class SecurityUtils {
         }
     }
 
-    public static Integer getUserId(){
+    public static Long getUserId(){
         return getAuthUser().getUserId();
     }
 

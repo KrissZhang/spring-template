@@ -44,7 +44,7 @@ public class User implements Serializable {
     /**
      * 是否逻辑删除，0-未删除，1-已删除
      */
-    private Boolean isDeleted;
+    private Byte isDeleted;
 
     /**
      * 创建人

@@ -43,7 +43,7 @@ public class UserService {
      * @param userId 用户id
      * @return 用户权限
      */
-    public List<String> selectPermissionListByUserId(Integer userId){
+    public List<String> selectPermissionListByUserId(Long userId){
         //获取指定用户权限--TODO
         return Lists.newArrayList("sys_admin", "sys_user");
     }

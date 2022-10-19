@@ -34,7 +34,7 @@ public class AuthUser implements UserDetails {
     private String tokenId;
 
     @Schema(name = "用户id", description = "用户id")
-    private Integer userId;
+    private Long userId;
 
     @Schema(name = "终端类型", description = "终端类型")
     private String terminalType;

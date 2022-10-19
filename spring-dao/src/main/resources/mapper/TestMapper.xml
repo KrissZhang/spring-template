@@ -8,7 +8,7 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="value" column="value" jdbcType="VARCHAR"/>
-            <result property="isDeleted" column="is_deleted" jdbcType="BOOLEAN"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
             <result property="createUser" column="create_user" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
@@ -27,7 +27,7 @@
         from test t
 
         <where>
-            and t.enable = 1
+            and t.is_deleted = 0
 
             <if test="condition.name != null and condition.name != ''">
                 and t.name = #{condition.name}

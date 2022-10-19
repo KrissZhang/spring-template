@@ -11,7 +11,7 @@
             <result property="businessType" column="business_type" jdbcType="TINYINT"/>
             <result property="method" column="method" jdbcType="VARCHAR"/>
             <result property="reqMethod" column="req_method" jdbcType="VARCHAR"/>
-            <result property="operatorId" column="operator_id" jdbcType="INTEGER"/>
+            <result property="operatorId" column="operator_id" jdbcType="BIGINT"/>
             <result property="operatorName" column="operator_name" jdbcType="VARCHAR"/>
             <result property="reqIp" column="req_ip" jdbcType="VARCHAR"/>
             <result property="reqUrl" column="req_url" jdbcType="VARCHAR"/>
