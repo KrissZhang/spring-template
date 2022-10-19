@@ -5,7 +5,7 @@
 <mapper namespace="com.self.dao.mapper.OperLogMapper">
 
     <resultMap id="BaseResultMap" type="com.self.dao.entity.OperLog">
-            <id property="id" column="id" jdbcType="INTEGER"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="terminalType" column="terminal_type" jdbcType="VARCHAR"/>
             <result property="title" column="title" jdbcType="VARCHAR"/>
             <result property="businessType" column="business_type" jdbcType="TINYINT"/>

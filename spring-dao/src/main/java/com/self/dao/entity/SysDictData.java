@@ -19,7 +19,7 @@ public class SysDictData implements Serializable {
      * id
      */
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
      * 字典类型编码
@@ -42,7 +42,7 @@ public class SysDictData implements Serializable {
     private Integer dictSort;
 
     /**
-     * 状态，1-启用，0-停用
+     * 状态，0-启用，1-停用
      */
     private Byte status;
 
@@ -52,9 +52,9 @@ public class SysDictData implements Serializable {
     private String remark;
 
     /**
-     * 创建人id
+     * 创建人
      */
-    private Integer createUser;
+    private Long createUser;
 
     /**
      * 创建时间
@@ -62,9 +62,9 @@ public class SysDictData implements Serializable {
     private Date createTime;
 
     /**
-     * 修改人id
+     * 修改人
      */
-    private Integer updateUser;
+    private Long updateUser;
 
     /**
      * 修改时间

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
 /**
@@ -18,7 +19,7 @@ public class User implements Serializable {
      * id
      */
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
      * 用户名
@@ -41,9 +42,29 @@ public class User implements Serializable {
     private String phoneNum;
 
     /**
-     * 是否启用
+     * 是否逻辑删除，0-未删除，1-已删除
      */
-    private Byte enable;
+    private Boolean isDeleted;
+
+    /**
+     * 创建人
+     */
+    private Long createUser;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 修改人
+     */
+    private Long updateUser;
+
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

@@ -5,15 +5,20 @@
 <mapper namespace="com.self.dao.mapper.TestMapper">
 
     <resultMap id="BaseResultMap" type="com.self.dao.entity.Test">
-            <id property="id" column="id" jdbcType="INTEGER"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="value" column="value" jdbcType="VARCHAR"/>
-            <result property="enable" column="enable" jdbcType="TINYINT"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="BOOLEAN"/>
+            <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,name,value,
-        enable
+        is_deleted,create_user,create_time,
+        update_user,update_time
     </sql>
 
     <select id="selectAllByNameTestList" resultType="com.self.dao.entity.Test">

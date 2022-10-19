@@ -5,16 +5,16 @@
 <mapper namespace="com.self.dao.mapper.SysDictDataMapper">
 
     <resultMap id="BaseResultMap" type="com.self.dao.entity.SysDictData">
-            <id property="id" column="id" jdbcType="INTEGER"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="dictTypeCode" column="dict_type_code" jdbcType="VARCHAR"/>
             <result property="dictLabel" column="dict_label" jdbcType="VARCHAR"/>
             <result property="dictValue" column="dict_value" jdbcType="VARCHAR"/>
             <result property="dictSort" column="dict_sort" jdbcType="INTEGER"/>
             <result property="status" column="status" jdbcType="TINYINT"/>
             <result property="remark" column="remark" jdbcType="VARCHAR"/>
-            <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+            <result property="createUser" column="create_user" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+            <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
