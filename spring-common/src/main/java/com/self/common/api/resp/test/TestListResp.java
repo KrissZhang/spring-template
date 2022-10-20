@@ -9,7 +9,7 @@ import lombok.Data;
 public class TestListResp {
 
     @Schema(name = "id", description = "id")
-    private Integer id;
+    private Long id;
 
     @Schema(name = "名称", description = "名称")
     private String name;
