@@ -39,7 +39,7 @@ public class Test implements Serializable {
     /**
      * 创建人
      */
-    private Long createUser;
+    private Long createBy;
 
     /**
      * 创建时间
@@ -49,7 +49,7 @@ public class Test implements Serializable {
     /**
      * 修改人
      */
-    private Long updateUser;
+    private Long updateBy;
 
     /**
      * 修改时间

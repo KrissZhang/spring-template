@@ -83,8 +83,8 @@ public class TestService {
     public ResultEntity<Object> testTransaction(TestAddReq testAddReq){
         Test test = BeanUtils.copyProperties(testAddReq, Test.class);
 
-        test.setCreateUser(CurUserUtils.getUserId());
-        test.setUpdateUser(CurUserUtils.getUserId());
+        test.setCreateBy(CurUserUtils.getUserId());
+        test.setUpdateBy(CurUserUtils.getUserId());
 
         TransactionUtils.beginTransaction(() -> {
             testMapper.insert(test);

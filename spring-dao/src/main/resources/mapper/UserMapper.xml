@@ -11,16 +11,16 @@
             <result property="realName" column="real_name" jdbcType="VARCHAR"/>
             <result property="phoneNum" column="phone_num" jdbcType="VARCHAR"/>
             <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
-            <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+            <result property="createBy" column="create_by" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+            <result property="updateBy" column="update_by" jdbcType="BIGINT"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,user_name,password,
         real_name,phone_num,is_deleted,
-        create_user,create_time,update_user,
+        create_by,create_time,update_by,
         update_time
     </sql>
 </mapper>
