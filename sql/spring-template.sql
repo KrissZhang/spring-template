@@ -11,7 +11,7 @@ CREATE TABLE `oper_log`  (
   `business_type` tinyint(0) UNSIGNED NULL DEFAULT NULL COMMENT '功能类型',
   `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '方法名称',
   `req_method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求方式',
-  `operator_id` int(0) NOT NULL COMMENT '操作人id',
+  `operator_id` bigint(0) UNSIGNED NOT NULL COMMENT '操作人id',
   `operator_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作人名称',
   `req_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求ip',
   `req_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '请求url',
