@@ -39,7 +39,7 @@ CREATE TABLE `sys_dict_data`  (
   `update_user` bigint(0) UNSIGNED NULL DEFAULT NULL COMMENT '修改人',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `normal_dict_type_code`(`dict_type_code`) USING BTREE COMMENT '字典类型编码索引'
+  INDEX `idx_dict_type_code`(`dict_type_code`) USING BTREE COMMENT '字典类型编码索引'
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -62,7 +62,7 @@ CREATE TABLE `sys_dict_type`  (
   `update_user` bigint(0) UNSIGNED NULL DEFAULT NULL COMMENT '修改人',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `unique_dict_type_code`(`dict_type_code`) USING BTREE COMMENT '字典类型编码唯一'
+  UNIQUE INDEX `uk_dict_type_code`(`dict_type_code`) USING BTREE COMMENT '字典类型编码唯一'
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -100,8 +100,8 @@ CREATE TABLE `user`  (
   `update_user` bigint(0) UNSIGNED NULL DEFAULT NULL COMMENT '修改人',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `unique_user_name`(`user_name`) USING BTREE COMMENT '用户名唯一',
-  UNIQUE INDEX `unique_phone_num`(`phone_num`) USING BTREE COMMENT '手机号码唯一'
+  UNIQUE INDEX `uk_user_name`(`user_name`) USING BTREE COMMENT '用户名唯一',
+  UNIQUE INDEX `uk_phone_num`(`phone_num`) USING BTREE COMMENT '手机号码唯一'
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
