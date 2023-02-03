@@ -11,6 +11,7 @@ import com.self.common.api.req.kafka.TestKafkaReq;
 import com.self.common.api.req.test.TestAddReq;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
+import com.self.common.api.resp.test.TestSensitiveResp;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.DeletedEnum;
 import com.self.common.exception.BizException;
@@ -58,6 +59,17 @@ public class TestService {
 
     public ResultEntity<String> testReq(String req){
         return ResultEntity.ok("testKey:" + req);
+    }
+
+    public ResultEntity<TestSensitiveResp> testSensitive(){
+        TestSensitiveResp resp = new TestSensitiveResp();
+        resp.setId(1L);
+        resp.setChineseName("张瑾瑜");
+        resp.setIdCard("500108202202135115");
+        resp.setMobilePhone("15020736323");
+        resp.setText("既然如何, 了解清楚随机一段废话到底是一种怎么样的存在, 是解决一切问题的关键.问题的关键究竟为何? 经过上述讨论, 在这种困难的抉择下, 本人思来想去, 寝食难安.带着这些问题, 我们来审视一下随机一段废话. 那么, 我们不妨可以这样来想: 本人也是经过了深思熟虑,在每个日日夜夜思考这个问题. 要想清楚, 随机一段废话, 到底是一种怎么样的存在. 生活中, 若随机一段废话出现了, 我们就不得不考");
+
+        return ResultEntity.ok(resp);
     }
 
     @Transactional(rollbackFor = {Exception.class, Error.class})

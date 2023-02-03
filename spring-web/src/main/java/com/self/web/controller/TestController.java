@@ -9,6 +9,7 @@ import com.self.common.api.req.kafka.TestKafkaReq;
 import com.self.common.api.req.test.TestAddReq;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
+import com.self.common.api.resp.test.TestSensitiveResp;
 import com.self.common.constants.ApiURI;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.BusinessTypeEnum;
@@ -38,6 +39,14 @@ public class TestController {
     @GetMapping(value = ApiURI.TEST_REQ)
     public ResultEntity<String> testReq(@Parameter(description = "请求参数") @RequestParam String req){
         return testService.testReq(req);
+    }
+
+    @Operation(summary = "测试脱敏")
+    @RateLimiter(limitType = LimitTypeEnum.IP, count = 10)
+    @OperLog(title = "测试脱敏", businessType = BusinessTypeEnum.OTHER)
+    @GetMapping(value = ApiURI.TEST_SENSITIVE)
+    public ResultEntity<TestSensitiveResp> testSensitive(){
+        return testService.testSensitive();
     }
 
     @Operation(summary = "测试逻辑删除")

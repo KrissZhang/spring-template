@@ -29,6 +29,11 @@ public class ApiURI {
     public static final String TEST_REQ = MODULE_URI_PREFIX + "/test/testReq";
 
     /**
+     * 测试脱敏
+     */
+    public static final String TEST_SENSITIVE = MODULE_URI_PREFIX + "/test/testSensitive";
+
+    /**
      * 测试逻辑删除
      */
     public static final String TEST_DEL = MODULE_URI_PREFIX + "/test/testDel";
