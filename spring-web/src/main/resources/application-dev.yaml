@@ -41,9 +41,5 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-logging:
-  level:
-    root: debug
-
 # Kafka Topic
 app.topic.test_record: TEST-RECORD-DEV
