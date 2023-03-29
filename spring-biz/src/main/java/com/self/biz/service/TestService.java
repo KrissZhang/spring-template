@@ -2,7 +2,8 @@ package com.self.biz.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.self.biz.kafka.producer.test.RecordKafkaProducer;
 import com.self.common.api.condition.test.TestListCondition;
@@ -80,16 +81,17 @@ public class TestService {
     }
 
     public ResultEntity<PagingResp<TestListResp>> testPage(TestListReq testListReq){
-        Page<TestListResp> page = Page.of(testListReq.getCurrentPage(), testListReq.getPageSize());
-
         TestListCondition condition = BeanUtils.copyProperties(testListReq, TestListCondition.class);
-        List<Test> testList = testMapper.selectAllByNameTestList(page, condition);
 
-        List<TestListResp> respList = BeanUtils.copyList(testList, TestListResp.class);
+        PageInfo<Test> pageInfo = PageHelper.startPage(testListReq.getCurrentPage(), testListReq.getPageSize()).doSelectPageInfo(() -> testMapper.selectAllByNameTestList(condition));
 
+        List<TestListResp> respList = BeanUtils.copyList(pageInfo.getList(), TestListResp.class);
         respList.forEach(r -> Optional.ofNullable(DeletedEnum.resolve(r.getIsDeleted())).ifPresent(deletedEnum -> r.setIsDeletedName(deletedEnum.getDesc())));
 
-        return ResultEntity.ok(new PagingResp<>(page, respList));
+        PageInfo<TestListResp> pageResult = BeanUtils.copyProperties(pageInfo, PageInfo.class);
+        pageResult.setList(respList);
+
+        return ResultEntity.ok(new PagingResp<>(pageResult));
     }
 
     public ResultEntity<Object> testTransaction(TestAddReq testAddReq){

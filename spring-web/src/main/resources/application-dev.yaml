@@ -37,9 +37,13 @@ management:
       exposure:
         include: env,health,info
 
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 logging:
   level:
-    root: info
+    root: debug
 
 # Kafka Topic
 app.topic.test_record: TEST-RECORD-DEV

@@ -15,10 +15,10 @@ public class PagingReq {
 
     @Schema(name = "当前页数", description = "当前页数", required = true)
     @NotNull(message = "当前页数不能为空")
-    private Long currentPage;
+    private Integer currentPage;
 
     @Schema(name = "每页条数", description = "每页条数", required = true)
     @NotNull(message = "每页条数不能为空")
-    private Long pageSize;
+    private Integer pageSize;
 
 }

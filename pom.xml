@@ -21,8 +21,10 @@
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
         <redisson.version>3.17.7</redisson.version>
         <druid.version>1.2.12</druid.version>
-        <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <mybatis-plus.version>3.3.2</mybatis-plus.version>
+        <mybatis-autoconfigure.version>2.1.1</mybatis-autoconfigure.version>
         <mybatisplus-plus.version>1.5.1-RELEASE</mybatisplus-plus.version>
+        <pagehelper.version>1.4.3</pagehelper.version>
         <seaweedfs.version>0.0.9.RELEASE</seaweedfs.version>
         <okhttp.version>4.9.3</okhttp.version>
         <springfox.version>3.0.0</springfox.version>
@@ -145,9 +147,21 @@
         </dependency>
 
         <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
+            <version>${mybatis-autoconfigure.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.jeffreyning</groupId>
             <artifactId>mybatisplus-plus</artifactId>
             <version>${mybatisplus-plus.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.version}</version>
         </dependency>
 
         <dependency>
