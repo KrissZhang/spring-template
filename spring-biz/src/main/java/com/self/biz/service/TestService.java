@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.self.biz.kafka.producer.test.RecordKafkaProducer;
+import com.self.biz.request.TxWeatherRequest;
 import com.self.common.api.condition.test.TestListCondition;
 import com.self.common.api.req.job.*;
 import com.self.common.api.req.kafka.TestKafkaReq;
@@ -13,14 +14,14 @@ import com.self.common.api.req.test.TestAddReq;
 import com.self.common.api.req.test.TestListReq;
 import com.self.common.api.resp.test.TestListResp;
 import com.self.common.api.resp.test.TestSensitiveResp;
+import com.self.common.converter.ToStringConverterFactory;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.DeletedEnum;
 import com.self.common.exception.BizException;
+import com.self.common.exception.HttpException;
 import com.self.common.utils.BeanUtils;
 import com.self.common.utils.CurUserUtils;
 import com.self.common.utils.TransactionUtils;
-import com.self.common.utils.http.BaseHttpRequest;
-import com.self.common.utils.http.OkHttpUtils;
 import com.self.dao.api.page.PagingResp;
 import com.self.dao.entity.Test;
 import com.self.dao.mapper.TestMapper;
@@ -33,6 +34,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -186,8 +190,7 @@ public class TestService {
         fileService.downloadFile(response, fileId, fileName);
     }
 
-    public ResultEntity<JSONObject> testOkHttp(){
-        String url = "https://wis.qq.com/weather/common";
+    public ResultEntity<JSONObject> testRetrofit(){
         Map<String, Object> reqMap = Maps.newHashMap();
         reqMap.put("source", "pc");
         reqMap.put("weather_type", "forecast_24h");
@@ -195,11 +198,23 @@ public class TestService {
         reqMap.put("city", "重庆市");
         reqMap.put("county", "北碚区");
 
-        BaseHttpRequest request = new BaseHttpRequest(url, BaseHttpRequest.Method.GET);
-        request.getQueryParams().putAll(reqMap);
-        String response = OkHttpUtils.getInstance().sendRequest(request);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TxWeatherRequest.BASE_URL)
+                .addConverterFactory(new ToStringConverterFactory())
+                .build();
 
-        return ResultEntity.ok(JSON.parseObject(response));
+        TxWeatherRequest txWeatherRequest = retrofit.create(TxWeatherRequest.class);
+        Call<String> call = txWeatherRequest.getWeatherInfo(reqMap);
+
+        String result = null;
+        try {
+            Response<String> resp = call.execute();
+            result = Optional.ofNullable(resp).map(Response::body).orElse(null);
+        } catch (IOException e) {
+            throw new HttpException("腾讯天气请求失败", e);
+        }
+
+        return ResultEntity.ok(JSON.parseObject(result));
     }
 
     public ResultEntity<Object> testKafkaSend(TestKafkaReq testKafkaReq){

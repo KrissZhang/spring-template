@@ -94,9 +94,9 @@ public class ApiURI {
     public static final String TEST_DOWNLOAD_FILE = MODULE_URI_PREFIX + "/test/testDownloadFile";
 
     /**
-     * 测试OkHttp
+     * 测试Retrofit
      */
-    public static final String TEST_OKHTTP = MODULE_URI_PREFIX + "/test/testOkHttp";
+    public static final String TEST_RETROFIT = MODULE_URI_PREFIX + "/test/testRetrofit";
 
     /**
      * 测试Kafka消息

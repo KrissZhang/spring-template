@@ -134,12 +134,12 @@ public class TestController {
         testService.testDownloadFile(response, fileId, fileName);
     }
 
-    @Operation(summary = "测试OkHttp")
+    @Operation(summary = "测试Retrofit")
     @RateLimiter(limitType = LimitTypeEnum.IP, count = 10)
-    @OperLog(title = "测试OkHttp", businessType = BusinessTypeEnum.OTHER)
-    @GetMapping(value = ApiURI.TEST_OKHTTP)
-    public ResultEntity<JSONObject> testOkHttp(){
-        return testService.testOkHttp();
+    @OperLog(title = "测试Retrofit", businessType = BusinessTypeEnum.OTHER)
+    @GetMapping(value = ApiURI.TEST_RETROFIT)
+    public ResultEntity<JSONObject> testRetrofit(){
+        return testService.testRetrofit();
     }
 
     @Operation(summary = "测试Kafka消息")
