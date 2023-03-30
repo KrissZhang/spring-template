@@ -43,6 +43,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpException.class)
     public final ResultEntity<Object> handleHttpExceptions(Exception ex) {
+        logger.error("http请求失败：", ex);
         return ResultEntity.addError(RespCodeEnum.FAIL_SYS.getCode(), ex.getMessage());
     }
 
