@@ -4,16 +4,87 @@ server:
 spring:
   swagger:
     enable: false
-  druid:
-    datasource:
-      type: com.alibaba.druid.pool.DruidDataSource
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/spring-template?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
-      username: ${DB_USERNAME:root}
-      password: ${DB_PASSWORD:Zp18716331455}
-    login-username: admin
-    login-password: 123
-    allow: 127.0.0.1
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/spring-template?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:Zp18716331455}
+    druid:
+      # 启动程序时，在连接池中初始化多少个连接
+      initialSize: 5
+      # 回收空闲连接时，将保证至少有多少个连接（与 initialSize 相同）
+      minIdle: 5
+      # 连接池中最多支持多少个活动会话
+      maxActive: 20
+      # 程序向连接池中请求连接时，超过 maxWait 的值后，认为本次请求失败，即连接池，没有可用连接，单位毫秒，设置 -1 时表示无限等待
+      maxWait: 60000
+      # 检查空闲连接的频率，单位毫秒，非正整数时表示不进行检查
+      timeBetweenEvictionRunsMillis: 60000
+      # 连接池中某个连接的空闲时长达到 N 毫秒后, 连接池在下次检查空闲连接时，将回收该连接
+      minEvictableIdleTimeMillis: 300000
+      # 检查池中的连接是否仍可用的 SQL 语句，druid 会连接到数据库执行该 SQL，如果正常返回，则表示连接可用，否则表示连接不可用
+      validationQuery: SELECT 1 FROM DUAL
+      # 当程序请求连接池在分配连接时，是否先检查该连接是否有效
+      testWhileIdle: true
+      # 程序申请连接时，进行连接有效性检查
+      testOnBorrow: false
+      # 程序返还连接时，进行连接有效性检查
+      testOnReturn: false
+      # 程序没有 close 连接且空闲时长超过 minEvictableIdleTimeMillis，则会执行 validationQuery 指定的 SQL，以保证该程序连接不会池 kill 掉，其范围不超过 minIdle 指定的连接个数
+      keepAlive: true
+      # 缓存通过以下两个方法发起的 SQL：
+      # public PreparedStatement prepareStatement(String sql)
+      # public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)
+      poolPreparedStatements: true
+      # 每个连接最多缓存多少个 SQL
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 是否合并多个 DruidDataSource 的监控数据
+      useGlobalDataSourceStat: true
+      # 监控统计
+      # 开启 mergeSql
+      # 是否启用慢 SQL 记录
+      # 执行时间超过 slowSqlMillis 的就是慢，单位毫秒
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.logSlowSql=true;druid.stat.slowSqlMillis=1000;
+      # 配置监控统计拦截的 filters，去掉后监控界面 SQL 无法统计，'wall'用于防火墙
+      filters: stat,wall,slf4j
+
+      # 配置监控属性
+      # webStatFilter 配置
+      web-stat-filter:
+        # 启用 webStatFilter 配置
+        enabled: true
+        # 过滤所有的 url 路径
+        url-pattern: /*
+        # 排除不必要采集的 url 路径，以逗号“,”分割
+        exclusions: /druid/*,*.js,*.gif,*.jpg,*.png,*.css,*.ico,*.map
+        # 是否使用 session 监控功能
+        session-stat-enable: true
+        # 使用 session 监控最大数量
+        session-stat-max-count: 1000
+        # 使得 druid 能够知道当前的 session 的用户是谁，根据需要，把改值修改为你 user 信息保存在 session 中的 sessionName
+        principal-session-name: session_user_key
+        # 如果你的 user 信息保存在 cookie 中，你可以配置 principalCookieName，使得 druid 知道当前的 user 是谁，根据需要，把该值修改为你 user 信息保存在 cookie 中的 cookieName
+        principal-cookie-name: cookie_user_key
+        # 是否监控单个 url 调用的 sql 列表
+        profile-enable: true
+
+      # statViewServlet 配置
+      stat-view-servlet:
+        # 启用 statViewServlet 配置
+        enabled: true
+        # 访问监控信息显示页面的 url 路径
+        url-pattern: /druid/*
+        # 是否允许清空统计数据
+        reset-enable: false
+        # 登录监控信息显示页面的用户名
+        login-username: admin
+        # 登录监控信息显示页面的密码
+        login-password: 123
+        # 允许访问控制（格式：ip地址、ip地址/子网掩码位数）逗号分隔多个地址
+        allow: 127.0.0.1
+        # 拒绝访问控制（格式：ip地址、ip地址/子网掩码位数）逗号分隔多个地址
+        #deny:
   redis:
     host: ${REDIS_HOST:10.12.2.64}
     password: ${REDIS_PASSWORD:sy_202106}

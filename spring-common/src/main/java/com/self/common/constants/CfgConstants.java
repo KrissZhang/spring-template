@@ -24,21 +24,6 @@ public final class CfgConstants {
     public static final String REDIS_PASSWORD = "${spring.redis.password:sy_202106}";
 
     /**
-     * druid 登陆用户名
-     */
-    public static final String DRUID_LOGIN_USERNAME = "${spring.druid.login-username: admin}";
-
-    /**
-     * druid 登陆密码
-     */
-    public static final String DRUID_LOGIN_PASSWORD = "${spring.druid.login-password: 123}";
-
-    /**
-     * druid 允许访问地址
-     */
-    public static final String DRUID_LOGIN_ALLOW = "${spring.druid.allow: 127.0.0.1}";
-
-    /**
      * SeaweedFS 地址
      */
     public static final String SEAWEEDFS_HOST = "${seaweedfs.host: 127.0.0.1}";
