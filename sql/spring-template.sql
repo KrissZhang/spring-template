@@ -77,7 +77,7 @@ CREATE TABLE `test`  (
   `id` bigint(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
   `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '值',
-  `is_deleted` tinyint(0) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否逻辑删除，0-未删除，1-已删除',
+  `is_deleted` tinyint(0) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否逻辑删除，0-未删除，时间戳-已删除',
   `create_by` bigint(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建人',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_by` bigint(0) UNSIGNED NULL DEFAULT NULL COMMENT '修改人',
@@ -94,14 +94,14 @@ CREATE TABLE `user`  (
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `real_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户真实名称',
   `phone_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '手机号码',
-  `is_deleted` tinyint(0) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否逻辑删除，0-未删除，1-已删除',
+  `is_deleted` tinyint(0) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否逻辑删除，0-未删除，时间戳-已删除',
   `create_by` bigint(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建人',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_by` bigint(0) UNSIGNED NULL DEFAULT NULL COMMENT '修改人',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_user_name`(`user_name`) USING BTREE COMMENT '用户名唯一',
-  UNIQUE INDEX `uk_phone_num`(`phone_num`) USING BTREE COMMENT '手机号码唯一'
+  UNIQUE INDEX `uk_user_name`(`user_name`,`is_deleted`) USING BTREE COMMENT '用户名唯一',
+  UNIQUE INDEX `uk_phone_num`(`phone_num`,`is_deleted`) USING BTREE COMMENT '手机号码唯一'
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------

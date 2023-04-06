@@ -1,9 +1,7 @@
 package com.self.dao.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -42,8 +40,9 @@ public class User implements Serializable {
     private String phoneNum;
 
     /**
-     * 是否逻辑删除，0-未删除，1-已删除
+     * 是否逻辑删除，0-未删除，时间戳-已删除
      */
+    @TableLogic(value = "0", delval = "REPLACE(UNIX_TIMESTAMP(CURRENT_TIMESTAMP(3)), '.', '')")
     private Byte isDeleted;
 
     /**

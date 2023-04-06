@@ -103,14 +103,6 @@ spring:
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*.xml
-  global-config:
-    db-config:
-      # 全局逻辑删除实体字段名
-      logic-delete-field: isDeleted
-      # 逻辑未删除值
-      logic-not-delete-value: 0
-      # 逻辑已删除值
-      logic-delete-value: 1
 
 logging:
   config: ${LOGING_CONFIG:classpath:logback/logback-test.xml}
