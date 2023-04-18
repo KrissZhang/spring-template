@@ -1,7 +1,6 @@
 package com.self.common.config;
 
 import com.self.common.constants.CfgConstants;
-import net.anumbrella.seaweedfs.core.ConnectionProperties;
 import net.anumbrella.seaweedfs.core.FileSource;
 import net.anumbrella.seaweedfs.core.FileTemplate;
 import org.slf4j.Logger;
@@ -27,12 +26,9 @@ public class SeaweedFSConfig {
     @Bean
     public FileTemplate fileTemplate() {
         FileSource fileSource = new FileSource();
-        ConnectionProperties properties
-                = new ConnectionProperties.Builder()
-                .host(seaweedFSHost)
-                .port(seaweedFSPort)
-                .maxConnection(100).build();
-        fileSource.setProperties(properties);
+        fileSource.setHost(seaweedFSHost);
+        fileSource.setPort(seaweedFSPort);
+        fileSource.setMaxConnection(100);
 
         // 启动服务
         try {

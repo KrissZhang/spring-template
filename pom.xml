@@ -25,7 +25,7 @@
         <mybatis-autoconfigure.version>2.1.1</mybatis-autoconfigure.version>
         <mybatisplus-plus.version>1.5.1-RELEASE</mybatisplus-plus.version>
         <pagehelper.version>1.4.3</pagehelper.version>
-        <seaweedfs.version>0.0.9.RELEASE</seaweedfs.version>
+        <seaweedfs.version>0.0.2.RELEASE</seaweedfs.version>
         <retrofit.version>2.9.0</retrofit.version>
         <springfox.version>3.0.0</springfox.version>
         <knife4j.version>3.0.3</knife4j.version>
