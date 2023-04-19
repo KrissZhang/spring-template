@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -52,6 +55,15 @@ public class WebTest {
     @Test
     public void testYitId(){
         System.out.println("生成分布式id：" + YitIdHelper.nextId());
+    }
+
+    @Test
+    public void testMockito(){
+        List mockList = mock(ArrayList.class);
+
+        when(mockList.get(0)).thenReturn("element");
+
+        System.out.println(mockList.get(0));
     }
 
 }
