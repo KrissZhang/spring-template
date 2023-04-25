@@ -21,7 +21,6 @@ import com.self.common.exception.BizException;
 import com.self.common.exception.HttpException;
 import com.self.common.utils.BeanUtils;
 import com.self.common.utils.CurUserUtils;
-import com.self.common.utils.TransactionUtils;
 import com.self.dao.api.page.PagingResp;
 import com.self.dao.entity.Test;
 import com.self.dao.mapper.TestMapper;
@@ -33,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import retrofit2.Call;
@@ -62,6 +62,9 @@ public class TestService {
 
     @Autowired
     private RecordKafkaProducer recordKafkaProducer;
+
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
     public ResultEntity<String> testReq(String req){
         return ResultEntity.ok("testKey:" + req);
@@ -111,14 +114,19 @@ public class TestService {
         test.setCreateBy(CurUserUtils.getUserId());
         test.setUpdateBy(CurUserUtils.getUserId());
 
-        TransactionUtils.beginTransaction(() -> {
-            testMapper.insert(test);
+        transactionTemplate.executeWithoutResult(transactionStatus -> {
+            try{
+                testMapper.insert(test);
 
-            /**
-             * 事务内部异常会回滚
-            if(test.getId() % 2 != 0){
-                throw new BizException("测试异常");
-            }*/
+                /**
+                 * 事务内部异常会回滚
+                 if(test.getId() % 2 != 0){
+                 throw new BizException("测试异常");
+                 }*/
+            }catch (Exception e){
+                transactionStatus.setRollbackOnly();
+                logger.error("测试事务异常，事务回滚");
+            }
         });
 
         //事务外部异常不会回滚
