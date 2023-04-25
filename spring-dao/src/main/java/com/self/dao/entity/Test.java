@@ -33,7 +33,7 @@ public class Test implements Serializable {
      * 是否逻辑删除，0-未删除，时间戳-已删除
      */
     @TableLogic(value = "0", delval = "REPLACE(UNIX_TIMESTAMP(CURRENT_TIMESTAMP(3)), '.', '')")
-    private Byte isDeleted;
+    private Long isDeleted;
 
     /**
      * 创建人

@@ -18,7 +18,7 @@ public class TestListResp {
     private String value;
 
     @Schema(name = "是否逻辑删除", description = "是否逻辑删除")
-    private Byte isDeleted;
+    private Long isDeleted;
 
     @Schema(name = "是否逻辑删除名称", description = "是否逻辑删除名称")
     private String isDeletedName;

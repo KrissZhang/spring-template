@@ -8,7 +8,7 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="value" column="value" jdbcType="VARCHAR"/>
-            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="BIGINT"/>
             <result property="createBy" column="create_by" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateBy" column="update_by" jdbcType="BIGINT"/>

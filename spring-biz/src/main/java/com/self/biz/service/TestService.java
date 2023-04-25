@@ -27,6 +27,7 @@ import com.self.dao.entity.Test;
 import com.self.dao.mapper.TestMapper;
 import com.self.quartz.job.TestJob;
 import com.self.quartz.service.QuartzService;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,13 @@ public class TestService {
         PageInfo<Test> pageInfo = PageHelper.startPage(testListReq.getCurrentPage(), testListReq.getPageSize()).doSelectPageInfo(() -> testMapper.selectAllByNameTestList(condition));
 
         List<TestListResp> respList = BeanUtils.copyList(pageInfo.getList(), TestListResp.class);
-        respList.forEach(r -> Optional.ofNullable(DeletedEnum.resolve(r.getIsDeleted())).ifPresent(deletedEnum -> r.setIsDeletedName(deletedEnum.getDesc())));
+        respList.forEach(r -> {
+            if(NumberUtils.LONG_ZERO.equals(r.getIsDeleted())){
+                r.setIsDeletedName(DeletedEnum.ENABLE.getDesc());
+            }else{
+                r.setIsDeletedName(DeletedEnum.DELETED.getDesc());
+            }
+        });
 
         PageInfo<TestListResp> pageResult = BeanUtils.copyProperties(pageInfo, PageInfo.class);
         pageResult.setList(respList);
