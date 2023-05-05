@@ -70,6 +70,10 @@ public class TestService {
         return ResultEntity.ok("testKey:" + req);
     }
 
+    public ResultEntity<String> testXwwwFormUrlEncoded(String param1, String param2){
+        return ResultEntity.ok("x-www-form-urlencoded:" + param1 + "," + param2);
+    }
+
     public ResultEntity<TestSensitiveResp> testSensitive(){
         TestSensitiveResp resp = new TestSensitiveResp();
         resp.setId(1L);

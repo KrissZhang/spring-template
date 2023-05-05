@@ -29,6 +29,11 @@ public class ApiURI {
     public static final String TEST_REQ = MODULE_URI_PREFIX + "/test/testReq";
 
     /**
+     * 测试x-www-form-urlencoded请求
+     */
+    public static final String TEST_X_WWW_FORM_URLENCODED_REQ = MODULE_URI_PREFIX + "/test/testXwwwFormUrlEncoded";
+
+    /**
      * 测试脱敏
      */
     public static final String TEST_SENSITIVE = MODULE_URI_PREFIX + "/test/testSensitive";
