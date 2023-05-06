@@ -31,7 +31,7 @@ public class ApiURI {
     /**
      * 测试x-www-form-urlencoded请求
      */
-    public static final String TEST_X_WWW_FORM_URLENCODED_REQ = MODULE_URI_PREFIX + "/test/testXwwwFormUrlEncoded";
+    public static final String TEST_FORM_URLENCODED_REQ = MODULE_URI_PREFIX + "/test/testFormUrlEncoded";
 
     /**
      * 测试脱敏

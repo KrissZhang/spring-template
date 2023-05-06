@@ -44,9 +44,9 @@ public class TestController {
     @Operation(summary = "测试x-www-form-urlencoded请求")
     @RateLimiter(limitType = LimitTypeEnum.IP, count = 10)
     @OperLog(title = "测试x-www-form-urlencoded请求", businessType = BusinessTypeEnum.OTHER)
-    @PostMapping(value = ApiURI.TEST_X_WWW_FORM_URLENCODED_REQ)
-    public ResultEntity<String> testXwwwFormUrlEncoded(@Parameter(description = "请求参数1") @RequestParam String param1, @Parameter(description = "请求参数2") @RequestParam String param2){
-        return testService.testXwwwFormUrlEncoded(param1, param2);
+    @PostMapping(value = ApiURI.TEST_FORM_URLENCODED_REQ)
+    public ResultEntity<String> testFormUrlEncoded(@Parameter(description = "请求参数1") @RequestParam String param1, @Parameter(description = "请求参数2") @RequestParam String param2){
+        return testService.testFormUrlEncoded(param1, param2);
     }
 
     @Operation(summary = "测试脱敏")
