@@ -27,6 +27,7 @@
         <pagehelper.version>1.4.3</pagehelper.version>
         <seaweedfs.version>0.0.2.RELEASE</seaweedfs.version>
         <retrofit.version>2.9.0</retrofit.version>
+        <okhttp3-interceptor.version>3.14.9</okhttp3-interceptor.version>
         <springfox.version>3.0.0</springfox.version>
         <knife4j.version>3.0.3</knife4j.version>
         <jjwt.version>0.9.1</jjwt.version>
@@ -214,6 +215,12 @@
             <groupId>com.squareup.retrofit2</groupId>
             <artifactId>converter-jackson</artifactId>
             <version>${retrofit.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>${okhttp3-interceptor.version}</version>
         </dependency>
 
         <dependency>

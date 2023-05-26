@@ -21,6 +21,7 @@ import com.self.common.exception.BizException;
 import com.self.common.exception.HttpException;
 import com.self.common.utils.BeanUtils;
 import com.self.common.utils.CurUserUtils;
+import com.self.common.utils.OkHttpClientUtils;
 import com.self.dao.api.page.PagingResp;
 import com.self.dao.entity.Test;
 import com.self.dao.mapper.TestMapper;
@@ -219,6 +220,7 @@ public class TestService {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(TxWeatherRequest.BASE_URL)
+                .client(OkHttpClientUtils.getInstance())
                 .addConverterFactory(new ToStringConverterFactory())
                 .build();
 
