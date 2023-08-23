@@ -86,8 +86,8 @@ spring:
         # 拒绝访问控制（格式：ip地址、ip地址/子网掩码位数）逗号分隔多个地址
         #deny:
   redis:
-    host: ${REDIS_HOST:10.12.2.64}
-    password: ${REDIS_PASSWORD:sy_202106}
+    host: ${REDIS_HOST:127.0.0.1}
+    password: ${REDIS_PASSWORD:Zp18716331455}
     port: 6379
   kafka:
     # 指定kafka server的地址，集群配多个，中间，逗号隔开
