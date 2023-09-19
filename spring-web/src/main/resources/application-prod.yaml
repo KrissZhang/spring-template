@@ -102,11 +102,21 @@ seaweedfs:
   use-public: true
 
 management:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+        step: 1m
+        descriptions: true
+  web:
+    server:
+      auto-time-requests: true
   endpoints:
+    prometheus:
+      id: springmetrics
     web:
-      base-path: /actuator
       exposure:
-        include: health,info
+        include: health,info,env,prometheus,metrics,httptrace,threaddump,heapdump,springmetrics
 
 # Kafka Topic
 app.topic.test_record: TEST-RECORD-PROD
