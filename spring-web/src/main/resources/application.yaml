@@ -11,7 +11,7 @@ spring:
   banner:
     location: banner.txt
   profiles:
-    active: ${ENV_TYPE:dev}
+    active: dev
   mvc:
     async:
       request-timeout: 600000
@@ -105,6 +105,6 @@ mybatis-plus:
   mapper-locations: classpath*:mapper/**/*.xml
 
 logging:
-  config: ${LOGING_CONFIG:classpath:logback/logback-test.xml}
+  config: classpath:logback/logback-test.xml
   level:
     root: info
