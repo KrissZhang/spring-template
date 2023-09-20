@@ -1,6 +1,7 @@
 package com.self.security.service;
 
 import com.self.biz.service.UserService;
+import com.self.common.exception.UnAuthorizedException;
 import com.self.common.utils.BeanUtils;
 import com.self.dao.entity.User;
 import com.self.security.bean.AuthUser;
@@ -42,7 +43,7 @@ public class SysUserDetailsService implements UserDetailsService {
         //获取认证用户
         User user = userService.selectUserByTelPhoneNum(telPhoneNum);
         if(Objects.isNull(user)){
-            throw new RuntimeException("认证用户不存在");
+            throw new UnAuthorizedException("认证用户不存在");
         }
         JWTInfo jwtInfo = buildJWTInfoByUser(user);
 
