@@ -24,7 +24,7 @@ public class TreeUtils {
 
         Map<Long, List<T>> listMap = list.stream().collect(Collectors.groupingBy(T::getParentId));
 
-        list.forEach(grid -> grid.setChildren(listMap.get(grid.getId())));
+        list.forEach(grid -> grid.setChildren(listMap.get(grid.getId()) == null ? Lists.newArrayListWithCapacity(0) : listMap.get(grid.getId())));
 
         return list.stream().filter(item -> NumberUtils.LONG_ZERO.equals(item.getParentId()))
                 .collect(Collectors.toList());
