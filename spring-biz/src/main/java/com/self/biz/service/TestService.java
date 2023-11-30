@@ -4,10 +4,12 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.self.biz.kafka.producer.test.RecordKafkaProducer;
 import com.self.biz.request.TxWeatherRequest;
 import com.self.common.api.condition.test.TestListCondition;
+import com.self.common.api.export.test.TestExport;
 import com.self.common.api.req.job.*;
 import com.self.common.api.req.kafka.TestKafkaReq;
 import com.self.common.api.req.test.TestAddReq;
@@ -21,6 +23,7 @@ import com.self.common.exception.BizException;
 import com.self.common.exception.HttpException;
 import com.self.common.utils.BeanUtils;
 import com.self.common.utils.CurUserUtils;
+import com.self.common.utils.ExcelUtils;
 import com.self.common.utils.OkHttpClientUtils;
 import com.self.dao.api.page.PagingResp;
 import com.self.dao.entity.Test;
@@ -208,6 +211,19 @@ public class TestService {
 
     public void testDownloadFile(HttpServletResponse response, String fileId, String fileName){
         fileService.downloadFile(response, fileId, fileName);
+    }
+
+    public void testExport(HttpServletResponse response) throws Exception {
+        List<TestExport> dataList = Lists.newArrayListWithCapacity(2);
+        TestExport testExport1 = TestExport.builder()
+                .id(1L).name("名称1").value(1.1).date(new Date()).build();
+        dataList.add(testExport1);
+
+        TestExport testExport2 = TestExport.builder()
+                .id(2L).name("名称2").value(2.1).date(new Date()).build();
+        dataList.add(testExport2);
+
+        ExcelUtils.exportToWeb(response, "测试导出", "sheet1", TestExport.class, dataList);
     }
 
     public ResultEntity<JSONObject> testRetrofit(){

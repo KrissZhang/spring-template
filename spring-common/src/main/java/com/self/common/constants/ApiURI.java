@@ -99,6 +99,11 @@ public class ApiURI {
     public static final String TEST_DOWNLOAD_FILE = MODULE_URI_PREFIX + "/test/testDownloadFile";
 
     /**
+     * 测试导出
+     */
+    public static final String TEST_EXPORT = MODULE_URI_PREFIX + "/test/testExport";
+
+    /**
      * 测试Retrofit
      */
     public static final String TEST_RETROFIT = MODULE_URI_PREFIX + "/test/testRetrofit";

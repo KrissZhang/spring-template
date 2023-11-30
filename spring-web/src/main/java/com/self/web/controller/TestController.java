@@ -142,6 +142,13 @@ public class TestController {
         testService.testDownloadFile(response, fileId, fileName);
     }
 
+    @Operation(summary = "测试导出")
+    @OperLog(title = "测试导出", businessType = BusinessTypeEnum.OTHER)
+    @PostMapping(value = ApiURI.TEST_EXPORT)
+    public void testExport(HttpServletResponse response) throws Exception {
+        testService.testExport(response);
+    }
+
     @Operation(summary = "测试Retrofit")
     @RateLimiter(limitType = LimitTypeEnum.IP, count = 10)
     @OperLog(title = "测试Retrofit", businessType = BusinessTypeEnum.OTHER)
