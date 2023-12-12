@@ -14,6 +14,8 @@ public interface TestMapper extends BaseMapper<Test> {
 
     List<Test> selectAllByNameTestList(@Param("condition") TestListCondition condition);
 
+    int insertBatch(@Param("lists") List<Test> lists);
+
 }
 
 

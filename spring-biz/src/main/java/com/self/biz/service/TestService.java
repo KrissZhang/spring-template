@@ -1,15 +1,19 @@
 package com.self.biz.service;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.exception.ExcelAnalysisException;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.self.biz.excel.listener.test.TestListener;
 import com.self.biz.kafka.producer.test.RecordKafkaProducer;
 import com.self.biz.request.TxWeatherRequest;
 import com.self.common.api.condition.test.TestListCondition;
 import com.self.common.api.export.test.TestExport;
+import com.self.common.api.importo.test.TestImport;
 import com.self.common.api.req.job.*;
 import com.self.common.api.req.kafka.TestKafkaReq;
 import com.self.common.api.req.test.TestAddReq;
@@ -21,6 +25,7 @@ import com.self.common.domain.ResultEntity;
 import com.self.common.enums.DeletedEnum;
 import com.self.common.exception.BizException;
 import com.self.common.exception.HttpException;
+import com.self.common.exception.ParamException;
 import com.self.common.utils.BeanUtils;
 import com.self.common.utils.CurUserUtils;
 import com.self.common.utils.ExcelUtils;
@@ -38,6 +43,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.MultipartFile;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -69,6 +75,9 @@ public class TestService {
 
     @Autowired
     private TransactionTemplate transactionTemplate;
+
+    @Autowired
+    private LocalValidatorFactoryBean validator;
 
     public ResultEntity<String> testReq(String req){
         return ResultEntity.ok("testKey:" + req);
@@ -211,6 +220,20 @@ public class TestService {
 
     public void testDownloadFile(HttpServletResponse response, String fileId, String fileName){
         fileService.downloadFile(response, fileId, fileName);
+    }
+
+    public ResultEntity<Object> testImport(MultipartFile file){
+        try{
+            EasyExcel.read(file.getInputStream(), TestImport.class, new TestListener<TestImport>(validator, testMapper)).sheet().headRowNumber(2).doRead();
+        }catch (Exception e){
+            String msg = "导入失败";
+            if(e instanceof ExcelAnalysisException){
+                msg = e.getMessage();
+            }
+            throw new ParamException(msg);
+        }
+
+        return ResultEntity.ok();
     }
 
     public void testExport(HttpServletResponse response) throws Exception {

@@ -142,8 +142,15 @@ public class TestController {
         testService.testDownloadFile(response, fileId, fileName);
     }
 
+    @Operation(summary = "测试导入")
+    @OperLog(title = "测试导入", businessType = BusinessTypeEnum.IMPORT)
+    @PostMapping(value = ApiURI.TEST_IMPORT)
+    public ResultEntity<Object> testImport(MultipartFile file) {
+        return testService.testImport(file);
+    }
+
     @Operation(summary = "测试导出")
-    @OperLog(title = "测试导出", businessType = BusinessTypeEnum.OTHER)
+    @OperLog(title = "测试导出", businessType = BusinessTypeEnum.EXPORT)
     @PostMapping(value = ApiURI.TEST_EXPORT)
     public void testExport(HttpServletResponse response) throws Exception {
         testService.testExport(response);

@@ -37,4 +37,15 @@
         order by t.id asc
     </select>
 
+    <insert id="insertBatch">
+        insert into test (name,value,is_deleted,create_by,create_time,update_by,update_time) values
+        <foreach collection="lists" item="item" index="index" separator=",">
+            (
+                #{item.name},#{item.value},#{item.isDeleted},
+                #{item.createBy},#{item.createTime},
+                #{item.updateBy},#{item.updateTime}
+            )
+        </foreach>
+    </insert>
+
 </mapper>
