@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Api(tags = "测试管理")
 @RestController
@@ -47,6 +48,14 @@ public class TestController {
     @PostMapping(value = ApiURI.TEST_FORM_URLENCODED_REQ)
     public ResultEntity<String> testFormUrlEncoded(@Parameter(description = "请求参数1") @RequestParam String param1, @Parameter(description = "请求参数2") @RequestParam String param2){
         return testService.testFormUrlEncoded(param1, param2);
+    }
+
+    @Operation(summary = "测试函数式接口")
+    @RateLimiter(limitType = LimitTypeEnum.IP, count = 10)
+    @OperLog(title = "测试函数式接口", businessType = BusinessTypeEnum.OTHER)
+    @GetMapping(value = ApiURI.TEST_FUNCTION)
+    public ResultEntity<List<String>> testFunction(@Parameter(description = "请求参数") @RequestParam String req){
+        return testService.testFunction(req, testService::testFunctionLogic);
     }
 
     @Operation(summary = "测试脱敏")

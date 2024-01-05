@@ -51,10 +51,8 @@ import retrofit2.Retrofit;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 
 @Service
 public class TestService {
@@ -85,6 +83,14 @@ public class TestService {
 
     public ResultEntity<String> testFormUrlEncoded(String param1, String param2){
         return ResultEntity.ok("x-www-form-urlencoded:" + param1 + "," + param2);
+    }
+
+    public <K, V> ResultEntity<List<V>> testFunction(K req, Function<K, List<V>> function){
+        return ResultEntity.ok(function.apply(req));
+    }
+
+    public List<String> testFunctionLogic(String params){
+        return Collections.singletonList(params);
     }
 
     public ResultEntity<TestSensitiveResp> testSensitive(){
