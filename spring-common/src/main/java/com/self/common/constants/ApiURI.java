@@ -123,4 +123,9 @@ public class ApiURI {
      */
     public static final String TEST_KAFKA_SEND = MODULE_URI_PREFIX + "/test/testKafkaSend";
 
+    /**
+     * 测试延迟队列消息
+     */
+    public static final String TEST_DELAY_QUEUE_SEND = MODULE_URI_PREFIX + "/test/testDelayQueueSend";
+
 }

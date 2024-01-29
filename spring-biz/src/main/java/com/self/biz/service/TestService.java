@@ -14,6 +14,7 @@ import com.self.biz.request.TxWeatherRequest;
 import com.self.common.api.condition.test.TestListCondition;
 import com.self.common.api.export.test.TestExport;
 import com.self.common.api.importo.test.TestImport;
+import com.self.common.api.req.delayqueue.TestDelayQueueReq;
 import com.self.common.api.req.job.*;
 import com.self.common.api.req.kafka.TestKafkaReq;
 import com.self.common.api.req.test.TestAddReq;
@@ -23,13 +24,11 @@ import com.self.common.api.resp.test.TestSensitiveResp;
 import com.self.common.converter.ToStringConverterFactory;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.DeletedEnum;
+import com.self.common.enums.RedisDelayQueueEnum;
 import com.self.common.exception.BizException;
 import com.self.common.exception.HttpException;
 import com.self.common.exception.ParamException;
-import com.self.common.utils.BeanUtils;
-import com.self.common.utils.CurUserUtils;
-import com.self.common.utils.ExcelUtils;
-import com.self.common.utils.OkHttpClientUtils;
+import com.self.common.utils.*;
 import com.self.dao.api.page.PagingResp;
 import com.self.dao.entity.Test;
 import com.self.dao.mapper.TestMapper;
@@ -52,6 +51,7 @@ import retrofit2.Retrofit;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Service
@@ -76,6 +76,9 @@ public class TestService {
 
     @Autowired
     private LocalValidatorFactoryBean validator;
+
+    @Autowired
+    private RedissonUtils redissonUtils;
 
     public ResultEntity<String> testReq(String req){
         return ResultEntity.ok("testKey:" + req);
@@ -285,6 +288,14 @@ public class TestService {
 
     public ResultEntity<Object> testKafkaSend(TestKafkaReq testKafkaReq){
         recordKafkaProducer.send(testKafkaReq);
+
+        return ResultEntity.ok();
+    }
+
+    public ResultEntity<Object> testDelayQueueSend(TestDelayQueueReq testDelayQueueReq){
+        redissonUtils.addDelayQueue(RedisDelayQueueEnum.TEST_DELAY_RECORD_1.getCode(), 10, TimeUnit.SECONDS, testDelayQueueReq.getMsg() + "-1");
+
+        redissonUtils.addDelayQueue(RedisDelayQueueEnum.TEST_DELAY_RECORD_2.getCode(), 20, TimeUnit.SECONDS, testDelayQueueReq.getMsg() + "-2");
 
         return ResultEntity.ok();
     }

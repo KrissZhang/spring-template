@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.self.biz.service.TestService;
 import com.self.common.annotation.OperLog;
 import com.self.common.annotation.RateLimiter;
+import com.self.common.api.req.delayqueue.TestDelayQueueReq;
 import com.self.common.api.req.job.*;
 import com.self.common.api.req.kafka.TestKafkaReq;
 import com.self.common.api.req.test.TestAddReq;
@@ -178,6 +179,13 @@ public class TestController {
     @PostMapping(value = ApiURI.TEST_KAFKA_SEND)
     public ResultEntity<Object> testKafkaSend(@RequestBody @Validated TestKafkaReq testKafkaReq){
         return testService.testKafkaSend(testKafkaReq);
+    }
+
+    @Operation(summary = "测试延迟队列消息")
+    @OperLog(title = "测试延迟队列消息", businessType = BusinessTypeEnum.OTHER)
+    @PostMapping(value = ApiURI.TEST_DELAY_QUEUE_SEND)
+    public ResultEntity<Object> testDelayQueueSend(@RequestBody @Validated TestDelayQueueReq testDelayQueueReq){
+        return testService.testDelayQueueSend(testDelayQueueReq);
     }
 
 }

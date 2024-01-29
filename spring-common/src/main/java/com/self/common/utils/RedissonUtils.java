@@ -1,16 +1,22 @@
 package com.self.common.utils;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class RedissonUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(RedissonUtils.class);
 
     @Autowired
     private RedissonClient redissonClient;
@@ -128,6 +134,7 @@ public class RedissonUtils {
         try{
             RDelayedQueue<Object> delayedQueue = redissonClient.getDelayedQueue(redissonClient.getBlockingQueue(queueCode));
             delayedQueue.offer(value, delay, timeUnit);
+            logger.info("发送延迟消息，队列key: {}，队列值: {}，发送时间: {}，延迟时间: {}", queueCode, value, DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"), (timeUnit.toSeconds(delay) + "秒"));
         }catch (Exception e){
             throw new RuntimeException("添加延时队列失败: " + e.getMessage());
         }
