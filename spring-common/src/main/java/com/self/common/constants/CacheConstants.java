@@ -21,18 +21,23 @@ public final class CacheConstants {
     public static final String RATE_LIMIT_KEY = "rate_limit:";
 
     /**
-     * 雪花漂移 ID_GENERATOR Key
+     * 雪花漂移 ID_GENERATOR key
      */
     public static final String YITTER_ID_GENERATOR_KEY = "yitter:id:generator";
 
     /**
-     * 雪花漂移 最大机器号 Key
+     * 雪花漂移 最大机器号 key
      */
     public static final String YITTER_WORKERID_MAXID_KEY = "yitter:workerid:maxid";
 
     /**
-     * 雪花漂移 已分配的机器号 Key
+     * 雪花漂移 已分配的机器号 key
      */
     public static final String YITTER_ID_IP_KEY = "yitter:id:ip";
+
+    /**
+     * 延迟队列 redis key
+     */
+    public static final String DELAY_QUEUE_KEY = "delay:queue:";
 
 }

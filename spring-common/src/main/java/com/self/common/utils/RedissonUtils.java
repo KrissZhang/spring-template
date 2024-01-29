@@ -1,5 +1,7 @@
 package com.self.common.utils;
 
+import org.redisson.api.RBlockingQueue;
+import org.redisson.api.RDelayedQueue;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +115,31 @@ public class RedissonUtils {
         if(lock.isLocked() && lock.isHeldByCurrentThread()) {
             lock.unlock();
         }
+    }
+
+    /**
+     * 添加延迟队列
+     * @param queueCode 队列key
+     * @param delay 延迟时间
+     * @param timeUnit 延迟时间单位
+     * @param value 队列值
+     */
+    public <T> void addDelayQueue(String queueCode, long delay, TimeUnit timeUnit, T value){
+        try{
+            RDelayedQueue<Object> delayedQueue = redissonClient.getDelayedQueue(redissonClient.getBlockingQueue(queueCode));
+            delayedQueue.offer(value, delay, timeUnit);
+        }catch (Exception e){
+            throw new RuntimeException("添加延时队列失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取延迟队列
+     * @param queueCode 队列key
+     */
+    public <T> T getDelayQueue(String queueCode) throws InterruptedException {
+        RBlockingQueue<T> blockingQueue = redissonClient.getBlockingQueue(queueCode);
+        return blockingQueue.take();
     }
 
 }

@@ -3,9 +3,12 @@ package com.self.web.runner;
 import cn.hutool.core.net.NetUtil;
 import com.github.yitter.contract.IdGeneratorOptions;
 import com.github.yitter.idgen.YitIdHelper;
+import com.self.biz.delayqueue.RedisDelayQueueHandler;
 import com.self.common.constants.CacheConstants;
+import com.self.common.enums.RedisDelayQueueEnum;
 import com.self.common.utils.RedisUtils;
 import com.self.common.utils.RedissonUtils;
+import com.self.common.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 @Component
 @Order(0)
@@ -30,6 +35,9 @@ public class InitRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         // 雪花漂移id初始化
         yitIdInit();
+
+        // 延迟队列侦听
+        delayQueueListen();
 
         logger.info("service startup completed...");
     }
@@ -75,6 +83,31 @@ public class InitRunner implements ApplicationRunner {
             redissonUtils.unlock(CacheConstants.YITTER_ID_GENERATOR_KEY);
             logger.info("{} 配置分布式Id Work缓存========结束", macAddress);
         }
+    }
+
+    /**
+     * 延迟队列侦听
+     */
+    private void delayQueueListen(){
+        logger.info("配置 redis 延迟队列========开始");
+
+        new Thread(() -> {
+            while(true){
+                try{
+                    for (RedisDelayQueueEnum queueEnum : RedisDelayQueueEnum.values()) {
+                        Object value = redissonUtils.getDelayQueue(queueEnum.getCode());
+                        if(Objects.nonNull(value)){
+                            RedisDelayQueueHandler handler = SpringUtils.getBean(queueEnum.getBeanId());
+                            handler.execute(value);
+                        }
+                    }
+                }catch (Exception e){
+                    logger.error("延迟队列启动失败: ", e.getMessage());
+                }
+            }
+        }).start();
+
+        logger.info("配置 redis 延迟队列========结束");
     }
 
 }
