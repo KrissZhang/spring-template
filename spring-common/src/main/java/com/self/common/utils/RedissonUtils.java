@@ -136,7 +136,7 @@ public class RedissonUtils {
             delayedQueue.offer(value, delay, timeUnit);
             logger.info("发送延迟消息，队列key: {}，队列值: {}，发送时间: {}，延迟时间: {}", queueCode, value, DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"), (timeUnit.toSeconds(delay) + "秒"));
         }catch (Exception e){
-            throw new RuntimeException("添加延时队列失败: " + e.getMessage());
+            throw new RuntimeException("添加延时队列消息失败: " + e.getMessage());
         }
     }
 
