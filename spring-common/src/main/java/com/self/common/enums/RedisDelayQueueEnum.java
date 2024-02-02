@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 延迟队列消息类型(相当于topic)
+ * 延迟队列消息类型
+ * (相当于topic, 同一类型业务应当共用一个枚举类型以减少侦听线程数量)
  */
 @Getter
 @NoArgsConstructor

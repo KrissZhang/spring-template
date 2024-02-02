@@ -91,21 +91,21 @@ public class InitRunner implements ApplicationRunner {
     private void delayQueueListen(){
         logger.info("配置 redis 延迟队列========开始");
 
-        new Thread(() -> {
-            while(true){
-                try{
-                    for (RedisDelayQueueEnum queueEnum : RedisDelayQueueEnum.values()) {
+        for (RedisDelayQueueEnum queueEnum : RedisDelayQueueEnum.values()) {
+            new Thread(() -> {
+                while(true){
+                    try{
                         Object value = redissonUtils.getDelayQueue(queueEnum.getCode());
                         if(Objects.nonNull(value)){
                             RedisDelayQueueHandler handler = SpringUtils.getBean(queueEnum.getBeanId());
                             handler.execute(value);
                         }
+                    }catch (Exception e){
+                        logger.error("延迟队列启动失败: ", e.getMessage());
                     }
-                }catch (Exception e){
-                    logger.error("延迟队列启动失败: ", e.getMessage());
                 }
-            }
-        }).start();
+            }).start();
+        }
 
         logger.info("配置 redis 延迟队列========结束");
     }
