@@ -124,7 +124,7 @@ public class RedissonUtils {
     }
 
     /**
-     * 添加延迟队列
+     * 添加延迟队列消息
      * @param queueCode 队列key
      * @param delay 延迟时间
      * @param timeUnit 延迟时间单位
@@ -141,7 +141,7 @@ public class RedissonUtils {
     }
 
     /**
-     * 获取延迟队列
+     * 获取延迟队列消息
      * @param queueCode 队列key
      */
     public <T> T getDelayQueue(String queueCode) throws InterruptedException {
