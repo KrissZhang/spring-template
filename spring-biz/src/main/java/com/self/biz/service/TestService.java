@@ -293,9 +293,9 @@ public class TestService {
     }
 
     public ResultEntity<Object> testDelayQueueSend(TestDelayQueueReq testDelayQueueReq){
-        redissonUtils.addDelayQueue(RedisDelayQueueEnum.TEST_DELAY_RECORD_1.getCode(), 10, TimeUnit.SECONDS, testDelayQueueReq.getMsg() + "-1");
+        redissonUtils.addDelayQueueMsg(RedisDelayQueueEnum.TEST_DELAY_RECORD_1.getCode(), 10, TimeUnit.SECONDS, testDelayQueueReq.getMsg() + "-1");
 
-        redissonUtils.addDelayQueue(RedisDelayQueueEnum.TEST_DELAY_RECORD_2.getCode(), 20, TimeUnit.SECONDS, testDelayQueueReq.getMsg() + "-2");
+        redissonUtils.addDelayQueueMsg(RedisDelayQueueEnum.TEST_DELAY_RECORD_2.getCode(), 20, TimeUnit.SECONDS, testDelayQueueReq.getMsg() + "-2");
 
         return ResultEntity.ok();
     }

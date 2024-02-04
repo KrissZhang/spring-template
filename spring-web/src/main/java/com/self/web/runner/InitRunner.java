@@ -95,13 +95,13 @@ public class InitRunner implements ApplicationRunner {
             new Thread(() -> {
                 while(true){
                     try{
-                        Object value = redissonUtils.getDelayQueue(queueEnum.getCode());
+                        Object value = redissonUtils.getDelayQueueMsg(queueEnum.getCode());
                         if(Objects.nonNull(value)){
                             RedisDelayQueueHandler handler = SpringUtils.getBean(queueEnum.getBeanId());
                             handler.execute(value);
                         }
                     }catch (Exception e){
-                        logger.error("延迟队列启动失败: ", e.getMessage());
+                        logger.error("延迟队列: {}, 启动失败: ", queueEnum.getName(), e.getMessage());
                     }
                 }
             }).start();
