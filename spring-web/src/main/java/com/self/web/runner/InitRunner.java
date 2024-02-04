@@ -115,7 +115,7 @@ public class InitRunner implements ApplicationRunner {
                             handler.execute(value);
                         }
                     }catch (InterruptedException ex){
-                        if(!destroy){
+                        if(destroy){
                             return;
                         }
                         logger.error("延迟队列: {}, 侦听失败: ", queueEnum.getName(), ex.getMessage());
