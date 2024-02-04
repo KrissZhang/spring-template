@@ -92,6 +92,9 @@ public class InitRunner implements ApplicationRunner {
         logger.info("配置 redis 延迟队列========开始");
 
         for (RedisDelayQueueEnum queueEnum : RedisDelayQueueEnum.values()) {
+            // 初始化延迟队列
+            redissonUtils.getDelayQueue(queueEnum.getCode());
+
             new Thread(() -> {
                 while(true){
                     try{
