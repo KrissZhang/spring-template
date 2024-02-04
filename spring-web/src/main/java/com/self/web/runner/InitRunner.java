@@ -9,6 +9,7 @@ import com.self.common.enums.RedisDelayQueueEnum;
 import com.self.common.utils.RedisUtils;
 import com.self.common.utils.RedissonUtils;
 import com.self.common.utils.SpringUtils;
+import org.redisson.RedissonShutdownException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +116,7 @@ public class InitRunner implements ApplicationRunner {
                             handler.execute(value);
                         }
                     }catch (Exception e){
-                        if(destroy){
+                        if((e instanceof RedissonShutdownException) && destroy){
                             return;
                         }
                         logger.error("延迟队列: {}, 侦听失败: ", queueEnum.getName(), e.getMessage());
