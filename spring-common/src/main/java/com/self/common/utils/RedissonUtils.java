@@ -124,6 +124,14 @@ public class RedissonUtils {
     }
 
     /**
+     * 获取延迟队列
+     * @param queueCode 队列key
+     */
+    public <T> RDelayedQueue<T> getDelayQueue(String queueCode){
+        return redissonClient.getDelayedQueue(redissonClient.getBlockingQueue(queueCode));
+    }
+
+    /**
      * 添加延迟队列消息
      * @param queueCode 队列key
      * @param delay 延迟时间
@@ -132,7 +140,7 @@ public class RedissonUtils {
      */
     public <T> void addDelayQueueMsg(String queueCode, long delay, TimeUnit timeUnit, T value){
         try{
-            RDelayedQueue<Object> delayedQueue = redissonClient.getDelayedQueue(redissonClient.getBlockingQueue(queueCode));
+            RDelayedQueue<Object> delayedQueue = getDelayQueue(queueCode);
             delayedQueue.offer(value, delay, timeUnit);
             logger.info("发送延迟消息，队列key: {}，队列值: {}，发送时间: {}，延迟时间: {}", queueCode, value, DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"), (timeUnit.toSeconds(delay) + "秒"));
         }catch (Exception e){
