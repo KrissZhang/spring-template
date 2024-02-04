@@ -114,12 +114,10 @@ public class InitRunner implements ApplicationRunner {
                             RedisDelayQueueHandler<Object> handler = SpringUtils.getBean(queueEnum.getBeanId());
                             handler.execute(value);
                         }
-                    }catch (InterruptedException ex){
+                    }catch (Exception e){
                         if(destroy){
                             return;
                         }
-                        logger.error("延迟队列: {}, 侦听失败: ", queueEnum.getName(), ex.getMessage());
-                    }catch (Exception e){
                         logger.error("延迟队列: {}, 侦听失败: ", queueEnum.getName(), e.getMessage());
                     }
                 }
