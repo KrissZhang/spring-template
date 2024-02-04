@@ -17,6 +17,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.util.Objects;
 
 @Component
@@ -24,6 +25,11 @@ import java.util.Objects;
 public class InitRunner implements ApplicationRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(InitRunner.class);
+
+    /**
+     * 服务停止标识，true-停止，false-未停止
+     */
+    private volatile boolean destroy = false;
 
     @Autowired
     private RedisUtils redisUtils;
@@ -40,6 +46,11 @@ public class InitRunner implements ApplicationRunner {
         delayQueueListen();
 
         logger.info("service startup completed...");
+    }
+
+    @PreDestroy
+    private void destroy(){
+        destroy = true;
     }
 
     /**
@@ -100,11 +111,16 @@ public class InitRunner implements ApplicationRunner {
                     try{
                         Object value = redissonUtils.getDelayQueueMsg(queueEnum.getCode());
                         if(Objects.nonNull(value)){
-                            RedisDelayQueueHandler handler = SpringUtils.getBean(queueEnum.getBeanId());
+                            RedisDelayQueueHandler<Object> handler = SpringUtils.getBean(queueEnum.getBeanId());
                             handler.execute(value);
                         }
+                    }catch (InterruptedException ex){
+                        if(!destroy){
+                            return;
+                        }
+                        logger.error("延迟队列: {}, 侦听失败: ", queueEnum.getName(), ex.getMessage());
                     }catch (Exception e){
-                        logger.error("延迟队列: {}, 启动失败: ", queueEnum.getName(), e.getMessage());
+                        logger.error("延迟队列: {}, 侦听失败: ", queueEnum.getName(), e.getMessage());
                     }
                 }
             }).start();
