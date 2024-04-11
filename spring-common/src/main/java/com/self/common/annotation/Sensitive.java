@@ -19,7 +19,7 @@ public @interface Sensitive {
     /**
      * 脱敏数据类型
      */
-    SensitiveTypeEnum type() default SensitiveTypeEnum.CUSTOMER;
+    SensitiveTypeEnum type() default SensitiveTypeEnum.CUSTOM;
 
     /**
      * 前置不需要打码的长度

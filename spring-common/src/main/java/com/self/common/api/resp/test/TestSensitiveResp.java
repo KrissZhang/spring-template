@@ -26,7 +26,7 @@ public class TestSensitiveResp {
     private String mobilePhone;
 
     @Schema(name = "文本", description = "文本")
-    @Sensitive(type = SensitiveTypeEnum.CUSTOMER, prefixNoMaskLen = 5, suffixNoMaskLen = 5, symbol = "#")
+    @Sensitive(type = SensitiveTypeEnum.CUSTOM, prefixNoMaskLen = 5, suffixNoMaskLen = 5, symbol = "#")
     private String text;
 
 }

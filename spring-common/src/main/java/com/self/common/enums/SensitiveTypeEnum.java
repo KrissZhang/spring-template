@@ -23,6 +23,6 @@ public enum SensitiveTypeEnum {
     /**
      * 自定义
      */
-    CUSTOMER;
+    CUSTOM;
 
 }

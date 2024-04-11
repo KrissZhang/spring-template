@@ -52,7 +52,7 @@ public class SensitiveSerialize extends JsonSerializer<String> implements Contex
             case MOBILE_PHONE:
                 jsonGenerator.writeString(DesensitizedUtils.mobilePhone(origin));
                 break;
-            case CUSTOMER:
+            case CUSTOM:
                 jsonGenerator.writeString(DesensitizedUtils.desValue(origin, prefixNoMaskLen, suffixNoMaskLen, symbol));
                 break;
             default:
