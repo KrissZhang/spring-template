@@ -15,8 +15,12 @@
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <sql id="AES_KEY">
+        'kHW8nuIzdKJOw1Bu'
+    </sql>
+
     <sql id="Base_Column_List">
-        id,name,value,
+        id,name,CAST(AES_DECRYPT(FROM_BASE64(value),<include refid="AES_KEY" />) AS CHAR) as value,
         is_deleted,create_by,create_time,
         update_by,update_time
     </sql>
@@ -41,8 +45,8 @@
         insert into test (name,value,is_deleted,create_by,create_time,update_by,update_time) values
         <foreach collection="lists" item="item" index="index" separator=",">
             (
-                #{item.name},#{item.value},#{item.isDeleted},
-                #{item.createBy},#{item.createTime},
+                #{item.name},#{item.value,typeHandler=com.self.dao.config.EncryptTypeHandler},
+                #{item.isDeleted},#{item.createBy},#{item.createTime},
                 #{item.updateBy},#{item.updateTime}
             )
         </foreach>

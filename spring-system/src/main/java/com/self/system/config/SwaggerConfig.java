@@ -1,6 +1,6 @@
 package com.self.system.config;
 
-import com.self.system.properties.SwaggerProperties;
+import com.self.common.properties.SwaggerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

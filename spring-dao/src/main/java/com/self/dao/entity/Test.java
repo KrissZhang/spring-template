@@ -4,13 +4,15 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.self.dao.config.EncryptTypeHandler;
 import lombok.Data;
 
 /**
  * 测试信息表
  * @TableName test
  */
-@TableName(value ="test")
+@TableName(value ="test", autoResultMap = true)
 @Data
 public class Test implements Serializable {
     /**
@@ -27,6 +29,7 @@ public class Test implements Serializable {
     /**
      * 值
      */
+    @TableField(value = "value", typeHandler = EncryptTypeHandler.class)
     private String value;
 
     /**
