@@ -12,4 +12,7 @@ public class TestListReq extends PagingReq {
     @Schema(name = "名称", description = "名称")
     private String name;
 
+    @Schema(name = "值", description = "值")
+    private String value;
+
 }

@@ -32,6 +32,10 @@
             <if test="condition.name != null and condition.name != ''">
                 and t.name = #{condition.name}
             </if>
+
+            <if test="condition.value != null and condition.value != ''">
+                and AES_DECRYPT(FROM_BASE64(t.`value`), (select d.dict_value from sys_dict_data d where d.dict_type_code = 'aes_key' and d.dict_label = 'key_val' limit 1)) like CONCAT('%', #{condition.value}, '%')
+            </if>
         </where>
 
         order by t.id asc
