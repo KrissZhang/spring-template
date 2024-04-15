@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface TestMapper extends BaseMapper<Test> {
 
+    //切换敏感字段加密方式时需要手动修改解密逻辑
     List<Test> selectAllByNameTestList(@Param("aesKey") String aesKey, @Param("condition") TestListCondition condition);
 
     int insertBatch(@Param("lists") List<Test> lists);
