@@ -28,6 +28,7 @@ import com.self.common.enums.RedisDelayQueueEnum;
 import com.self.common.exception.BizException;
 import com.self.common.exception.HttpException;
 import com.self.common.exception.ParamException;
+import com.self.common.properties.EncryptProperties;
 import com.self.common.utils.*;
 import com.self.dao.api.page.PagingResp;
 import com.self.dao.entity.Test;
@@ -80,6 +81,9 @@ public class TestService {
     @Autowired
     private RedissonUtils redissonUtils;
 
+    @Autowired
+    private EncryptProperties encryptProperties;
+
     public ResultEntity<String> testReq(String req){
         return ResultEntity.ok("testKey:" + req);
     }
@@ -117,7 +121,7 @@ public class TestService {
     public ResultEntity<PagingResp<TestListResp>> testPage(TestListReq testListReq){
         TestListCondition condition = BeanUtils.copyProperties(testListReq, TestListCondition.class);
 
-        PageInfo<Test> pageInfo = PageHelper.startPage(testListReq.getCurrentPage(), testListReq.getPageSize()).doSelectPageInfo(() -> testMapper.selectAllByNameTestList(condition));
+        PageInfo<Test> pageInfo = PageHelper.startPage(testListReq.getCurrentPage(), testListReq.getPageSize()).doSelectPageInfo(() -> testMapper.selectAllByNameTestList(encryptProperties.getAesKey(), condition));
 
         List<TestListResp> respList = BeanUtils.copyList(pageInfo.getList(), TestListResp.class);
         respList.forEach(r -> {

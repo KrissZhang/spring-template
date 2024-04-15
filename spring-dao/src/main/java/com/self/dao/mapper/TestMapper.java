@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface TestMapper extends BaseMapper<Test> {
 
-    List<Test> selectAllByNameTestList(@Param("condition") TestListCondition condition);
+    List<Test> selectAllByNameTestList(@Param("aesKey") String aesKey, @Param("condition") TestListCondition condition);
 
     int insertBatch(@Param("lists") List<Test> lists);
 
