@@ -14,6 +14,16 @@ public class ApiURI {
     public static final String MODULE_URI_PREFIX = "/api";
 
     /**
+     * 获取登陆验证码key
+     */
+    public static final String TOKEN_VALIDATE_KEY = MODULE_URI_PREFIX + "/token/validateKey";
+
+    /**
+     * 获取登陆验证码
+     */
+    public static final String TOKEN_VALIDATE_CODE = MODULE_URI_PREFIX + "/token/validateCode";
+
+    /**
      * token认证
      */
     public static final String TOKEN_LOGIN = MODULE_URI_PREFIX + "/token/login";

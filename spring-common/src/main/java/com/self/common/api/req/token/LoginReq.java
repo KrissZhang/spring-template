@@ -18,4 +18,12 @@ public class LoginReq {
     @NotBlank(message = "密码不能为空")
     private String password;
 
+    @Schema(name = "验证码key", description = "验证码key", required = true)
+    @NotBlank(message = "验证码key不能为空")
+    private String validateKey;
+
+    @Schema(name = "验证码", description = "验证码", required = true)
+    @NotBlank(message = "验证码不能为空")
+    private String validateCode;
+
 }

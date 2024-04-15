@@ -16,4 +16,14 @@ public final class SecurityConstants {
 
     public static final String PREFIX_AUTH_USER_DETAIL = "auth:user:token:detail:";
 
+    /**
+     * 验证码key固定盐
+     */
+    public static final String SALT_VALIDATE_KEY = "auth:validate:key:salt:";
+
+    /**
+     * 登陆验证码 key
+     */
+    public static final String PREFIX_AUTH_VALIDATE_KEY = "auth:validate:key:";
+
 }

@@ -10,11 +10,10 @@ import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Api(tags = "用户认证")
 @RestController
@@ -22,6 +21,18 @@ public class TokenController {
 
     @Autowired
     private TokenService tokenService;
+
+    @Operation(summary = "获取登陆验证码key")
+    @GetMapping(value = ApiURI.TOKEN_VALIDATE_KEY)
+    public ResultEntity<String> validateKey(){
+        return tokenService.validateKey();
+    }
+
+    @Operation(summary = "获取登陆验证码")
+    @GetMapping(value = ApiURI.TOKEN_VALIDATE_CODE)
+    public void validateCode(HttpServletResponse response, @RequestParam String validateKey){
+        tokenService.validateCode(response, validateKey);
+    }
 
     @Operation(summary = "用户名密码认证")
     @PostMapping(value = ApiURI.TOKEN_LOGIN)

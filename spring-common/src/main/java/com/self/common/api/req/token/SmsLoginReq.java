@@ -16,6 +16,6 @@ public class SmsLoginReq {
 
     @Schema(name = "验证码", description = "验证码", required = true)
     @NotBlank(message = "验证码不能为空")
-    private String verifyCode;
+    private String validateCode;
 
 }
