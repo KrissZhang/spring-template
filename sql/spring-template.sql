@@ -47,6 +47,7 @@ CREATE TABLE `sys_dict_data`  (
 -- ----------------------------
 INSERT INTO `sys_dict_data` VALUES (1, 'gender', '男', '1', 1, 0, NULL, 1, '2022-08-04 15:36:29', 1, '2022-08-04 15:37:05');
 INSERT INTO `sys_dict_data` VALUES (2, 'gender', '女', '2', 2, 0, NULL, 1, '2022-08-04 15:37:34', 1, '2022-08-04 15:37:38');
+INSERT INTO `sys_dict_data` VALUES (3, 'aes_key', 'key_val', 'kHW8nuIzdKJOw1Bu', 1, 0, NULL, 1, '2022-08-04 15:37:34', 1, '2022-08-04 15:37:38');
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -69,6 +70,7 @@ CREATE TABLE `sys_dict_type`  (
 -- Records of sys_dict_type
 -- ----------------------------
 INSERT INTO `sys_dict_type` VALUES (1, 'gender', '性别', 0, NULL, 1, '2022-08-04 15:38:13', 1, '2022-08-04 15:38:16');
+INSERT INTO `sys_dict_type` VALUES (2, 'aes_key', 'AES加密密钥', 0, NULL, 1, '2022-08-04 15:38:13', 1, '2022-08-04 15:38:16');
 
 -- ----------------------------
 -- Table structure for test
