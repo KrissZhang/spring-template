@@ -118,5 +118,9 @@ management:
       exposure:
         include: health,info,env,prometheus,metrics,httptrace,threaddump,heapdump,springmetrics
 
+mybatis-plus:
+  encrypt:
+    aesKey: kHW8nuIzdKJOw1Bu
+
 # Kafka Topic
 app.topic.test_record: TEST-RECORD-TEST

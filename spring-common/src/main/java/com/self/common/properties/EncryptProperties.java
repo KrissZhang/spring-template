@@ -14,13 +14,13 @@ public class EncryptProperties {
     private AlgorithmEnum algorithm = AlgorithmEnum.BASE64;
 
     /**
-     * AES密钥Key
-     */
-    private String aesKey = "kHW8nuIzdKJOw1Bu";
-
-    /**
      * AES加密模式：Ecb
      */
     private String aesMode = "AES/ECB/PKCS5Padding";
+
+    /**
+     * AES密钥Key
+     */
+    private String aesKey = "";
 
 }

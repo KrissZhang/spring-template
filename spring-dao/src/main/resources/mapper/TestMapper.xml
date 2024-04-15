@@ -7,7 +7,7 @@
     <resultMap id="BaseResultMap" type="com.self.dao.entity.Test">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="value" column="value" jdbcType="VARCHAR"/>
+            <result property="value" column="value" jdbcType="VARCHAR" typeHandler="com.self.dao.config.EncryptTypeHandler" />
             <result property="isDeleted" column="is_deleted" jdbcType="BIGINT"/>
             <result property="createBy" column="create_by" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
@@ -15,17 +15,13 @@
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="AES_KEY">
-        'kHW8nuIzdKJOw1Bu'
-    </sql>
-
     <sql id="Base_Column_List">
-        id,name,CAST(AES_DECRYPT(FROM_BASE64(value),<include refid="AES_KEY" />) AS CHAR) as value,
+        id,name,value,
         is_deleted,create_by,create_time,
         update_by,update_time
     </sql>
 
-    <select id="selectAllByNameTestList" resultType="com.self.dao.entity.Test">
+    <select id="selectAllByNameTestList" resultMap="BaseResultMap">
         select
             <include refid="Base_Column_List" />
         from test t
