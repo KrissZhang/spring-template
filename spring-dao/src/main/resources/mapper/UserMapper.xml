@@ -10,6 +10,7 @@
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="realName" column="real_name" jdbcType="VARCHAR"/>
             <result property="phoneNum" column="phone_num" jdbcType="VARCHAR"/>
+            <result property="expireDate" column="expire_date" jdbcType="DATE"/>
             <result property="isDeleted" column="is_deleted" jdbcType="BIGINT"/>
             <result property="createBy" column="create_by" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
@@ -19,7 +20,7 @@
 
     <sql id="Base_Column_List">
         id,user_name,password,
-        real_name,phone_num,is_deleted,
+        real_name,phone_num,expire_date,is_deleted,
         create_by,create_time,update_by,
         update_time
     </sql>

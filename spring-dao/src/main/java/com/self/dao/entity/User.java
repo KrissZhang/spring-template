@@ -40,6 +40,11 @@ public class User implements Serializable {
     private String phoneNum;
 
     /**
+     * 密码过期日期
+     */
+    private Date expireDate;
+
+    /**
      * 是否逻辑删除，0-未删除，时间戳-已删除
      */
     @TableLogic(value = "0", delval = "REPLACE(UNIX_TIMESTAMP(CURRENT_TIMESTAMP(3)), '.', '')")

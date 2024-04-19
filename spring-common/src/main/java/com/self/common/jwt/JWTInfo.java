@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @ApiModel(description = "认证详情")
 @Data
@@ -27,5 +28,11 @@ public class JWTInfo implements Serializable {
 
     @Schema(name = "用户真实名称", description = "用户真实名称")
     private String realName;
+
+    @Schema(name = "密码过期日期", description = "密码过期日期")
+    private Date expireDate;
+
+    @Schema(name = "是否删除", description = "是否删除")
+    private Long isDeleted;
 
 }

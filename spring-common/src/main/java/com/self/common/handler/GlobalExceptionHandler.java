@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -67,6 +69,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public final ResultEntity<Object> handleBadCredentialsExceptions(Exception ex) {
         return ResultEntity.addError(RespCodeEnum.FAIL_UNAUTHORIZED.getCode(), "用户名密码错误");
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public final ResultEntity<Object> handleDisabledExceptions(Exception ex) {
+        return ResultEntity.addError(RespCodeEnum.FAIL_UNAUTHORIZED.getCode(), "认证用户不存在");
+    }
+
+    @ExceptionHandler(CredentialsExpiredException.class)
+    public final ResultEntity<Object> handleCredentialsExpiredExceptions(Exception ex) {
+        return ResultEntity.addError(RespCodeEnum.FAIL_UNAUTHORIZED.getCode(), "密码已过期");
     }
 
     @ExceptionHandler(AccessDeniedException.class)

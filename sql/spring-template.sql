@@ -94,6 +94,7 @@ CREATE TABLE `user`  (
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `real_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户真实名称',
   `phone_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '手机号码',
+  `expire_date` date(0) NOT NULL DEFAULT DATE_ADD(CURRENT_DATE(0), INTERVAL 90 DAY) COMMENT '密码过期日期',
   `is_deleted` bigint(0) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否逻辑删除，0-未删除，时间戳-已删除',
   `create_by` bigint(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建人',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
@@ -107,6 +108,6 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'user1', 'e10adc3949ba59abbe56e057f20f883e', '用户1', '13983387265', 0, 1, '2022-10-19 15:45:21', 1, '2022-10-19 15:59:49');
+INSERT INTO `user` VALUES (1, 'user1', 'e10adc3949ba59abbe56e057f20f883e', '用户1', '13983387265', DATE_ADD(NOW(), INTERVAL 90 DAY), 0, 1, NOW(), 1, NOW());
 
 SET FOREIGN_KEY_CHECKS = 1;

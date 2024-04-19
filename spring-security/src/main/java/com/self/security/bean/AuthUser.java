@@ -10,12 +10,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +46,7 @@ public class AuthUser implements UserDetails {
     @Schema(name = "认证时间", description = "认证时间")
     private Long authTimeMs;
 
-    @Schema(name = "过期时间", description = "过期时间")
+    @Schema(name = "令牌过期时间", description = "令牌过期时间")
     private Long expiresTimeMs;
 
     @Schema(name = "认证详情", description = "认证详情")
@@ -107,7 +111,7 @@ public class AuthUser implements UserDetails {
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return DateUtils.truncate(new Date(), Calendar.DATE).before(DateUtils.truncate(jwtInfo.getExpireDate(), Calendar.DATE));
     }
 
     /**
@@ -117,7 +121,7 @@ public class AuthUser implements UserDetails {
     @JsonIgnore
     @Override
     public boolean isEnabled() {
-        return true;
+        return NumberUtils.LONG_ZERO.equals(jwtInfo.getIsDeleted());
     }
 
 }
