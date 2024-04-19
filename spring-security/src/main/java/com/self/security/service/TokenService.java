@@ -114,7 +114,7 @@ public class TokenService {
         try{
             authUser = SecurityUtils.getAuthUser();
         }catch (Exception e){
-            logger.info("退出获取认证用户失败");
+            logger.info("未获取到认证用户");
         }
 
         if(Objects.isNull(authUser)){
