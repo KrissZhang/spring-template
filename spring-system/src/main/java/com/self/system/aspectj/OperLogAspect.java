@@ -1,6 +1,7 @@
 package com.self.system.aspectj;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.google.common.collect.Maps;
 import com.self.common.annotation.OperLog;
@@ -84,6 +85,16 @@ public class OperLogAspect {
 
             //获取当前的用户
             JWTInfo jwtInfo = CurUserUtils.curJWTInfo();
+            if(Objects.isNull(jwtInfo) && Objects.nonNull(jsonResult)){
+                JSONObject dataObj = JSON.parseObject(JSON.toJSONString(jsonResult)).getJSONObject("data");
+                if(Objects.nonNull(dataObj)){
+                    jwtInfo = (dataObj.getJSONObject("jwtInfo") == null ? null : JSON.parseObject(dataObj.getJSONObject("jwtInfo").toJSONString(), JWTInfo.class));
+                }
+            }
+
+            if(Objects.isNull(jwtInfo)){
+                return;
+            }
 
             com.self.dao.entity.OperLog operLog = new com.self.dao.entity.OperLog();
 

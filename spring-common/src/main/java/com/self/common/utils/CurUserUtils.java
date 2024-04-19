@@ -10,16 +10,16 @@ public class CurUserUtils {
     }
 
     public static JWTInfo curJWTInfo(){
-        JWTInfo jwtInfo = JWTInfoContext.get();
+        return JWTInfoContext.get();
+    }
+
+    public static Long getUserId(){
+        JWTInfo jwtInfo = curJWTInfo();
         if(jwtInfo == null){
             throw new UnAuthorizedException("获取当前用户异常");
         }
 
-        return jwtInfo;
-    }
-
-    public static Long getUserId(){
-        return curJWTInfo().getUserId();
+        return jwtInfo.getUserId();
     }
 
 }

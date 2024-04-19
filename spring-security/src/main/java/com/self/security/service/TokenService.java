@@ -110,7 +110,13 @@ public class TokenService {
     }
 
     public ResultEntity<Object> logout(){
-        AuthUser authUser = SecurityUtils.getAuthUser();
+        AuthUser authUser = null;
+        try{
+            authUser = SecurityUtils.getAuthUser();
+        }catch (Exception e){
+            logger.info("退出获取认证用户失败：{}", e.getMessage());
+        }
+
         if(Objects.isNull(authUser)){
             return ResultEntity.ok();
         }

@@ -16,7 +16,7 @@ public class ResultEntity<T> implements Serializable {
 
     private String tip = "";
 
-    private transient T data;
+    private T data;
 
     public ResultEntity() {
     }
