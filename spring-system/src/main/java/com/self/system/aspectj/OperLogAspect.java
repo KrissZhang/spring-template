@@ -86,9 +86,12 @@ public class OperLogAspect {
             //获取当前的用户
             JWTInfo jwtInfo = CurUserUtils.curJWTInfo();
             if(Objects.isNull(jwtInfo) && Objects.nonNull(jsonResult)){
-                JSONObject dataObj = JSON.parseObject(JSON.toJSONString(jsonResult)).getJSONObject("data");
-                if(Objects.nonNull(dataObj)){
-                    jwtInfo = (dataObj.getJSONObject("jwtInfo") == null ? null : JSON.parseObject(dataObj.getJSONObject("jwtInfo").toJSONString(), JWTInfo.class));
+                JSONObject resultObj = JSON.parseObject(JSON.toJSONString(jsonResult));
+                if(resultObj.containsKey("data")){
+                    JSONObject dataObj = resultObj.getJSONObject("data");
+                    if(Objects.nonNull(dataObj)){
+                        jwtInfo = (((!dataObj.containsKey("jwtInfo")) || Objects.isNull(dataObj.getJSONObject("jwtInfo"))) ? null : JSON.parseObject(dataObj.getJSONObject("jwtInfo").toJSONString(), JWTInfo.class));
+                    }
                 }
             }
 
