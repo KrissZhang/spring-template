@@ -34,6 +34,11 @@ public class ApiURI {
     public static final String TOKEN_SMS_LOGIN = MODULE_URI_PREFIX + "/token/smsLogin";
 
     /**
+     * 退出认证
+     */
+    public static final String TOKEN_LOGOUT = MODULE_URI_PREFIX + "/token/logout";
+
+    /**
      * 测试请求
      */
     public static final String TEST_REQ = MODULE_URI_PREFIX + "/test/testReq";

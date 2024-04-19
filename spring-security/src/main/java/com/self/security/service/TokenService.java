@@ -12,6 +12,7 @@ import com.self.common.utils.ServletUtils;
 import com.self.security.bean.AuthUser;
 import com.self.security.constants.SecurityConstants;
 import com.self.security.token.SmsAuthenticationToken;
+import com.self.security.utils.SecurityUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 @Service
 public class TokenService {
@@ -105,6 +107,17 @@ public class TokenService {
         AbstractAuthenticationToken abstractAuthenticationToken = new SmsAuthenticationToken(smsLoginReq.getTelPhoneNum());
 
         return ResultEntity.ok(doLogin(request, abstractAuthenticationToken));
+    }
+
+    public ResultEntity<Object> logout(){
+        AuthUser authUser = SecurityUtils.getAuthUser();
+        if(Objects.isNull(authUser)){
+            return ResultEntity.ok();
+        }
+
+        jwtTokenService.removeToken(authUser.getTokenId());
+
+        return ResultEntity.ok();
     }
 
     private AuthUser doLogin(HttpServletRequest request, AbstractAuthenticationToken abstractAuthenticationToken){
