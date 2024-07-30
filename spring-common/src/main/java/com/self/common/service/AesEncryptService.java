@@ -1,6 +1,5 @@
 package com.self.common.service;
 
-import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.self.common.exception.BizException;
 import com.self.common.properties.EncryptProperties;
 import org.slf4j.Logger;
@@ -26,7 +25,7 @@ public class AesEncryptService implements EncryptService {
     public String encrypt(String content) {
         try {
             Cipher cipher = Cipher.getInstance(encryptProperties.getAesMode());
-            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(encryptProperties.getAesKey().getBytes(StandardCharsets.UTF_8), Constants.AES));
+            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(encryptProperties.getAesKey().getBytes(StandardCharsets.UTF_8), "AES"));
             byte[] doFinal = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(doFinal);
         } catch (Exception e) {
@@ -39,7 +38,7 @@ public class AesEncryptService implements EncryptService {
     public String decrypt(String content) {
         try {
             Cipher cipher = Cipher.getInstance(encryptProperties.getAesMode());
-            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(encryptProperties.getAesKey().getBytes(StandardCharsets.UTF_8), Constants.AES));
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(encryptProperties.getAesKey().getBytes(StandardCharsets.UTF_8), "AES"));
             byte[] doFinal = cipher.doFinal(Base64.getDecoder().decode(content));
             return new String(doFinal);
         } catch (Exception e) {
