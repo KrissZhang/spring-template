@@ -24,18 +24,33 @@ public final class CfgConstants {
     public static final String REDIS_PASSWORD = "${spring.redis.password:sy_202106}";
 
     /**
-     * SeaweedFS 地址
+     * Minio api地址
      */
-    public static final String SEAWEEDFS_HOST = "${seaweedfs.host: 127.0.0.1}";
+    public static final String MINIO_URL = "${minio.url: #{null}}";
 
     /**
-     * SeaweedFS 端口
+     * Minio 端口
      */
-    public static final String SEAWEEDFS_PORT = "${seaweedfs.port: 8080}";
+    public static final String MINIO_PORT = "${minio.port: #{null}}";
 
     /**
-     * SeaweedFS use-public
+     * Minio 账号
      */
-    public static final String SEAWEEDFS_USE_PUBLIC = "${seaweedfs.use-public: false}";
+    public static final String MINIO_ACCESS_KEY = "${minio.access_key: #{null}}";
+
+    /**
+     * Minio 密码
+     */
+    public static final String MINIO_SECRET_KEY = "${minio.secret_key: #{null}}";
+
+    /**
+     * Minio 文件夹名称
+     */
+    public static final String MINIO_BUCKET_NAME = "${minio.bucket_name: #{null}}";
+
+    /**
+     * Minio secure
+     */
+    public static final String MINIO_SECURE = "${minio.secure: #{null}}";
 
 }

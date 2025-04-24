@@ -1,7 +1,7 @@
 package com.self.biz.service;
 
 import com.self.common.exception.ParamException;
-import com.self.common.utils.SeaweedFSUtils;
+import com.self.common.utils.MinioUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,10 +23,10 @@ public class FileService {
     private static final Logger logger = LoggerFactory.getLogger(FileService.class);
 
     @Resource
-    private SeaweedFSUtils seaweedFSUtils;
+    private MinioUtils minioUtils;
 
     public String uploadFile(MultipartFile multipartFile) throws IOException {
-        return seaweedFSUtils.uploadFile(multipartFile);
+        return minioUtils.uploadFile(multipartFile);
     }
 
     public void downloadFile(HttpServletResponse response, String fileId, String fileName){
@@ -36,7 +36,7 @@ public class FileService {
 
         ServletOutputStream os = null;
         try {
-            byte[] bytes = seaweedFSUtils.downloadFile(fileId);
+            byte[] bytes = minioUtils.downloadFile(fileId);
             response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()));
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             if (Objects.nonNull(bytes)) {

@@ -25,7 +25,7 @@
         <mybatis-autoconfigure.version>2.1.1</mybatis-autoconfigure.version>
         <mybatisplus-plus.version>1.5.1-RELEASE</mybatisplus-plus.version>
         <pagehelper.version>1.4.3</pagehelper.version>
-        <seaweedfs.version>0.0.2.RELEASE</seaweedfs.version>
+        <minio.version>8.2.1</minio.version>
         <retrofit.version>2.9.0</retrofit.version>
         <okhttp3-interceptor.version>3.14.9</okhttp3-interceptor.version>
         <springfox.version>3.0.0</springfox.version>
@@ -184,31 +184,9 @@
         </dependency>
 
         <dependency>
-            <groupId>net.anumbrella.seaweedfs</groupId>
-            <artifactId>seaweedfs-java-client</artifactId>
-            <version>${seaweedfs.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>commons-codec</artifactId>
-                    <groupId>commons-codec</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>commons-io</artifactId>
-                    <groupId>commons-io</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>junit</artifactId>
-                    <groupId>junit</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>commons-lang3</artifactId>
-                    <groupId>org.apache.commons</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
         </dependency>
 
         <dependency>

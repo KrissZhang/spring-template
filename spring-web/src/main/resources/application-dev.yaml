@@ -96,10 +96,19 @@ spring:
     consumer:
       group-id: spring-web-dev
 
-seaweedfs:
-  host: 10.15.2.38
-  port: 9333
-  use-public: true
+minio:
+  # api地址
+  url: http://127.0.0.1
+  # 端口号
+  port: 9005
+  # 账号
+  access_key: minioadmin
+  # 密码
+  secret_key: minioadmin
+  # 文件夹名称
+  bucket_name: "test"
+  # true-https，false-http
+  secure: false
 
 management:
   metrics:
