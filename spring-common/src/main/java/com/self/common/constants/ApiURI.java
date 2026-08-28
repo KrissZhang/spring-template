@@ -143,4 +143,19 @@ public class ApiURI {
      */
     public static final String TEST_DELAY_QUEUE_SEND = MODULE_URI_PREFIX + "/test/testDelayQueueSend";
 
+    /**
+     * 提交请假申请
+     */
+    public static final String PROCESSES_LEAVE_SUBMIT = MODULE_URI_PREFIX + "/leave/submit";
+
+    /**
+     * 查询请假待办列表
+     */
+    public static final String PROCESSES_LEAVE_TODOLIST = MODULE_URI_PREFIX + "/leave/getTodoList";
+
+    /**
+     * 审批请假申请
+     */
+    public static final String PROCESSES_LEAVE_APPROVE = MODULE_URI_PREFIX + "/leave/approve";
+
 }

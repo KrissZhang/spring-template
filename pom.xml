@@ -40,6 +40,7 @@
         <fastjson.version>2.0.2</fastjson.version>
         <easyexcel.version>2.2.6</easyexcel.version>
         <yitter.version>1.0.6</yitter.version>
+        <flowable.version>6.7.2</flowable.version>
     </properties>
 
     <modules>
@@ -295,6 +296,18 @@
             <groupId>com.github.yitter</groupId>
             <artifactId>yitter-idgenerator</artifactId>
             <version>${yitter.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter-process</artifactId>
+            <version>${flowable.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

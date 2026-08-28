@@ -86,6 +86,24 @@ CREATE TABLE `test`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '测试信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for leave_info
+-- ----------------------------
+CREATE TABLE `leave_info`  (
+  `id` bigint(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `applicant` bigint(0) UNSIGNED DEFAULT NULL COMMENT '申请人id',
+  `days` int(11) UNSIGNED DEFAULT NULL COMMENT '请假天数',
+  `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请假原因',
+  `status` int(3) UNSIGNED DEFAULT NULL COMMENT '状态，0-审批中，1-通过，2-驳回',
+  `process_instance_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '流程实例id',
+  `is_deleted` bigint(0) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否逻辑删除，0-未删除，时间戳-已删除',
+  `create_by` bigint(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_by` bigint(0) UNSIGNED NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '请假信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for user
 -- ----------------------------
 CREATE TABLE `user`  (
@@ -109,5 +127,7 @@ CREATE TABLE `user`  (
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'user1', 'e10adc3949ba59abbe56e057f20f883e', '用户1', '13983387265', DATE_ADD(CURDATE(), INTERVAL 90 DAY), 0, 1, NOW(), 1, NOW());
+INSERT INTO `user` VALUES (2, 'user2', 'e10adc3949ba59abbe56e057f20f883e', '用户2', '13983387266', DATE_ADD(CURDATE(), INTERVAL 90 DAY), 0, 1, NOW(), 1, NOW());
+INSERT INTO `user` VALUES (3, 'user3', 'e10adc3949ba59abbe56e057f20f883e', '用户3', '13983387267', DATE_ADD(CURDATE(), INTERVAL 90 DAY), 0, 1, NOW(), 1, NOW());
 
 SET FOREIGN_KEY_CHECKS = 1;
