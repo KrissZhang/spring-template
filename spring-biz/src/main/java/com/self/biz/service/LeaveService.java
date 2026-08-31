@@ -10,7 +10,6 @@ import com.self.common.api.resp.processes.leave.LeaveTodoTaskResp;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.ProcessInstanceKeyEnum;
 import com.self.common.exception.BizException;
-import com.self.common.utils.BeanUtils;
 import com.self.common.utils.CurUserUtils;
 import com.self.dao.api.page.PagingResp;
 import com.self.dao.entity.LeaveInfo;
@@ -110,6 +109,9 @@ public class LeaveService {
         long total = taskQuery.count();
         pagingResp.setTotalRecord(total);
 
+        long totalPage = (total + pagingReq.getPageSize() - 1) / pagingReq.getPageSize();
+        pagingResp.setTotalPage((int) totalPage);
+
         if(startIndex >= total){
             pagingResp.setData(Lists.newArrayListWithCapacity(0));
 
@@ -117,12 +119,22 @@ public class LeaveService {
         }
 
         List<Task> taskList = taskQuery.listPage(startIndex, pagingReq.getPageSize());
-        List<LeaveTodoTaskResp> respList = taskList.stream().map(task -> BeanUtils.copyProperties(task, LeaveTodoTaskResp.class)).collect(Collectors.toList());
+        List<LeaveTodoTaskResp> respList = taskList.stream().map(task -> {
+            LeaveTodoTaskResp resp = new LeaveTodoTaskResp();
+            resp.setTaskId(task.getId());
+            resp.setTaskName(task.getName());
+            resp.setTaskDefinitionKey(task.getTaskDefinitionKey());
+            resp.setTaskAssignee(task.getAssignee());
+            resp.setProcessInstanceId(task.getProcessInstanceId());
+            resp.setTaskCreateTime(task.getCreateTime());
 
-        List<Long> userIds = respList.stream().map(LeaveTodoTaskResp::getAssignee).map(Long::parseLong).collect(Collectors.toList());
+            return resp;
+        }).collect(Collectors.toList());
+
+        List<Long> userIds = respList.stream().map(LeaveTodoTaskResp::getTaskAssignee).map(Long::parseLong).collect(Collectors.toList());
         Map<Long, String> userRealNameMap = userDaoService.listByIds(userIds).stream().collect(Collectors.toMap(User::getId, User::getRealName));
 
-        respList.forEach(resp -> resp.setAssigneeRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getAssignee()), null)));
+        respList.forEach(resp -> resp.setTaskAssigneeRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getTaskAssignee()), null)));
 
         pagingResp.setData(respList);
 
