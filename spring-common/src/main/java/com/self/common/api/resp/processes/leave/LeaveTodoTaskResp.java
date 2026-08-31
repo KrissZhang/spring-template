@@ -25,10 +25,16 @@ public class LeaveTodoTaskResp {
     @Schema(name = "流程实例id", description = "流程实例id")
     private String processInstanceId;
 
+    @Schema(name = "流程标识KEY", description = "流程标识KEY")
+    private String processInstanceKey;
+
     @Schema(name = "任务创建时间", description = "任务创建时间")
     private Date taskCreateTime;
 
     @Schema(name = "任务办理人真实名称", description = "任务办理人真实名称")
     private String taskAssigneeRealName;
+
+    @Schema(name = "表单状态标识", description = "表单状态标识")
+    private String formStatus;
 
 }

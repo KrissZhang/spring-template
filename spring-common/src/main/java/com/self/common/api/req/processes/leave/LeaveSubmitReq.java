@@ -10,6 +10,9 @@ import javax.validation.constraints.NotNull;
 @Data
 public class LeaveSubmitReq {
 
+    @Schema(name = "任务id", description = "任务id(开始流程时不传，驳回重新提交时传)")
+    private String taskId;
+
     @Schema(name = "请假天数", description = "请假天数")
     @NotNull(message = "请假天数不能为空")
     private Integer days;
