@@ -204,6 +204,9 @@ public class LeaveService {
 
         Boolean approved = leaveApproveReq.getApproved();
 
+        //添加当前环节的审批意见
+        taskService.addComment(leaveApproveReq.getTaskId(), task.getProcessInstanceId(), (approved ? "同意" : "驳回"), leaveApproveReq.getComment());
+
         if(approved){
             //同意：推动流程走向下一节点
             taskService.complete(leaveApproveReq.getTaskId());
@@ -222,9 +225,6 @@ public class LeaveService {
 
             updateLeaveStatus(task, 2);
         }
-
-        //添加当前环节的审批意见
-        taskService.addComment(leaveApproveReq.getTaskId(), task.getProcessInstanceId(), (approved ? "同意" : "驳回"), leaveApproveReq.getComment());
 
         return ResultEntity.ok();
     }
