@@ -162,7 +162,6 @@ public class LeaveService {
 
         if(startIndex >= total){
             pagingResp.setData(Lists.newArrayListWithCapacity(0));
-
             return ResultEntity.ok(pagingResp);
         }
 
@@ -205,9 +204,6 @@ public class LeaveService {
 
         Boolean approved = leaveApproveReq.getApproved();
 
-        //添加当前环节的审批意见
-        taskService.addComment(leaveApproveReq.getTaskId(), task.getProcessInstanceId(), (approved ? "同意" : "驳回"), leaveApproveReq.getComment());
-
         if(approved){
             //同意：推动流程走向下一节点
             taskService.complete(leaveApproveReq.getTaskId());
@@ -218,34 +214,17 @@ public class LeaveService {
 
             if(Objects.isNull(processInstance)){
                 //流程结束
-                LambdaQueryWrapper<LeaveInfo> queryWrapper = new LambdaQueryWrapper<>();
-                queryWrapper.eq(LeaveInfo::getProcessInstanceId, task.getProcessInstanceId());
-
-                LeaveInfo leaveInfo = leaveInfoService.getOne(queryWrapper);
-                if(Objects.nonNull(leaveInfo)){
-                    LeaveInfo editLeaveInfo = new LeaveInfo();
-                    editLeaveInfo.setId(leaveInfo.getId());
-                    //同意
-                    editLeaveInfo.setStatus(1);
-                    leaveInfoService.updateById(editLeaveInfo);
-                }
+                updateLeaveStatus(task, 1);
             }
         }else{
             //驳回
             rejectTask(task);
 
-            LambdaQueryWrapper<LeaveInfo> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(LeaveInfo::getProcessInstanceId, task.getProcessInstanceId());
-
-            LeaveInfo leaveInfo = leaveInfoService.getOne(queryWrapper);
-            if(Objects.nonNull(leaveInfo)){
-                LeaveInfo editLeaveInfo = new LeaveInfo();
-                editLeaveInfo.setId(leaveInfo.getId());
-                //驳回
-                editLeaveInfo.setStatus(2);
-                leaveInfoService.updateById(editLeaveInfo);
-            }
+            updateLeaveStatus(task, 2);
         }
+
+        //添加当前环节的审批意见
+        taskService.addComment(leaveApproveReq.getTaskId(), task.getProcessInstanceId(), (approved ? "同意" : "驳回"), leaveApproveReq.getComment());
 
         return ResultEntity.ok();
     }
@@ -272,6 +251,19 @@ public class LeaveService {
                 .processInstanceId(curTask.getProcessInstanceId())
                 .moveActivityIdTo(curTaskDefinitionKey, targetTaskDefinitionKey)
                 .changeState();
+    }
+
+    private void updateLeaveStatus(Task task, Integer targetStatus){
+        LambdaQueryWrapper<LeaveInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(LeaveInfo::getProcessInstanceId, task.getProcessInstanceId());
+
+        LeaveInfo leaveInfo = leaveInfoService.getOne(queryWrapper);
+        if(Objects.nonNull(leaveInfo)){
+            LeaveInfo editLeaveInfo = new LeaveInfo();
+            editLeaveInfo.setId(leaveInfo.getId());
+            editLeaveInfo.setStatus(targetStatus);
+            leaveInfoService.updateById(editLeaveInfo);
+        }
     }
 
 }

@@ -110,7 +110,7 @@ flowable:
   # 关闭定时任务引擎
   async-executor-activate: false
   # 首次启动自动建表(后续改为false)
-  database-schema-update: true
+  database-schema-update: false
 
 logging:
   config: classpath:logback/logback-test.xml
