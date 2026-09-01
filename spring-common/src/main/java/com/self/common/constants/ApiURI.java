@@ -158,4 +158,9 @@ public class ApiURI {
      */
     public static final String PROCESSES_LEAVE_APPROVE = MODULE_URI_PREFIX + "/leave/approve";
 
+    /**
+     * 查询请假历史轨迹
+     */
+    public static final String PROCESSES_LEAVE_HISTORY = MODULE_URI_PREFIX + "/leave/history";
+
 }

@@ -5,6 +5,7 @@ import com.self.common.annotation.OperLog;
 import com.self.common.api.req.page.PagingReq;
 import com.self.common.api.req.processes.leave.LeaveApproveReq;
 import com.self.common.api.req.processes.leave.LeaveSubmitReq;
+import com.self.common.api.resp.processes.leave.LeaveHistoryResp;
 import com.self.common.api.resp.processes.leave.LeaveTodoTaskResp;
 import com.self.common.constants.ApiURI;
 import com.self.common.domain.ResultEntity;
@@ -15,6 +16,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(tags = "请假流程")
 @RestController
@@ -42,6 +45,13 @@ public class LeaveController {
     @PostMapping(value = ApiURI.PROCESSES_LEAVE_APPROVE)
     public ResultEntity<Void> approve(@RequestBody @Validated LeaveApproveReq leaveApproveReq){
         return leaveService.approve(leaveApproveReq);
+    }
+
+    @Operation(summary = "查询请假历史轨迹")
+    @OperLog(title = "查询请假历史轨迹", businessType = BusinessTypeEnum.OTHER)
+    @GetMapping(value = ApiURI.PROCESSES_LEAVE_HISTORY)
+    public ResultEntity<List<LeaveHistoryResp>> getHistoryList(@RequestParam String processInstanceId){
+        return leaveService.getHistoryList(processInstanceId);
     }
 
 }

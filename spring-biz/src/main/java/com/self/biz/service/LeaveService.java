@@ -6,9 +6,11 @@ import com.google.common.collect.Maps;
 import com.self.common.api.req.page.PagingReq;
 import com.self.common.api.req.processes.leave.LeaveApproveReq;
 import com.self.common.api.req.processes.leave.LeaveSubmitReq;
+import com.self.common.api.resp.processes.leave.LeaveHistoryResp;
 import com.self.common.api.resp.processes.leave.LeaveTodoTaskResp;
 import com.self.common.constants.CommonConstants;
 import com.self.common.domain.ResultEntity;
+import com.self.common.enums.ProcessActivityStatusEnum;
 import com.self.common.enums.ProcessFormStatusEnum;
 import com.self.common.enums.ProcessInstanceKeyEnum;
 import com.self.common.exception.BizException;
@@ -18,9 +20,12 @@ import com.self.dao.entity.LeaveInfo;
 import com.self.dao.entity.User;
 import com.self.dao.service.LeaveInfoService;
 import io.micrometer.core.instrument.util.StringUtils;
+import org.flowable.engine.HistoryService;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
+import org.flowable.engine.history.HistoricActivityInstance;
 import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.engine.task.Comment;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
 import org.slf4j.Logger;
@@ -28,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,6 +48,9 @@ public class LeaveService {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private HistoryService historyService;
 
     @Autowired
     private com.self.biz.service.UserService userLogicService;
@@ -133,6 +142,9 @@ public class LeaveService {
             Map<String, Object> submitVars = Maps.newHashMap();
             submitVars.put("formStatus", ProcessFormStatusEnum.FIRST_SUBMIT.getValue());
 
+            //默认添加当前环节的评论意见
+            taskService.addComment(applyTask.getId(), applyTask.getProcessInstanceId(), "APPLY", "申请填报");
+
             taskService.complete(applyTask.getId(), submitVars);
 
             return ResultEntity.ok(processInstance.getId());
@@ -205,7 +217,7 @@ public class LeaveService {
         Boolean approved = leaveApproveReq.getApproved();
 
         //添加当前环节的审批意见
-        taskService.addComment(leaveApproveReq.getTaskId(), task.getProcessInstanceId(), (approved ? "同意" : "驳回"), leaveApproveReq.getComment());
+        taskService.addComment(leaveApproveReq.getTaskId(), task.getProcessInstanceId(), (approved ? "YES" : "NO"), leaveApproveReq.getComment());
 
         if(approved){
             //同意：推动流程走向下一节点
@@ -264,6 +276,87 @@ public class LeaveService {
             editLeaveInfo.setStatus(targetStatus);
             leaveInfoService.updateById(editLeaveInfo);
         }
+    }
+
+    public ResultEntity<List<LeaveHistoryResp>> getHistoryList(String processInstanceId){
+        //查询所有历史活动节点
+        List<HistoricActivityInstance> activities = historyService.createHistoricActivityInstanceQuery()
+                .processInstanceId(processInstanceId)
+                //只查询用户任务
+                .activityType("userTask")
+                .orderByHistoricActivityInstanceStartTime()
+                .desc()
+                .list();
+
+        if(CollectionUtils.isEmpty(activities)){
+            return ResultEntity.ok(Lists.newArrayListWithCapacity(0));
+        }
+
+        //查询所有节点评论
+        List<Comment> commentList = taskService.getProcessInstanceComments(processInstanceId);
+
+        //查询用户真实姓名
+        List<Long> userIds = activities.stream().map(HistoricActivityInstance::getAssignee).filter(StringUtils::isNotBlank).map(Long::parseLong).collect(Collectors.toList());
+        Map<Long, String> userRealNameMap = userDaoService.listByIds(userIds).stream().collect(Collectors.toMap(User::getId, User::getRealName));
+
+        //标记当前节点
+        List<String> curActivityIds = Lists.newArrayList();
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .singleResult();
+
+        if(Objects.nonNull(processInstance)){
+            //流程仍在进行中
+            curActivityIds = runtimeService.getActiveActivityIds(processInstanceId);
+        }
+
+        List<LeaveHistoryResp> respList = Lists.newArrayList();
+
+        for (HistoricActivityInstance activity : activities) {
+            LeaveHistoryResp resp = new LeaveHistoryResp();
+
+            resp.setActivityId(activity.getActivityId());
+            resp.setActivityName(activity.getActivityName());
+            resp.setActivityType(activity.getActivityType());
+            resp.setAssignee(activity.getAssignee());
+            resp.setAssigneeRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getAssignee()), null));
+            resp.setStartTime(activity.getStartTime());
+            resp.setEndTime(activity.getEndTime());
+            resp.setDurationInMillis(activity.getDurationInMillis());
+
+            Comment curComment = null;
+            for (Comment comment : commentList) {
+                if(comment.getTaskId().equals(activity.getTaskId())){
+                    curComment = comment;
+                    break;
+                }
+            }
+
+            resp.setComment(curComment == null ? null : curComment.getFullMessage());
+
+            //节点状态
+            if(curActivityIds.contains(resp.getActivityId()) && Objects.isNull(resp.getEndTime())){
+                //当前停留节点(进行中/未完成)
+                resp.setActivityStatus(ProcessActivityStatusEnum.CURRENT.getValue());
+            }else if(Objects.nonNull(resp.getEndTime())){
+                //已完成的节点
+                if(Objects.isNull(curComment)){
+                    resp.setActivityStatus(ProcessActivityStatusEnum.FINISHED.getValue());
+                }else if("YES".equals(curComment.getType())){
+                    resp.setActivityStatus(ProcessActivityStatusEnum.APPROVED.getValue());
+                }else if("NO".equals(curComment.getType())){
+                    resp.setActivityStatus(ProcessActivityStatusEnum.REJECTED.getValue());
+                }else{
+                    resp.setActivityStatus(ProcessActivityStatusEnum.FINISHED.getValue());
+                }
+            }else{
+                resp.setActivityStatus(ProcessActivityStatusEnum.PENDING.getValue());
+            }
+
+            respList.add(resp);
+        }
+
+        return ResultEntity.ok(respList);
     }
 
 }
