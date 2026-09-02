@@ -102,12 +102,10 @@ public class LeaveService {
             return ResultEntity.ok(task.getProcessInstanceId());
         }else{
             //新建流程
-            //保存请假信息
             LeaveInfo leaveInfo = new LeaveInfo();
             leaveInfo.setApplicant(userId);
             leaveInfo.setDays(leaveSubmitReq.getDays());
             leaveInfo.setReason(leaveSubmitReq.getReason());
-            //审批中
             leaveInfo.setStatus(0);
             leaveInfo.setCreateBy(userId);
             leaveInfo.setUpdateBy(userId);
@@ -281,6 +279,7 @@ public class LeaveService {
         //更新流程变量
         runtimeService.setVariable(curTask.getProcessInstanceId(), "formStatus", ProcessFormStatusEnum.REJECTED.getValue());
 
+        //回退节点至目标位置
         runtimeService.createChangeActivityStateBuilder()
                 .processInstanceId(curTask.getProcessInstanceId())
                 .moveActivityIdTo(curTaskActivityId, targetTaskActivityId)
