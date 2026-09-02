@@ -279,7 +279,7 @@ public class LeaveService {
         //更新流程变量
         runtimeService.setVariable(curTask.getProcessInstanceId(), "formStatus", ProcessFormStatusEnum.REJECTED.getValue());
 
-        //回退节点至目标位置
+        //回退节点至目标位置(暴力回退，只能用于简单串行，正确的方式是使用排他网关)
         runtimeService.createChangeActivityStateBuilder()
                 .processInstanceId(curTask.getProcessInstanceId())
                 .moveActivityIdTo(curTaskActivityId, targetTaskActivityId)
