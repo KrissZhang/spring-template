@@ -64,6 +64,7 @@ public class LeaveService {
     @Transactional(rollbackFor = {Exception.class, Error.class})
     public ResultEntity<String> submit(LeaveSubmitReq leaveSubmitReq){
         Long userId = CurUserUtils.getUserId();
+        Date now = new Date();
 
         if(StringUtils.isNotBlank(leaveSubmitReq.getTaskId())){
             //重新提交
@@ -89,12 +90,14 @@ public class LeaveService {
             Map<String, Object> varsMap = runtimeService.getVariables(task.getProcessInstanceId());
             varsMap.put("formStatus", ProcessFormStatusEnum.RESUBMIT.getValue());
             varsMap.put("applicant", userId);
+            varsMap.put("applicantTime", now);
             varsMap.put("days", leaveSubmitReq.getDays());
 
-            runtimeService.setVariables(task.getProcessInstanceId(), varsMap);
+            //默认添加当前环节的评论意见
+            taskService.addComment(task.getId(), task.getProcessInstanceId(), "APPLY", "申请填报");
 
             //重新提交，推进至下一任务节点
-            taskService.complete(leaveSubmitReq.getTaskId());
+            taskService.complete(leaveSubmitReq.getTaskId(), varsMap);
 
             return ResultEntity.ok(task.getProcessInstanceId());
         }else{
@@ -116,7 +119,9 @@ public class LeaveService {
             User hrUser = userLogicService.selectUserByUserName("user3");
 
             Map<String, Object> variables = Maps.newHashMap();
+            variables.put("formStatus", ProcessFormStatusEnum.FIRST_SUBMIT.getValue());
             variables.put("applicant", userId);
+            variables.put("applicantTime", now);
             variables.put("days", leaveSubmitReq.getDays());
             variables.put("manager", managerUser == null ? null : managerUser.getId());
             variables.put("hr", hrUser == null ? null : hrUser.getId());
@@ -139,13 +144,10 @@ public class LeaveService {
                     .taskDefinitionKey("applyTask")
                     .singleResult();
 
-            Map<String, Object> submitVars = Maps.newHashMap();
-            submitVars.put("formStatus", ProcessFormStatusEnum.FIRST_SUBMIT.getValue());
-
             //默认添加当前环节的评论意见
             taskService.addComment(applyTask.getId(), applyTask.getProcessInstanceId(), "APPLY", "申请填报");
 
-            taskService.complete(applyTask.getId(), submitVars);
+            taskService.complete(applyTask.getId());
 
             return ResultEntity.ok(processInstance.getId());
         }
@@ -181,26 +183,38 @@ public class LeaveService {
         List<LeaveTodoTaskResp> respList = taskList.stream().map(task -> {
             LeaveTodoTaskResp resp = new LeaveTodoTaskResp();
             resp.setTaskId(task.getId());
-            resp.setTaskName(task.getName());
-            resp.setTaskDefinitionKey(task.getTaskDefinitionKey());
+            resp.setTaskCreateTime(task.getCreateTime());
             resp.setTaskAssignee(task.getAssignee());
+            resp.setTaskActivityId(task.getTaskDefinitionKey());
+            resp.setTaskActivityName(task.getName());
             resp.setProcessInstanceId(task.getProcessInstanceId());
 
-            String processDefinitionId = task.getProcessDefinitionId();
-            List<String> splitStr = Arrays.asList(org.apache.commons.lang3.StringUtils.split(processDefinitionId, CommonConstants.STR_COLON));
+            List<String> splitStr = Arrays.asList(org.apache.commons.lang3.StringUtils.split(task.getProcessDefinitionId(), CommonConstants.STR_COLON));
             resp.setProcessInstanceKey(splitStr.get(0));
-            resp.setTaskCreateTime(task.getCreateTime());
 
+            //流程变量
             Map<String, Object> varsMap = task.getProcessVariables();
+
+            resp.setProcessApplicant(Optional.ofNullable(varsMap.getOrDefault("applicant", null)).orElse("").toString());
+
+            Object applicantTimeObj = varsMap.getOrDefault("applicantTime", null);
+            Date applicantTime = (applicantTimeObj == null ? null : (Date)applicantTimeObj);
+            resp.setProcessApplicantTime(applicantTime);
+
             resp.setFormStatus(Optional.ofNullable(varsMap.getOrDefault("formStatus", null)).orElse("").toString());
 
             return resp;
         }).collect(Collectors.toList());
 
-        List<Long> userIds = respList.stream().map(LeaveTodoTaskResp::getTaskAssignee).map(Long::parseLong).collect(Collectors.toList());
+        Set<Long> userIds = respList.stream().map(LeaveTodoTaskResp::getTaskAssignee).filter(StringUtils::isNotBlank).map(Long::parseLong).collect(Collectors.toSet());
+        Set<Long> applicantUserIds = respList.stream().map(LeaveTodoTaskResp::getProcessApplicant).filter(StringUtils::isNotBlank).map(Long::parseLong).collect(Collectors.toSet());
+        userIds.addAll(applicantUserIds);
+
         Map<Long, String> userRealNameMap = userDaoService.listByIds(userIds).stream().collect(Collectors.toMap(User::getId, User::getRealName));
 
         respList.forEach(resp -> resp.setTaskAssigneeRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getTaskAssignee()), null)));
+
+        respList.forEach(resp -> resp.setProcessApplicantRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getProcessApplicant()), null)));
 
         pagingResp.setData(respList);
 
@@ -220,8 +234,15 @@ public class LeaveService {
         taskService.addComment(leaveApproveReq.getTaskId(), task.getProcessInstanceId(), (approved ? "YES" : "NO"), leaveApproveReq.getComment());
 
         if(approved){
+            //修改表单状态
+            Map<String, Object> varsMap = runtimeService.getVariables(task.getProcessInstanceId());
+            String formStatus = Optional.ofNullable(varsMap.getOrDefault("formStatus", null)).orElse("").toString();
+            if(ProcessFormStatusEnum.REJECTED.getValue().equals(formStatus)){
+                varsMap.put("formStatus", ProcessFormStatusEnum.RESUBMIT.getValue());
+            }
+
             //同意：推动流程走向下一节点
-            taskService.complete(leaveApproveReq.getTaskId());
+            taskService.complete(leaveApproveReq.getTaskId(), varsMap);
 
             //检查流程是否结束，若结束更新请假状态为审批通过
             ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
@@ -242,26 +263,27 @@ public class LeaveService {
     }
 
     private void rejectTask(Task curTask){
-        //当前任务节点KEY
-        String curTaskDefinitionKey = curTask.getTaskDefinitionKey();
+        //当前任务节点id
+        String curTaskActivityId = curTask.getTaskDefinitionKey();
 
-        //退回目标节点KEY
-        String targetTaskDefinitionKey = "";
+        //退回目标节点id
+        String targetTaskActivityId = "";
 
         //跳转活动状态节点
-        if("managerTask".equalsIgnoreCase(curTaskDefinitionKey)){
-            targetTaskDefinitionKey = "applyTask";
-        }else if("hrTask".equalsIgnoreCase(curTaskDefinitionKey)){
-            targetTaskDefinitionKey = "managerTask";
+        if("managerTask".equalsIgnoreCase(curTaskActivityId)){
+            targetTaskActivityId = "applyTask";
+        }else if("hrTask".equalsIgnoreCase(curTaskActivityId)){
+            targetTaskActivityId = "managerTask";
         }else{
             throw new BizException("当前节点标识错误，无法退回");
         }
 
+        //更新流程变量
         runtimeService.setVariable(curTask.getProcessInstanceId(), "formStatus", ProcessFormStatusEnum.REJECTED.getValue());
 
         runtimeService.createChangeActivityStateBuilder()
                 .processInstanceId(curTask.getProcessInstanceId())
-                .moveActivityIdTo(curTaskDefinitionKey, targetTaskDefinitionKey)
+                .moveActivityIdTo(curTaskActivityId, targetTaskActivityId)
                 .changeState();
     }
 
