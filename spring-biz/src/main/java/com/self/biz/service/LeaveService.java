@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.self.common.api.req.page.PagingReq;
 import com.self.common.api.req.processes.leave.LeaveApproveReq;
 import com.self.common.api.req.processes.leave.LeaveSubmitReq;
+import com.self.common.api.resp.processes.leave.LeaveDoneTaskResp;
 import com.self.common.api.resp.processes.leave.LeaveHistoryResp;
 import com.self.common.api.resp.processes.leave.LeaveTodoTaskResp;
 import com.self.common.constants.CommonConstants;
@@ -24,10 +25,13 @@ import org.flowable.engine.HistoryService;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.history.HistoricActivityInstance;
+import org.flowable.engine.history.HistoricProcessInstance;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.engine.task.Comment;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
+import org.flowable.task.api.history.HistoricTaskInstance;
+import org.flowable.task.api.history.HistoricTaskInstanceQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -378,6 +382,78 @@ public class LeaveService {
         }
 
         return ResultEntity.ok(respList);
+    }
+
+    public ResultEntity<PagingResp<LeaveDoneTaskResp>> getDoneList(PagingReq pagingReq){
+        Long userId = CurUserUtils.getUserId();
+
+        PagingResp<LeaveDoneTaskResp> pagingResp = new PagingResp<>();
+        pagingResp.setCurrentPage(pagingReq.getCurrentPage());
+        pagingResp.setPageSize(pagingReq.getPageSize());
+
+        int startIndex = ((pagingReq.getCurrentPage() - 1) * pagingReq.getPageSize());
+
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+                .taskAssignee(userId.toString())
+                .finished()
+                .orderByHistoricTaskInstanceEndTime()
+                .desc();
+
+        long total = historicTaskInstanceQuery.count();
+        pagingResp.setTotalRecord(total);
+
+        long totalPage = (total + pagingReq.getPageSize() - 1) / pagingReq.getPageSize();
+        pagingResp.setTotalPage((int) totalPage);
+
+        if(startIndex >= total){
+            pagingResp.setData(Lists.newArrayListWithCapacity(0));
+            return ResultEntity.ok(pagingResp);
+        }
+
+        List<HistoricTaskInstance> historicTaskList = historicTaskInstanceQuery.listPage(startIndex, pagingReq.getPageSize());
+
+        Set<String> processInstanceIds = historicTaskList.stream()
+                .map(HistoricTaskInstance::getProcessInstanceId)
+                .collect(Collectors.toSet());
+
+        List<HistoricProcessInstance> processInstanceList = Lists.newArrayList();
+        if(!CollectionUtils.isEmpty(processInstanceIds)){
+            processInstanceList = historyService.createHistoricProcessInstanceQuery()
+                    .processInstanceIds(processInstanceIds)
+                    .list();
+        }
+        Map<String, String> businessKeyMap = processInstanceList.stream().collect(Collectors.toMap(
+                HistoricProcessInstance::getId,
+                process -> (process.getBusinessKey() == null ? "" : process.getBusinessKey())
+        ));
+
+        List<LeaveDoneTaskResp> respList = historicTaskList.stream().map(historicTask -> {
+            LeaveDoneTaskResp resp = new LeaveDoneTaskResp();
+            resp.setTaskId(historicTask.getId());
+            resp.setTaskAssignee(historicTask.getAssignee());
+            resp.setTaskActivityId(historicTask.getTaskDefinitionKey());
+            resp.setTaskActivityName(historicTask.getName());
+            resp.setStartTime(historicTask.getCreateTime());
+            resp.setEndTime(historicTask.getEndTime());
+            resp.setDurationInMillis(historicTask.getDurationInMillis());
+            resp.setProcessInstanceId(historicTask.getProcessInstanceId());
+
+            List<String> splitStr = Arrays.asList(org.apache.commons.lang3.StringUtils.split(historicTask.getProcessDefinitionId(), CommonConstants.STR_COLON));
+            resp.setProcessInstanceKey(splitStr.get(0));
+
+            return resp;
+        }).collect(Collectors.toList());
+
+        Set<Long> userIds = respList.stream().map(LeaveDoneTaskResp::getTaskAssignee).filter(StringUtils::isNotBlank).map(Long::parseLong).collect(Collectors.toSet());
+        Map<Long, String> userRealNameMap = userDaoService.listByIds(userIds).stream().collect(Collectors.toMap(User::getId, User::getRealName));
+
+        respList.forEach(resp -> resp.setTaskAssigneeRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getTaskAssignee()), null)));
+
+        respList.forEach(resp -> resp.setBusinessKey(businessKeyMap.getOrDefault(resp.getProcessInstanceId(), null)));
+
+        pagingResp.setData(respList);
+
+        return ResultEntity.ok(pagingResp);
     }
 
 }

@@ -5,6 +5,7 @@ import com.self.common.annotation.OperLog;
 import com.self.common.api.req.page.PagingReq;
 import com.self.common.api.req.processes.leave.LeaveApproveReq;
 import com.self.common.api.req.processes.leave.LeaveSubmitReq;
+import com.self.common.api.resp.processes.leave.LeaveDoneTaskResp;
 import com.self.common.api.resp.processes.leave.LeaveHistoryResp;
 import com.self.common.api.resp.processes.leave.LeaveTodoTaskResp;
 import com.self.common.constants.ApiURI;
@@ -52,6 +53,13 @@ public class LeaveController {
     @GetMapping(value = ApiURI.PROCESSES_LEAVE_HISTORY)
     public ResultEntity<List<LeaveHistoryResp>> getHistoryList(@RequestParam String processInstanceId){
         return leaveService.getHistoryList(processInstanceId);
+    }
+
+    @Operation(summary = "查询请假已办列表")
+    @OperLog(title = "查询请假已办列表", businessType = BusinessTypeEnum.OTHER)
+    @PostMapping(value = ApiURI.PROCESSES_LEAVE_DONELIST)
+    public ResultEntity<PagingResp<LeaveDoneTaskResp>> getDoneList(@RequestBody @Validated PagingReq pagingReq){
+        return leaveService.getDoneList(pagingReq);
     }
 
 }

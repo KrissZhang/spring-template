@@ -163,4 +163,9 @@ public class ApiURI {
      */
     public static final String PROCESSES_LEAVE_HISTORY = MODULE_URI_PREFIX + "/leave/history";
 
+    /**
+     * 查询请假已办列表
+     */
+    public static final String PROCESSES_LEAVE_DONELIST = MODULE_URI_PREFIX + "/leave/getDoneList";
+
 }
