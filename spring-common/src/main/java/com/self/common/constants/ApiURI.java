@@ -144,33 +144,33 @@ public class ApiURI {
     public static final String TEST_DELAY_QUEUE_SEND = MODULE_URI_PREFIX + "/test/testDelayQueueSend";
 
     /**
+     * 查询流程待办列表
+     */
+    public static final String PROCESSES_TODOLIST = MODULE_URI_PREFIX + "/flow/getTodoList";
+
+    /**
+     * 查询流程历史轨迹
+     */
+    public static final String PROCESSES_HISTORY = MODULE_URI_PREFIX + "/flow/history";
+
+    /**
+     * 查询流程已办列表
+     */
+    public static final String PROCESSES_DONELIST = MODULE_URI_PREFIX + "/flow/getDoneList";
+
+    /**
+     * 查询高亮流程图
+     */
+    public static final String PROCESSES_DIAGRAM = MODULE_URI_PREFIX + "/flow/diagram";
+
+    /**
      * 提交请假申请
      */
     public static final String PROCESSES_LEAVE_SUBMIT = MODULE_URI_PREFIX + "/leave/submit";
 
     /**
-     * 查询请假待办列表
-     */
-    public static final String PROCESSES_LEAVE_TODOLIST = MODULE_URI_PREFIX + "/leave/getTodoList";
-
-    /**
      * 审批请假申请
      */
     public static final String PROCESSES_LEAVE_APPROVE = MODULE_URI_PREFIX + "/leave/approve";
-
-    /**
-     * 查询请假历史轨迹
-     */
-    public static final String PROCESSES_LEAVE_HISTORY = MODULE_URI_PREFIX + "/leave/history";
-
-    /**
-     * 查询请假已办列表
-     */
-    public static final String PROCESSES_LEAVE_DONELIST = MODULE_URI_PREFIX + "/leave/getDoneList";
-
-    /**
-     * 查询高亮流程图
-     */
-    public static final String PROCESSES_LEAVE_DIAGRAM = MODULE_URI_PREFIX + "/leave/diagram";
 
 }

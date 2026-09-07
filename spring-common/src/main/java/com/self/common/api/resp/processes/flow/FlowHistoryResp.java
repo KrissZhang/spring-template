@@ -1,4 +1,4 @@
-package com.self.common.api.resp.processes.leave;
+package com.self.common.api.resp.processes.flow;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -7,9 +7,9 @@ import lombok.Data;
 
 import java.util.Date;
 
-@ApiModel(description = "请假历史轨迹响应参数")
+@ApiModel(description = "流程历史轨迹响应参数")
 @Data
-public class LeaveHistoryResp {
+public class FlowHistoryResp {
 
     @Schema(name = "节点id", description = "节点id")
     private String activityId;

@@ -1,4 +1,4 @@
-package com.self.common.api.resp.processes.leave;
+package com.self.common.api.resp.processes.flow;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -7,9 +7,9 @@ import lombok.Data;
 
 import java.util.Date;
 
-@ApiModel(description = "请假待办任务列表响应参数")
+@ApiModel(description = "流程待办任务列表响应参数")
 @Data
-public class LeaveTodoTaskResp {
+public class FlowTodoTaskResp {
 
     @Schema(name = "任务id", description = "任务id")
     private String taskId;

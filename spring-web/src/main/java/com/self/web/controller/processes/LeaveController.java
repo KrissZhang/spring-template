@@ -2,27 +2,16 @@ package com.self.web.controller.processes;
 
 import com.self.biz.service.LeaveService;
 import com.self.common.annotation.OperLog;
-import com.self.common.api.req.page.PagingReq;
 import com.self.common.api.req.processes.leave.LeaveApproveReq;
 import com.self.common.api.req.processes.leave.LeaveSubmitReq;
-import com.self.common.api.resp.processes.leave.LeaveDoneTaskResp;
-import com.self.common.api.resp.processes.leave.LeaveHistoryResp;
-import com.self.common.api.resp.processes.leave.LeaveTodoTaskResp;
 import com.self.common.constants.ApiURI;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.BusinessTypeEnum;
-import com.self.dao.api.page.PagingResp;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
-import org.flowable.common.engine.impl.util.IoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 @Api(tags = "请假流程")
 @RestController
@@ -38,45 +27,11 @@ public class LeaveController {
         return leaveService.submit(leaveSubmitReq);
     }
 
-    @Operation(summary = "查询请假待办列表")
-    @OperLog(title = "查询请假待办列表", businessType = BusinessTypeEnum.OTHER)
-    @PostMapping(value = ApiURI.PROCESSES_LEAVE_TODOLIST)
-    public ResultEntity<PagingResp<LeaveTodoTaskResp>> getTodoList(@RequestBody @Validated PagingReq pagingReq){
-        return leaveService.getTodoList(pagingReq);
-    }
-
     @Operation(summary = "审批请假申请")
     @OperLog(title = "审批请假申请", businessType = BusinessTypeEnum.OTHER)
     @PostMapping(value = ApiURI.PROCESSES_LEAVE_APPROVE)
     public ResultEntity<Void> approve(@RequestBody @Validated LeaveApproveReq leaveApproveReq){
         return leaveService.approve(leaveApproveReq);
-    }
-
-    @Operation(summary = "查询请假历史轨迹")
-    @OperLog(title = "查询请假历史轨迹", businessType = BusinessTypeEnum.OTHER)
-    @GetMapping(value = ApiURI.PROCESSES_LEAVE_HISTORY)
-    public ResultEntity<List<LeaveHistoryResp>> getHistoryList(@RequestParam String processInstanceId){
-        return leaveService.getHistoryList(processInstanceId);
-    }
-
-    @Operation(summary = "查询请假已办列表")
-    @OperLog(title = "查询请假已办列表", businessType = BusinessTypeEnum.OTHER)
-    @PostMapping(value = ApiURI.PROCESSES_LEAVE_DONELIST)
-    public ResultEntity<PagingResp<LeaveDoneTaskResp>> getDoneList(@RequestBody @Validated PagingReq pagingReq){
-        return leaveService.getDoneList(pagingReq);
-    }
-
-    @Operation(summary = "查询高亮流程图")
-    @OperLog(title = "查询高亮流程图", businessType = BusinessTypeEnum.OTHER)
-    @GetMapping(value = ApiURI.PROCESSES_LEAVE_DIAGRAM)
-    public void getDiagram(HttpServletResponse response, @RequestParam String processInstanceId) throws IOException {
-        try(InputStream is = leaveService.generateHighLightDiagram(processInstanceId)){
-            byte[] bytes = IoUtil.readInputStream(is, "flow-diagram");
-            response.setContentType("image/png");
-            response.setContentLength(bytes.length);
-            response.getOutputStream().write(bytes);
-            response.getOutputStream().flush();
-        }
     }
 
 }
