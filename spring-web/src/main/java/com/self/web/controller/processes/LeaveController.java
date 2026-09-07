@@ -14,10 +14,14 @@ import com.self.common.enums.BusinessTypeEnum;
 import com.self.dao.api.page.PagingResp;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import org.flowable.common.engine.impl.util.IoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Api(tags = "请假流程")
@@ -60,6 +64,19 @@ public class LeaveController {
     @PostMapping(value = ApiURI.PROCESSES_LEAVE_DONELIST)
     public ResultEntity<PagingResp<LeaveDoneTaskResp>> getDoneList(@RequestBody @Validated PagingReq pagingReq){
         return leaveService.getDoneList(pagingReq);
+    }
+
+    @Operation(summary = "查询高亮流程图")
+    @OperLog(title = "查询高亮流程图", businessType = BusinessTypeEnum.OTHER)
+    @GetMapping(value = ApiURI.PROCESSES_LEAVE_DIAGRAM)
+    public void getDiagram(HttpServletResponse response, @RequestParam String processInstanceId) throws IOException {
+        try(InputStream is = leaveService.generateHighLightDiagram(processInstanceId)){
+            byte[] bytes = IoUtil.readInputStream(is, "flow-diagram");
+            response.setContentType("image/png");
+            response.setContentLength(bytes.length);
+            response.getOutputStream().write(bytes);
+            response.getOutputStream().flush();
+        }
     }
 
 }

@@ -23,13 +23,17 @@ import com.self.dao.entity.User;
 import com.self.dao.mapper.ActHiCommentMapper;
 import com.self.dao.service.LeaveInfoService;
 import io.micrometer.core.instrument.util.StringUtils;
+import org.flowable.bpmn.constants.BpmnXMLConstants;
+import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.engine.HistoryService;
+import org.flowable.engine.RepositoryService;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.history.HistoricActivityInstance;
 import org.flowable.engine.history.HistoricProcessInstance;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.engine.task.Comment;
+import org.flowable.image.impl.DefaultProcessDiagramGenerator;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
 import org.flowable.task.api.history.HistoricTaskInstance;
@@ -41,6 +45,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,6 +62,9 @@ public class LeaveService {
 
     @Autowired
     private HistoryService historyService;
+
+    @Autowired
+    private RepositoryService repositoryService;
 
     @Autowired
     private com.self.biz.service.UserService userLogicService;
@@ -447,6 +455,65 @@ public class LeaveService {
         pagingResp.setData(respList);
 
         return ResultEntity.ok(pagingResp);
+    }
+
+    public InputStream generateHighLightDiagram(String processInstanceId){
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .singleResult();
+
+        String processDefinitionId = null;
+        //高亮节点
+        List<String> highLightedActivities = Lists.newArrayList();
+        //高亮连线
+        List<String> highLightedFlows = Lists.newArrayList();
+
+        if(Objects.nonNull(processInstance)){
+            //实例运行中
+            processDefinitionId = processInstance.getProcessDefinitionId();
+            highLightedActivities = runtimeService.getActiveActivityIds(processInstanceId);
+        }else{
+            //实例已结束
+            HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
+                    .processInstanceId(processInstanceId)
+                    .singleResult();
+            processDefinitionId = historicProcessInstance.getProcessDefinitionId();
+        }
+
+        //查询已经过节点和连线
+        List<HistoricActivityInstance> historicList = historyService
+                .createHistoricActivityInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .list();
+
+        for (HistoricActivityInstance his : historicList) {
+            if (BpmnXMLConstants.ELEMENT_SEQUENCE_FLOW.equals(his.getActivityType())) {
+                //连线
+                highLightedFlows.add(his.getActivityId());
+            } else {
+                //节点
+                highLightedActivities.add(his.getActivityId());
+            }
+        }
+
+        //查询BPMN模型
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
+
+        //渲染
+        DefaultProcessDiagramGenerator generator = new DefaultProcessDiagramGenerator();
+
+        return generator.generateDiagram(
+                bpmnModel,
+                "png",  //图片类型
+                highLightedActivities,  //高亮节点
+                highLightedFlows,  //高亮连线
+                "宋体",  //节点字体
+                "宋体",  //连线标签字体
+                "宋体",  //注释字体
+                null,  //类加载器
+                1.0,  //缩放因子
+                true  //未设置标签时是否绘制连线名
+        );
     }
 
 }

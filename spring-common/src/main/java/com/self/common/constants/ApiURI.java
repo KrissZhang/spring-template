@@ -168,4 +168,9 @@ public class ApiURI {
      */
     public static final String PROCESSES_LEAVE_DONELIST = MODULE_URI_PREFIX + "/leave/getDoneList";
 
+    /**
+     * 查询高亮流程图
+     */
+    public static final String PROCESSES_LEAVE_DIAGRAM = MODULE_URI_PREFIX + "/leave/diagram";
+
 }

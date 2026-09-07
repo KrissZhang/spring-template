@@ -9,6 +9,7 @@ import com.self.common.enums.RedisDelayQueueEnum;
 import com.self.common.utils.RedisUtils;
 import com.self.common.utils.RedissonUtils;
 import com.self.common.utils.SpringUtils;
+import org.flowable.image.impl.DefaultProcessDiagramCanvas;
 import org.redisson.RedissonShutdownException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import java.awt.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Objects;
 
 @Component
@@ -45,6 +49,9 @@ public class InitRunner implements ApplicationRunner {
 
         // 延迟队列侦听
         delayQueueListen();
+
+        // 流程图高亮颜色初始化
+        initGreenHighLight();
 
         logger.info("service startup completed...");
     }
@@ -126,6 +133,25 @@ public class InitRunner implements ApplicationRunner {
         }
 
         logger.info("配置 redis 延迟队列========结束");
+    }
+
+    public static synchronized void initGreenHighLight() {
+        setColorField("HIGHLIGHT_COLOR", Color.GREEN);
+    }
+
+    private static void setColorField(String name, Color newColor) {
+        try {
+            Field field = DefaultProcessDiagramCanvas.class.getDeclaredField(name);
+            field.setAccessible(true);
+
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+
+            field.set(null, newColor);
+        } catch (Exception e) {
+            throw new IllegalStateException("修改高亮颜色失败: " + name, e);
+        }
     }
 
 }
