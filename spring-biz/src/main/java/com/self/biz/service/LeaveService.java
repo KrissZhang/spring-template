@@ -235,15 +235,20 @@ public class LeaveService {
         //添加当前环节的审批意见
         taskService.addComment(leaveApproveReq.getTaskId(), task.getProcessInstanceId(), (approved ? "YES" : "NO"), leaveApproveReq.getComment());
 
+        //流程变量
+        Map<String, Object> varsMap = runtimeService.getVariables(task.getProcessInstanceId());
+
         if(approved){
+            //同意
+            varsMap.put("approveResult", "approved");
+
             //修改表单状态
-            Map<String, Object> varsMap = runtimeService.getVariables(task.getProcessInstanceId());
             String formStatus = Optional.ofNullable(varsMap.getOrDefault("formStatus", null)).orElse("").toString();
             if(ProcessFormStatusEnum.REJECTED.getValue().equals(formStatus)){
                 varsMap.put("formStatus", ProcessFormStatusEnum.RESUBMIT.getValue());
             }
 
-            //同意：推动流程走向下一节点
+            //推动流程走向下一节点
             taskService.complete(leaveApproveReq.getTaskId(), varsMap);
 
             //检查流程是否结束，若结束更新请假状态为审批通过
@@ -256,38 +261,16 @@ public class LeaveService {
             }
         }else{
             //驳回
-            rejectTask(task);
+            varsMap.put("approveResult", "rejected");
+            varsMap.put("formStatus", ProcessFormStatusEnum.REJECTED.getValue());
+
+            //推动流程回退
+            taskService.complete(leaveApproveReq.getTaskId(), varsMap);
 
             updateLeaveStatus(task, 2);
         }
 
         return ResultEntity.ok();
-    }
-
-    private void rejectTask(Task curTask){
-        //当前任务节点id
-        String curTaskActivityId = curTask.getTaskDefinitionKey();
-
-        //退回目标节点id
-        String targetTaskActivityId = "";
-
-        //跳转活动状态节点
-        if("managerTask".equalsIgnoreCase(curTaskActivityId)){
-            targetTaskActivityId = "applyTask";
-        }else if("hrTask".equalsIgnoreCase(curTaskActivityId)){
-            targetTaskActivityId = "managerTask";
-        }else{
-            throw new BizException("当前节点标识错误，无法退回");
-        }
-
-        //更新流程变量
-        runtimeService.setVariable(curTask.getProcessInstanceId(), "formStatus", ProcessFormStatusEnum.REJECTED.getValue());
-
-        //回退节点至目标位置(暴力回退，只能用于简单串行，正确的方式是使用排他网关)
-        runtimeService.createChangeActivityStateBuilder()
-                .processInstanceId(curTask.getProcessInstanceId())
-                .moveActivityIdTo(curTaskActivityId, targetTaskActivityId)
-                .changeState();
     }
 
     private void updateLeaveStatus(Task task, Integer targetStatus){

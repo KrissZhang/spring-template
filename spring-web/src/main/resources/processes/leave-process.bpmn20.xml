@@ -2,31 +2,53 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
   <process id="leaveProcess" name="请假流程" isExecutable="true">
     <!-- 开始事件 -->
-    <startEvent id="startEvent" name="提交请假"/>
+    <startEvent id="startEvent" name="开始"/>
     <!-- 申请填报 -->
     <userTask id="applyTask" name="申请填报" flowable:assignee="${applicant}"/>
     <!-- 主管审批 -->
     <userTask id="managerTask" name="主管审批" flowable:assignee="${manager}"/>
-    <!-- 排他网关 (判断天数) -->
-    <exclusiveGateway id="dayGateway" name="天数判断"/>
     <!-- HR审批 (天数大于3天) -->
     <userTask id="hrTask" name="HR审批" flowable:assignee="${hr}"/>
     <!-- 结束事件 -->
     <endEvent id="endEvent" name="结束"/>
 
+    <!-- 主管审批网关：通过或驳回给申请人 -->
+    <exclusiveGateway id="managerGateway" name="主管审批网关"/>
+    <!-- 天数判断网关(大于3天走HR审批) -->
+    <exclusiveGateway id="dayGateway" name="天数判断网关"/>
+    <!-- HR审批网关：通过或驳回给主管 -->
+    <exclusiveGateway id="hrGateway" name="HR审批网关"/>
+
     <!-- 连线 -->
     <sequenceFlow id="flow_to_apply" sourceRef="startEvent" targetRef="applyTask"/>
     <sequenceFlow id="flow_to_manager" sourceRef="applyTask" targetRef="managerTask"/>
-    <sequenceFlow id="flow_to_gateway" sourceRef="managerTask" targetRef="dayGateway"/>
-    <!-- 天数大于3天，走HR -->
+    <sequenceFlow id="flow_manager_to_gateway" sourceRef="managerTask" targetRef="managerGateway"/>
+
+    <!-- 主管审批网关：通过或驳回给申请人 -->
+    <sequenceFlow id="flow_manager_approve_to_days" sourceRef="managerGateway" targetRef="dayGateway">
+      <conditionExpression xsi:type="tFormalExpression">${approveResult == 'approved'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_manager_reject" sourceRef="managerGateway" targetRef="applyTask">
+      <conditionExpression xsi:type="tFormalExpression">${approveResult == 'rejected'}</conditionExpression>
+    </sequenceFlow>
+
+    <!-- 天数判断网关(大于3天走HR审批) -->
     <sequenceFlow id="flow_to_hr" sourceRef="dayGateway" targetRef="hrTask">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${days > 3}]]></conditionExpression>
     </sequenceFlow>
-    <!-- 天数小于等于3天，直接结束 -->
     <sequenceFlow id="flow_to_end" sourceRef="dayGateway" targetRef="endEvent">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${days <= 3}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow_hr_to_end" sourceRef="hrTask" targetRef="endEvent"/>
+
+    <sequenceFlow id="flow_hr_to_gateway" sourceRef="hrTask" targetRef="hrGateway"/>
+
+    <!-- HR审批网关：通过或驳回给主管 -->
+    <sequenceFlow id="flow_hr_approve_to_end" sourceRef="hrGateway" targetRef="endEvent">
+      <conditionExpression xsi:type="tFormalExpression">${approveResult == 'approved'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_hr_reject" sourceRef="hrGateway" targetRef="managerTask">
+      <conditionExpression xsi:type="tFormalExpression">${approveResult == 'rejected'}</conditionExpression>
+    </sequenceFlow>
   </process>
 
   <bpmndi:BPMNDiagram id="BPMNDiagram_leaveProcess">
@@ -46,19 +68,29 @@
         <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="138.0"/>
       </bpmndi:BPMNShape>
 
-      <!-- 排他网关 -->
-      <bpmndi:BPMNShape bpmnElement="dayGateway" id="BPMNShape_dayGateway">
+      <!-- 主管审批网关 -->
+      <bpmndi:BPMNShape bpmnElement="managerGateway" id="BPMNShape_managerGateway">
         <omgdc:Bounds height="40.0" width="40.0" x="480.0" y="158.0"/>
+      </bpmndi:BPMNShape>
+
+      <!-- 天数判断网关 -->
+      <bpmndi:BPMNShape bpmnElement="dayGateway" id="BPMNShape_dayGateway">
+        <omgdc:Bounds height="40.0" width="40.0" x="570.0" y="158.0"/>
       </bpmndi:BPMNShape>
 
       <!-- HR审批 -->
       <bpmndi:BPMNShape bpmnElement="hrTask" id="BPMNShape_hrTask">
-        <omgdc:Bounds height="80.0" width="100.0" x="570.0" y="138.0"/>
+        <omgdc:Bounds height="80.0" width="100.0" x="650.0" y="138.0"/>
+      </bpmndi:BPMNShape>
+
+      <!-- HR审批网关 -->
+      <bpmndi:BPMNShape bpmnElement="hrGateway" id="BPMNShape_hrGateway">
+        <omgdc:Bounds height="40.0" width="40.0" x="790.0" y="158.0"/>
       </bpmndi:BPMNShape>
 
       <!-- 结束事件 -->
       <bpmndi:BPMNShape bpmnElement="endEvent" id="BPMNShape_endEvent">
-        <omgdc:Bounds height="30.0" width="30.0" x="720.0" y="163.0"/>
+        <omgdc:Bounds height="30.0" width="30.0" x="870.0" y="163.0"/>
       </bpmndi:BPMNShape>
 
       <!-- 连线布局 -->
@@ -72,30 +104,59 @@
         <omgdi:waypoint x="330.0" y="178.0"/>
       </bpmndi:BPMNEdge>
 
-      <bpmndi:BPMNEdge bpmnElement="flow_to_gateway" id="BPMNEdge_flow_to_gateway">
+      <bpmndi:BPMNEdge bpmnElement="flow_manager_to_gateway" id="BPMNEdge_flow_manager_to_gateway">
         <omgdi:waypoint x="430.0" y="178.0"/>
         <omgdi:waypoint x="480.0" y="178.0"/>
       </bpmndi:BPMNEdge>
 
-      <!-- 网关到HR (上方路径: >3天) -->
-      <bpmndi:BPMNEdge bpmnElement="flow_to_hr" id="BPMNEdge_flow_to_hr">
-        <omgdi:waypoint x="500.0" y="158.0"/>
-        <omgdi:waypoint x="500.0" y="100.0"/>
-        <omgdi:waypoint x="620.0" y="100.0"/>
-        <omgdi:waypoint x="620.0" y="138.0"/>
-      </bpmndi:BPMNEdge>
-
-      <!-- 网关到结束 (下方路径: <=3天) -->
-      <bpmndi:BPMNEdge bpmnElement="flow_to_end" id="BPMNEdge_flow_to_end">
+      <!-- 主管同意 -> 天数网关 -->
+      <bpmndi:BPMNEdge bpmnElement="flow_manager_approve_to_days" id="BPMNEdge_flow_manager_approve_to_days">
         <omgdi:waypoint x="520.0" y="178.0"/>
-        <omgdi:waypoint x="720.0" y="178.0"/>
+        <omgdi:waypoint x="570.0" y="178.0"/>
       </bpmndi:BPMNEdge>
 
-      <!-- HR到结束 -->
-      <bpmndi:BPMNEdge bpmnElement="flow_hr_to_end" id="BPMNEdge_flow_hr_to_end">
-        <omgdi:waypoint x="670.0" y="178.0"/>
-        <omgdi:waypoint x="720.0" y="178.0"/>
+      <!-- 主管驳回 -> 申请人 (下方折线退回) -->
+      <bpmndi:BPMNEdge bpmnElement="flow_manager_reject" id="BPMNEdge_flow_manager_reject">
+        <omgdi:waypoint x="500.0" y="198.0"/>
+        <omgdi:waypoint x="500.0" y="260.0"/>
+        <omgdi:waypoint x="230.0" y="260.0"/>
+        <omgdi:waypoint x="230.0" y="218.0"/>
       </bpmndi:BPMNEdge>
+
+      <!-- 天数网关 -> HR (>3天，上方折线) -->
+      <bpmndi:BPMNEdge bpmnElement="flow_to_hr" id="BPMNEdge_flow_to_hr">
+        <omgdi:waypoint x="590.0" y="158.0"/>
+        <omgdi:waypoint x="590.0" y="100.0"/>
+        <omgdi:waypoint x="700.0" y="100.0"/>
+        <omgdi:waypoint x="700.0" y="138.0"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- 天数网关 -> 结束 (<=3天) -->
+      <bpmndi:BPMNEdge bpmnElement="flow_to_end" id="BPMNEdge_flow_to_end">
+        <omgdi:waypoint x="610.0" y="178.0"/>
+        <omgdi:waypoint x="870.0" y="178.0"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- HR -> HR网关 -->
+      <bpmndi:BPMNEdge bpmnElement="flow_hr_to_gateway" id="BPMNEdge_flow_hr_to_gateway">
+        <omgdi:waypoint x="750.0" y="178.0"/>
+        <omgdi:waypoint x="790.0" y="178.0"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- HR同意 -> 结束 -->
+      <bpmndi:BPMNEdge bpmnElement="flow_hr_approve_to_end" id="BPMNEdge_flow_hr_approve_to_end">
+        <omgdi:waypoint x="830.0" y="178.0"/>
+        <omgdi:waypoint x="870.0" y="178.0"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- HR驳回 -> 主管 (下方折线退回) -->
+      <bpmndi:BPMNEdge bpmnElement="flow_hr_reject" id="BPMNEdge_flow_hr_reject">
+        <omgdi:waypoint x="810.0" y="198.0"/>
+        <omgdi:waypoint x="810.0" y="300.0"/>
+        <omgdi:waypoint x="380.0" y="300.0"/>
+        <omgdi:waypoint x="380.0" y="218.0"/>
+      </bpmndi:BPMNEdge>
+
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </definitions>
