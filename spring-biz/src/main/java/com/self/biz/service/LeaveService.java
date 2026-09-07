@@ -17,8 +17,10 @@ import com.self.common.enums.ProcessInstanceKeyEnum;
 import com.self.common.exception.BizException;
 import com.self.common.utils.CurUserUtils;
 import com.self.dao.api.page.PagingResp;
+import com.self.dao.entity.ActHiComment;
 import com.self.dao.entity.LeaveInfo;
 import com.self.dao.entity.User;
+import com.self.dao.mapper.ActHiCommentMapper;
 import com.self.dao.service.LeaveInfoService;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.flowable.engine.HistoryService;
@@ -64,6 +66,9 @@ public class LeaveService {
 
     @Autowired
     private LeaveInfoService leaveInfoService;
+
+    @Autowired
+    private ActHiCommentMapper actHiCommentMapper;
 
     @Transactional(rollbackFor = {Exception.class, Error.class})
     public ResultEntity<String> submit(LeaveSubmitReq leaveSubmitReq){
@@ -410,6 +415,9 @@ public class LeaveService {
                 process -> (process.getBusinessKey() == null ? "" : process.getBusinessKey())
         ));
 
+        List<ActHiComment> commentList = actHiCommentMapper.selectBatchByProcessInstanceIds(new ArrayList<>(processInstanceIds));
+        Map<String, String> commentMap = commentList.stream().collect(Collectors.toMap(ActHiComment::getTaskId, ActHiComment::getMessage));
+
         List<LeaveDoneTaskResp> respList = historicTaskList.stream().map(historicTask -> {
             LeaveDoneTaskResp resp = new LeaveDoneTaskResp();
             resp.setTaskId(historicTask.getId());
@@ -433,6 +441,8 @@ public class LeaveService {
         respList.forEach(resp -> resp.setTaskAssigneeRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getTaskAssignee()), null)));
 
         respList.forEach(resp -> resp.setBusinessKey(businessKeyMap.getOrDefault(resp.getProcessInstanceId(), null)));
+
+        respList.forEach(resp -> resp.setComment(commentMap.getOrDefault(resp.getTaskId(), null)));
 
         pagingResp.setData(respList);
 

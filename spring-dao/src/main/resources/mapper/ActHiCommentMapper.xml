@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.self.dao.mapper.ActHiCommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.self.dao.entity.ActHiComment">
+            <id property="id" column="ID_" />
+            <result property="type" column="TYPE_" />
+            <result property="time" column="TIME_" />
+            <result property="userId" column="USER_ID_" />
+            <result property="taskId" column="TASK_ID_" />
+            <result property="procInstId" column="PROC_INST_ID_" />
+            <result property="action" column="ACTION_" />
+            <result property="message" column="MESSAGE_" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID_,TYPE_,TIME_,USER_ID_,TASK_ID_,PROC_INST_ID_,
+        ACTION_,MESSAGE_,FULL_MSG_
+    </sql>
+
+    <select id="selectBatchByProcessInstanceIds" resultType="com.self.dao.entity.ActHiComment">
+        select
+            <include refid="Base_Column_List" />
+        from act_hi_comment
+        where PROC_INST_ID_ in
+        <foreach collection="processInstanceIds" item="processInstanceId" open="(" separator="," close=")">
+            #{processInstanceId}
+        </foreach>
+    </select>
+
+</mapper>
