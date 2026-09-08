@@ -6,9 +6,17 @@
     <!-- 申请填报 -->
     <userTask id="applyTask" name="申请填报" flowable:assignee="${applicant}"/>
     <!-- 主管审批 -->
-    <userTask id="managerTask" name="主管审批" flowable:assignee="${manager}"/>
+    <userTask id="managerTask" name="主管审批">
+      <extensionElements>
+        <flowable:taskListener event="create" delegateExpression="${managerAssigneeListener}" />
+      </extensionElements>
+    </userTask>
     <!-- HR审批 (天数大于3天) -->
-    <userTask id="hrTask" name="HR审批" flowable:assignee="${hr}"/>
+    <userTask id="hrTask" name="HR审批">
+      <extensionElements>
+        <flowable:taskListener event="create" delegateExpression="${hrAssigneeListener}" />
+      </extensionElements>
+    </userTask>
     <!-- 结束事件 -->
     <endEvent id="endEvent" name="结束"/>
 

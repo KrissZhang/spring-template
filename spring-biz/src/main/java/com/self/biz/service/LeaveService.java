@@ -10,7 +10,6 @@ import com.self.common.enums.ProcessInstanceKeyEnum;
 import com.self.common.exception.BizException;
 import com.self.common.utils.CurUserUtils;
 import com.self.dao.entity.LeaveInfo;
-import com.self.dao.entity.User;
 import com.self.dao.service.LeaveInfoService;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.flowable.engine.RuntimeService;
@@ -35,9 +34,6 @@ public class LeaveService {
 
     @Autowired
     private TaskService taskService;
-
-    @Autowired
-    private com.self.biz.service.UserService userLogicService;
 
     @Autowired
     private LeaveInfoService leaveInfoService;
@@ -93,17 +89,11 @@ public class LeaveService {
             leaveInfoService.save(leaveInfo);
 
             //设置流程变量
-            //获取审批人 -- TODO
-            User managerUser = userLogicService.selectUserByUserName("user2");
-            User hrUser = userLogicService.selectUserByUserName("user3");
-
             Map<String, Object> variables = Maps.newHashMap();
             variables.put("formStatus", ProcessFormStatusEnum.FIRST_SUBMIT.getValue());
             variables.put("applicant", userId);
             variables.put("applicantTime", now);
             variables.put("days", leaveSubmitReq.getDays());
-            variables.put("manager", managerUser == null ? null : managerUser.getId());
-            variables.put("hr", hrUser == null ? null : hrUser.getId());
 
             //启动流程实例
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(
