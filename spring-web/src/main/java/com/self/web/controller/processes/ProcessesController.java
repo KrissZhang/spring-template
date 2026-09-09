@@ -3,6 +3,7 @@ package com.self.web.controller.processes;
 import com.self.biz.service.ProcessesService;
 import com.self.common.annotation.OperLog;
 import com.self.common.api.req.page.PagingReq;
+import com.self.common.api.req.processes.ProcessesDeployReq;
 import com.self.common.api.resp.processes.ProcessesDoneTaskResp;
 import com.self.common.api.resp.processes.ProcessesHistoryResp;
 import com.self.common.api.resp.processes.ProcessesTodoTaskResp;
@@ -66,9 +67,9 @@ public class ProcessesController {
 
     @Operation(summary = "部署流程定义")
     @OperLog(title = "部署流程定义", businessType = BusinessTypeEnum.OTHER)
-    @GetMapping(value = ApiURI.PROCESSES_DEPLOY)
-    public ResultEntity<Deployment> deploy(@RequestParam String bpmnFileName, @RequestParam String deployName){
-        return processesService.deploy(bpmnFileName, deployName);
+    @PostMapping(value = ApiURI.PROCESSES_DEPLOY)
+    public ResultEntity<Deployment> deploy(@RequestBody @Validated ProcessesDeployReq processesDeployReq){
+        return processesService.deploy(processesDeployReq);
     }
 
 }

@@ -2,6 +2,7 @@ package com.self.biz.service;
 
 import com.google.common.collect.Lists;
 import com.self.common.api.req.page.PagingReq;
+import com.self.common.api.req.processes.ProcessesDeployReq;
 import com.self.common.api.resp.processes.ProcessesDoneTaskResp;
 import com.self.common.api.resp.processes.ProcessesHistoryResp;
 import com.self.common.api.resp.processes.ProcessesTodoTaskResp;
@@ -355,10 +356,10 @@ public class ProcessesService {
         );
     }
 
-    public ResultEntity<Deployment> deploy(String bpmnFileName, String deployName){
+    public ResultEntity<Deployment> deploy(ProcessesDeployReq processesDeployReq){
         Deployment deployment = repositoryService.createDeployment()
-                .addClasspathResource("processes/" + bpmnFileName)
-                .name(deployName)
+                .addClasspathResource("processes/" + processesDeployReq.getBpmnFileName())
+                .name(processesDeployReq.getDeployName())
                 .deploy();
 
         return ResultEntity.ok(deployment);
