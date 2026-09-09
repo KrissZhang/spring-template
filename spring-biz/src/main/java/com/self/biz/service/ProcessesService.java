@@ -2,9 +2,9 @@ package com.self.biz.service;
 
 import com.google.common.collect.Lists;
 import com.self.common.api.req.page.PagingReq;
-import com.self.common.api.resp.processes.flow.FlowDoneTaskResp;
-import com.self.common.api.resp.processes.flow.FlowHistoryResp;
-import com.self.common.api.resp.processes.flow.FlowTodoTaskResp;
+import com.self.common.api.resp.processes.ProcessesDoneTaskResp;
+import com.self.common.api.resp.processes.ProcessesHistoryResp;
+import com.self.common.api.resp.processes.ProcessesTodoTaskResp;
 import com.self.common.constants.CommonConstants;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.ProcessActivityStatusEnum;
@@ -40,9 +40,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class FlowService {
+public class ProcessesService {
 
-    private static final Logger logger = LoggerFactory.getLogger(FlowService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProcessesService.class);
 
     @Autowired
     private RuntimeService runtimeService;
@@ -62,10 +62,10 @@ public class FlowService {
     @Autowired
     private ActHiCommentMapper actHiCommentMapper;
 
-    public ResultEntity<PagingResp<FlowTodoTaskResp>> getTodoList(PagingReq pagingReq){
+    public ResultEntity<PagingResp<ProcessesTodoTaskResp>> getTodoList(PagingReq pagingReq){
         Long userId = CurUserUtils.getUserId();
 
-        PagingResp<FlowTodoTaskResp> pagingResp = new PagingResp<>();
+        PagingResp<ProcessesTodoTaskResp> pagingResp = new PagingResp<>();
         pagingResp.setCurrentPage(pagingReq.getCurrentPage());
         pagingResp.setPageSize(pagingReq.getPageSize());
 
@@ -89,8 +89,8 @@ public class FlowService {
         }
 
         List<Task> taskList = taskQuery.listPage(startIndex, pagingReq.getPageSize());
-        List<FlowTodoTaskResp> respList = taskList.stream().map(task -> {
-            FlowTodoTaskResp resp = new FlowTodoTaskResp();
+        List<ProcessesTodoTaskResp> respList = taskList.stream().map(task -> {
+            ProcessesTodoTaskResp resp = new ProcessesTodoTaskResp();
             resp.setTaskId(task.getId());
             resp.setTaskCreateTime(task.getCreateTime());
             resp.setTaskAssignee(task.getAssignee());
@@ -115,8 +115,8 @@ public class FlowService {
             return resp;
         }).collect(Collectors.toList());
 
-        Set<Long> userIds = respList.stream().map(FlowTodoTaskResp::getTaskAssignee).filter(StringUtils::isNotBlank).map(Long::parseLong).collect(Collectors.toSet());
-        Set<Long> applicantUserIds = respList.stream().map(FlowTodoTaskResp::getProcessApplicant).filter(StringUtils::isNotBlank).map(Long::parseLong).collect(Collectors.toSet());
+        Set<Long> userIds = respList.stream().map(ProcessesTodoTaskResp::getTaskAssignee).filter(StringUtils::isNotBlank).map(Long::parseLong).collect(Collectors.toSet());
+        Set<Long> applicantUserIds = respList.stream().map(ProcessesTodoTaskResp::getProcessApplicant).filter(StringUtils::isNotBlank).map(Long::parseLong).collect(Collectors.toSet());
         userIds.addAll(applicantUserIds);
 
         Map<Long, String> userRealNameMap = userDaoService.listByIds(userIds).stream().collect(Collectors.toMap(User::getId, User::getRealName));
@@ -130,7 +130,7 @@ public class FlowService {
         return ResultEntity.ok(pagingResp);
     }
 
-    public ResultEntity<List<FlowHistoryResp>> getHistoryList(String processInstanceId){
+    public ResultEntity<List<ProcessesHistoryResp>> getHistoryList(String processInstanceId){
         //查询所有历史活动节点
         List<HistoricActivityInstance> activities = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(processInstanceId)
@@ -162,10 +162,10 @@ public class FlowService {
             curActivityIds = runtimeService.getActiveActivityIds(processInstanceId);
         }
 
-        List<FlowHistoryResp> respList = Lists.newArrayList();
+        List<ProcessesHistoryResp> respList = Lists.newArrayList();
 
         for (HistoricActivityInstance activity : activities) {
-            FlowHistoryResp resp = new FlowHistoryResp();
+            ProcessesHistoryResp resp = new ProcessesHistoryResp();
 
             resp.setActivityId(activity.getActivityId());
             resp.setActivityName(activity.getActivityName());
@@ -211,10 +211,10 @@ public class FlowService {
         return ResultEntity.ok(respList);
     }
 
-    public ResultEntity<PagingResp<FlowDoneTaskResp>> getDoneList(PagingReq pagingReq){
+    public ResultEntity<PagingResp<ProcessesDoneTaskResp>> getDoneList(PagingReq pagingReq){
         Long userId = CurUserUtils.getUserId();
 
-        PagingResp<FlowDoneTaskResp> pagingResp = new PagingResp<>();
+        PagingResp<ProcessesDoneTaskResp> pagingResp = new PagingResp<>();
         pagingResp.setCurrentPage(pagingReq.getCurrentPage());
         pagingResp.setPageSize(pagingReq.getPageSize());
 
@@ -257,8 +257,8 @@ public class FlowService {
         List<ActHiComment> commentList = actHiCommentMapper.selectBatchByProcessInstanceIds(new ArrayList<>(processInstanceIds));
         Map<String, String> commentMap = commentList.stream().collect(Collectors.toMap(ActHiComment::getTaskId, ActHiComment::getMessage));
 
-        List<FlowDoneTaskResp> respList = historicTaskList.stream().map(historicTask -> {
-            FlowDoneTaskResp resp = new FlowDoneTaskResp();
+        List<ProcessesDoneTaskResp> respList = historicTaskList.stream().map(historicTask -> {
+            ProcessesDoneTaskResp resp = new ProcessesDoneTaskResp();
             resp.setTaskId(historicTask.getId());
             resp.setTaskAssignee(historicTask.getAssignee());
             resp.setTaskActivityId(historicTask.getTaskDefinitionKey());
@@ -274,7 +274,7 @@ public class FlowService {
             return resp;
         }).collect(Collectors.toList());
 
-        Set<Long> userIds = respList.stream().map(FlowDoneTaskResp::getTaskAssignee).filter(StringUtils::isNotBlank).map(Long::parseLong).collect(Collectors.toSet());
+        Set<Long> userIds = respList.stream().map(ProcessesDoneTaskResp::getTaskAssignee).filter(StringUtils::isNotBlank).map(Long::parseLong).collect(Collectors.toSet());
         Map<Long, String> userRealNameMap = userDaoService.listByIds(userIds).stream().collect(Collectors.toMap(User::getId, User::getRealName));
 
         respList.forEach(resp -> resp.setTaskAssigneeRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getTaskAssignee()), null)));

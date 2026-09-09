@@ -146,22 +146,22 @@ public class ApiURI {
     /**
      * 查询流程待办列表
      */
-    public static final String PROCESSES_TODOLIST = MODULE_URI_PREFIX + "/flow/getTodoList";
+    public static final String PROCESSES_TODOLIST = MODULE_URI_PREFIX + "/processes/getTodoList";
 
     /**
      * 查询流程历史轨迹
      */
-    public static final String PROCESSES_HISTORY = MODULE_URI_PREFIX + "/flow/history";
+    public static final String PROCESSES_HISTORY = MODULE_URI_PREFIX + "/processes/history";
 
     /**
      * 查询流程已办列表
      */
-    public static final String PROCESSES_DONELIST = MODULE_URI_PREFIX + "/flow/getDoneList";
+    public static final String PROCESSES_DONELIST = MODULE_URI_PREFIX + "/processes/getDoneList";
 
     /**
      * 查询高亮流程图
      */
-    public static final String PROCESSES_DIAGRAM = MODULE_URI_PREFIX + "/flow/diagram";
+    public static final String PROCESSES_DIAGRAM = MODULE_URI_PREFIX + "/processes/diagram";
 
     /**
      * 提交请假申请

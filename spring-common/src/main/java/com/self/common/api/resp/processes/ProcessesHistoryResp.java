@@ -1,4 +1,4 @@
-package com.self.common.api.resp.processes.flow;
+package com.self.common.api.resp.processes;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -9,7 +9,7 @@ import java.util.Date;
 
 @ApiModel(description = "流程历史轨迹响应参数")
 @Data
-public class FlowHistoryResp {
+public class ProcessesHistoryResp {
 
     @Schema(name = "节点id", description = "节点id")
     private String activityId;

@@ -1,11 +1,11 @@
 package com.self.web.controller.processes;
 
-import com.self.biz.service.FlowService;
+import com.self.biz.service.ProcessesService;
 import com.self.common.annotation.OperLog;
 import com.self.common.api.req.page.PagingReq;
-import com.self.common.api.resp.processes.flow.FlowDoneTaskResp;
-import com.self.common.api.resp.processes.flow.FlowHistoryResp;
-import com.self.common.api.resp.processes.flow.FlowTodoTaskResp;
+import com.self.common.api.resp.processes.ProcessesDoneTaskResp;
+import com.self.common.api.resp.processes.ProcessesHistoryResp;
+import com.self.common.api.resp.processes.ProcessesTodoTaskResp;
 import com.self.common.constants.ApiURI;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.BusinessTypeEnum;
@@ -24,37 +24,37 @@ import java.util.List;
 
 @Api(tags = "通用流程")
 @RestController
-public class FlowController {
+public class ProcessesController {
 
     @Autowired
-    private FlowService flowService;
+    private ProcessesService processesService;
 
     @Operation(summary = "查询流程待办列表")
     @OperLog(title = "查询流程待办列表", businessType = BusinessTypeEnum.OTHER)
     @PostMapping(value = ApiURI.PROCESSES_TODOLIST)
-    public ResultEntity<PagingResp<FlowTodoTaskResp>> getTodoList(@RequestBody @Validated PagingReq pagingReq){
-        return flowService.getTodoList(pagingReq);
+    public ResultEntity<PagingResp<ProcessesTodoTaskResp>> getTodoList(@RequestBody @Validated PagingReq pagingReq){
+        return processesService.getTodoList(pagingReq);
     }
 
     @Operation(summary = "查询流程历史轨迹")
     @OperLog(title = "查询流程历史轨迹", businessType = BusinessTypeEnum.OTHER)
     @GetMapping(value = ApiURI.PROCESSES_HISTORY)
-    public ResultEntity<List<FlowHistoryResp>> getHistoryList(@RequestParam String processInstanceId){
-        return flowService.getHistoryList(processInstanceId);
+    public ResultEntity<List<ProcessesHistoryResp>> getHistoryList(@RequestParam String processInstanceId){
+        return processesService.getHistoryList(processInstanceId);
     }
 
     @Operation(summary = "查询流程已办列表")
     @OperLog(title = "查询流程已办列表", businessType = BusinessTypeEnum.OTHER)
     @PostMapping(value = ApiURI.PROCESSES_DONELIST)
-    public ResultEntity<PagingResp<FlowDoneTaskResp>> getDoneList(@RequestBody @Validated PagingReq pagingReq){
-        return flowService.getDoneList(pagingReq);
+    public ResultEntity<PagingResp<ProcessesDoneTaskResp>> getDoneList(@RequestBody @Validated PagingReq pagingReq){
+        return processesService.getDoneList(pagingReq);
     }
 
     @Operation(summary = "查询高亮流程图")
     @OperLog(title = "查询高亮流程图", businessType = BusinessTypeEnum.OTHER)
     @GetMapping(value = ApiURI.PROCESSES_DIAGRAM)
     public void getDiagram(HttpServletResponse response, @RequestParam String processInstanceId) throws IOException {
-        try(InputStream is = flowService.generateHighLightDiagram(processInstanceId)){
+        try(InputStream is = processesService.generateHighLightDiagram(processInstanceId)){
             byte[] bytes = IoUtil.readInputStream(is, "flow-diagram");
             response.setContentType("image/png");
             response.setContentLength(bytes.length);
