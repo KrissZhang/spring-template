@@ -13,6 +13,7 @@ import com.self.dao.api.page.PagingResp;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import org.flowable.common.engine.impl.util.IoUtil;
+import org.flowable.engine.repository.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +62,13 @@ public class ProcessesController {
             response.getOutputStream().write(bytes);
             response.getOutputStream().flush();
         }
+    }
+
+    @Operation(summary = "部署流程定义")
+    @OperLog(title = "部署流程定义", businessType = BusinessTypeEnum.OTHER)
+    @GetMapping(value = ApiURI.PROCESSES_DEPLOY)
+    public ResultEntity<Deployment> deploy(@RequestParam String bpmnFileName, @RequestParam String deployName){
+        return processesService.deploy(bpmnFileName, deployName);
     }
 
 }

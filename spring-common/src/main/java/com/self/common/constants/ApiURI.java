@@ -164,6 +164,11 @@ public class ApiURI {
     public static final String PROCESSES_DIAGRAM = MODULE_URI_PREFIX + "/processes/diagram";
 
     /**
+     * 部署流程定义
+     */
+    public static final String PROCESSES_DEPLOY = MODULE_URI_PREFIX + "/processes/deploy";
+
+    /**
      * 提交请假申请
      */
     public static final String PROCESSES_LEAVE_SUBMIT = MODULE_URI_PREFIX + "/leave/submit";

@@ -111,6 +111,14 @@ flowable:
   async-executor-activate: false
   # 首次启动自动建表(后续改为false)
   database-schema-update: false
+  # 是否开启自动扫描并部署流程定义(默认为true)
+  check-process-definitions: true
+  # bpmn文件扫描路径(默认为classpath*:/processes/)
+  process-definition-location-prefix: classpath*:/processes/
+  # 自动部署名称(数据库ACT_RE_DEPLOYMENT.NAME_)
+  deployment-name: SpringBootAutoDeployment
+  # 历史级别
+  history-level: full
 
 logging:
   config: classpath:logback/logback-test.xml

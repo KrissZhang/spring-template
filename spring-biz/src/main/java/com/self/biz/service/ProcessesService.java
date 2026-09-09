@@ -22,6 +22,7 @@ import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.history.HistoricActivityInstance;
 import org.flowable.engine.history.HistoricProcessInstance;
+import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.engine.task.Comment;
 import org.flowable.image.impl.DefaultProcessDiagramGenerator;
@@ -345,6 +346,15 @@ public class ProcessesService {
                 1.0,  //缩放因子
                 true  //未设置标签时是否绘制连线名
         );
+    }
+
+    public ResultEntity<Deployment> deploy(String bpmnFileName, String deployName){
+        Deployment deployment = repositoryService.createDeployment()
+                .addClasspathResource("processes/" + bpmnFileName)
+                .name(deployName)
+                .deploy();
+
+        return ResultEntity.ok(deployment);
     }
 
 }
