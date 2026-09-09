@@ -11,7 +11,8 @@ import com.self.common.exception.BizException;
 import com.self.common.utils.CurUserUtils;
 import com.self.dao.entity.LeaveInfo;
 import com.self.dao.service.LeaveInfoService;
-import io.micrometer.core.instrument.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.flowable.engine.IdentityService;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
 import org.flowable.engine.runtime.ProcessInstance;
@@ -36,12 +37,14 @@ public class LeaveService {
     private TaskService taskService;
 
     @Autowired
+    private IdentityService identityService;
+
+    @Autowired
     private LeaveInfoService leaveInfoService;
 
     @Transactional(rollbackFor = {Exception.class, Error.class})
     public ResultEntity<String> submit(LeaveSubmitReq leaveSubmitReq){
         Long userId = CurUserUtils.getUserId();
-        Date now = new Date();
 
         if(StringUtils.isNotBlank(leaveSubmitReq.getTaskId())){
             //重新提交
@@ -66,8 +69,6 @@ public class LeaveService {
             //更新流程变量
             Map<String, Object> varsMap = runtimeService.getVariables(task.getProcessInstanceId());
             varsMap.put("formStatus", ProcessFormStatusEnum.RESUBMIT.getValue());
-            varsMap.put("applicant", userId);
-            varsMap.put("applicantTime", now);
             varsMap.put("days", leaveSubmitReq.getDays());
 
             //默认添加当前环节的评论意见
@@ -92,15 +93,27 @@ public class LeaveService {
             Map<String, Object> variables = Maps.newHashMap();
             variables.put("formStatus", ProcessFormStatusEnum.FIRST_SUBMIT.getValue());
             variables.put("applicant", userId);
-            variables.put("applicantTime", now);
             variables.put("days", leaveSubmitReq.getDays());
 
             //启动流程实例
-            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(
-                    ProcessInstanceKeyEnum.LEAVE.getValue(),
-                    leaveInfo.getId().toString(),
-                    variables
-            );
+            ProcessInstance processInstance = null;
+            try{
+                //设置当前线程认证用户
+                identityService.setAuthenticatedUserId(userId.toString());
+
+                processInstance = runtimeService.startProcessInstanceByKey(
+                        ProcessInstanceKeyEnum.LEAVE.getValue(),
+                        leaveInfo.getId().toString(),
+                        variables
+                );
+            }finally {
+                //清空当前线程认证用户
+                identityService.setAuthenticatedUserId(null);
+            }
+
+            if(Objects.isNull(processInstance)){
+                throw new BizException("启动流程失败");
+            }
 
             //回写流程实例id
             LeaveInfo editLeaveInfo = new LeaveInfo();

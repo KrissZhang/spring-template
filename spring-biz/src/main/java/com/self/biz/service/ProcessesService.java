@@ -13,7 +13,7 @@ import com.self.dao.api.page.PagingResp;
 import com.self.dao.entity.ActHiComment;
 import com.self.dao.entity.User;
 import com.self.dao.mapper.ActHiCommentMapper;
-import io.micrometer.core.instrument.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.constants.BpmnXMLConstants;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.engine.HistoryService;
@@ -38,6 +38,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.InputStream;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -90,6 +91,11 @@ public class ProcessesService {
         }
 
         List<Task> taskList = taskQuery.listPage(startIndex, pagingReq.getPageSize());
+
+        Set<String> processInstanceIds = taskList.stream().map(Task::getProcessInstanceId).filter(StringUtils::isNotBlank).collect(Collectors.toSet());
+        List<ProcessInstance> processInstanceList = runtimeService.createProcessInstanceQuery().processInstanceIds(processInstanceIds).list();
+        Map<String, ProcessInstance> processInstanceMap = processInstanceList.stream().collect(Collectors.toMap(ProcessInstance::getProcessInstanceId, Function.identity()));
+
         List<ProcessesTodoTaskResp> respList = taskList.stream().map(task -> {
             ProcessesTodoTaskResp resp = new ProcessesTodoTaskResp();
             resp.setTaskId(task.getId());
@@ -99,18 +105,15 @@ public class ProcessesService {
             resp.setTaskActivityName(task.getName());
             resp.setProcessInstanceId(task.getProcessInstanceId());
 
-            List<String> splitStr = Arrays.asList(org.apache.commons.lang3.StringUtils.split(task.getProcessDefinitionId(), CommonConstants.STR_COLON));
+            List<String> splitStr = Arrays.asList(StringUtils.split(task.getProcessDefinitionId(), CommonConstants.STR_COLON));
             resp.setProcessInstanceKey(splitStr.get(0));
+
+            resp.setProcessApplicant(Optional.ofNullable(processInstanceMap.getOrDefault(resp.getProcessInstanceId(), null)).map(ProcessInstance::getStartUserId).orElse(null));
+
+            resp.setProcessApplicantTime(Optional.ofNullable(processInstanceMap.getOrDefault(resp.getProcessInstanceId(), null)).map(ProcessInstance::getStartTime).orElse(null));
 
             //流程变量
             Map<String, Object> varsMap = task.getProcessVariables();
-
-            resp.setProcessApplicant(Optional.ofNullable(varsMap.getOrDefault("applicant", null)).orElse("").toString());
-
-            Object applicantTimeObj = varsMap.getOrDefault("applicantTime", null);
-            Date applicantTime = (applicantTimeObj == null ? null : (Date)applicantTimeObj);
-            resp.setProcessApplicantTime(applicantTime);
-
             resp.setFormStatus(Optional.ofNullable(varsMap.getOrDefault("formStatus", null)).orElse("").toString());
 
             return resp;
@@ -124,7 +127,11 @@ public class ProcessesService {
 
         respList.forEach(resp -> resp.setTaskAssigneeRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getTaskAssignee()), null)));
 
-        respList.forEach(resp -> resp.setProcessApplicantRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getProcessApplicant()), null)));
+        respList.forEach(resp -> {
+            if(StringUtils.isNotBlank(resp.getProcessApplicant())){
+                resp.setProcessApplicantRealName(userRealNameMap.getOrDefault(Long.parseLong(resp.getProcessApplicant()), null));
+            }
+        });
 
         pagingResp.setData(respList);
 
@@ -269,7 +276,7 @@ public class ProcessesService {
             resp.setDurationInMillis(historicTask.getDurationInMillis());
             resp.setProcessInstanceId(historicTask.getProcessInstanceId());
 
-            List<String> splitStr = Arrays.asList(org.apache.commons.lang3.StringUtils.split(historicTask.getProcessDefinitionId(), CommonConstants.STR_COLON));
+            List<String> splitStr = Arrays.asList(StringUtils.split(historicTask.getProcessDefinitionId(), CommonConstants.STR_COLON));
             resp.setProcessInstanceKey(splitStr.get(0));
 
             return resp;
