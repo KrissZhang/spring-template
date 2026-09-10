@@ -1,8 +1,10 @@
 package com.self.biz.service;
 
+import com.alibaba.excel.util.CollectionUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Maps;
 import com.self.common.api.req.processes.leave.LeaveApproveReq;
+import com.self.common.api.req.processes.leave.LeaveRevokeReq;
 import com.self.common.api.req.processes.leave.LeaveSubmitReq;
 import com.self.common.domain.ResultEntity;
 import com.self.common.enums.ProcessFormStatusEnum;
@@ -12,6 +14,7 @@ import com.self.common.utils.CurUserUtils;
 import com.self.dao.entity.LeaveInfo;
 import com.self.dao.service.LeaveInfoService;
 import org.apache.commons.lang3.StringUtils;
+import org.flowable.engine.HistoryService;
 import org.flowable.engine.IdentityService;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
@@ -35,6 +38,9 @@ public class LeaveService {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private HistoryService historyService;
 
     @Autowired
     private IdentityService identityService;
@@ -169,7 +175,7 @@ public class LeaveService {
 
             if(Objects.isNull(processInstance)){
                 //流程结束
-                updateLeaveStatus(task, 1);
+                updateLeaveStatus(task.getProcessInstanceId(), 1);
             }
         }else{
             //驳回
@@ -179,15 +185,15 @@ public class LeaveService {
             //推动流程回退
             taskService.complete(leaveApproveReq.getTaskId(), varsMap);
 
-            updateLeaveStatus(task, 2);
+            updateLeaveStatus(task.getProcessInstanceId(), 2);
         }
 
         return ResultEntity.ok();
     }
 
-    private void updateLeaveStatus(Task task, Integer targetStatus){
+    private void updateLeaveStatus(String processInstanceId, Integer targetStatus){
         LambdaQueryWrapper<LeaveInfo> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(LeaveInfo::getProcessInstanceId, task.getProcessInstanceId());
+        queryWrapper.eq(LeaveInfo::getProcessInstanceId, processInstanceId);
 
         LeaveInfo leaveInfo = leaveInfoService.getOne(queryWrapper);
         if(Objects.nonNull(leaveInfo)){
@@ -196,6 +202,66 @@ public class LeaveService {
             editLeaveInfo.setStatus(targetStatus);
             leaveInfoService.updateById(editLeaveInfo);
         }
+    }
+
+    @Transactional(rollbackFor = {Exception.class, Error.class})
+    public ResultEntity<Void> revoke(LeaveRevokeReq leaveRevokeReq){
+        Long userId = CurUserUtils.getUserId();
+
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(leaveRevokeReq.getProcessInstanceId())
+                .singleResult();
+
+        if(Objects.isNull(processInstance)){
+            throw new BizException("流程不存在或已结束");
+        }
+
+        if(!userId.toString().equals(processInstance.getStartUserId())){
+            throw new BizException("非流程发起人，无法撤销");
+        }
+
+        //当前停留任务节点
+        List<Task> curTasks = taskService.createTaskQuery()
+                .processInstanceId(leaveRevokeReq.getProcessInstanceId())
+                .list();
+
+        if(CollectionUtils.isEmpty(curTasks)){
+            throw new BizException("该流程当前无待办任务，无法撤销");
+        }
+
+        for (Task curTask : curTasks) {
+            if("applyTask".equals(curTask.getTaskDefinitionKey()) && userId.toString().equals(curTask.getAssignee())){
+                throw new BizException("当前任务已由您处理，无需撤销");
+            }
+        }
+
+        //已完成任务
+        long finishedTaskCount = historyService.createHistoricTaskInstanceQuery()
+                .processInstanceId(leaveRevokeReq.getProcessInstanceId())
+                .finished()
+                .count();
+
+        if(finishedTaskCount > 1){
+            throw new BizException("该流程已被审批处理过，无法撤销");
+        }
+
+        for (Task curTask : curTasks) {
+            //默认添加当前环节的评论意见
+            taskService.addComment(curTask.getId(), curTask.getProcessInstanceId(), "REVOKED", "撤销申请");
+
+            runtimeService.createChangeActivityStateBuilder()
+                    .processInstanceId(leaveRevokeReq.getProcessInstanceId())
+                    .moveActivityIdTo(curTask.getTaskDefinitionKey(), "applyTask")
+                    .changeState();
+        }
+
+        //更新业务状态为被撤销
+        updateLeaveStatus(leaveRevokeReq.getProcessInstanceId(), 3);
+
+        //更新表单状态为被撤销
+        runtimeService.setVariable(leaveRevokeReq.getProcessInstanceId(), "formStatus", ProcessFormStatusEnum.REVOKED.getValue());
+
+        return ResultEntity.ok();
     }
 
 }

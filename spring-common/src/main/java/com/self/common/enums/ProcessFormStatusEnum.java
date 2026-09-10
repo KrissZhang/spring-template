@@ -23,7 +23,12 @@ public enum ProcessFormStatusEnum {
     /**
      * 重新提交
      */
-    RESUBMIT("重新提交", "RESUBMIT");
+    RESUBMIT("重新提交", "RESUBMIT"),
+
+    /**
+     * 被撤销
+     */
+    REVOKED("被撤销", "REVOKED");
 
     private final String value;
 

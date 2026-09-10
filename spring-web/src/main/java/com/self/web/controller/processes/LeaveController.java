@@ -3,6 +3,7 @@ package com.self.web.controller.processes;
 import com.self.biz.service.LeaveService;
 import com.self.common.annotation.OperLog;
 import com.self.common.api.req.processes.leave.LeaveApproveReq;
+import com.self.common.api.req.processes.leave.LeaveRevokeReq;
 import com.self.common.api.req.processes.leave.LeaveSubmitReq;
 import com.self.common.constants.ApiURI;
 import com.self.common.domain.ResultEntity;
@@ -32,6 +33,13 @@ public class LeaveController {
     @PostMapping(value = ApiURI.PROCESSES_LEAVE_APPROVE)
     public ResultEntity<Void> approve(@RequestBody @Validated LeaveApproveReq leaveApproveReq){
         return leaveService.approve(leaveApproveReq);
+    }
+
+    @Operation(summary = "撤销请假申请")
+    @OperLog(title = "撤销请假申请", businessType = BusinessTypeEnum.OTHER)
+    @PostMapping(value = ApiURI.PROCESSES_LEAVE_REVOKE)
+    public ResultEntity<Void> revoke(@RequestBody @Validated LeaveRevokeReq leaveRevokeReq){
+        return leaveService.revoke(leaveRevokeReq);
     }
 
 }

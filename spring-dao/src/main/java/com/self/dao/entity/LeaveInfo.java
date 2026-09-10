@@ -35,7 +35,7 @@ public class LeaveInfo implements Serializable {
     private String reason;
 
     /**
-     * 状态，0-审批中，1-通过，2-驳回
+     * 状态，0-审批中，1-通过，2-驳回，3-撤销
      */
     private Integer status;
 
